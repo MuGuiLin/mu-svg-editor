@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { reactive, onMounted, onUnmounted } from 'vue';
 
+import Menu from './menu';
+import Tool from './tool';
 import Attr from './attr';
+import Info from './info';
 
 import scale from "./hook/scale";
 
@@ -67,20 +70,8 @@ onUnmounted(() => {
 
 <template>
     <section class="mu-svg-editor">
-        <header class="mu-svg-editor-menu">
-            <label>
-                显示标尺：
-                <a-switch v-model:checked="state.isScale" checked-children="开启" un-checked-children="关闭" />
-            </label>，
-            <label>
-                坐标辅助：
-                <a-switch v-model:checked="state.isLine" checked-children="开启" un-checked-children="关闭" />
-            </label>
-        </header>
-
-        <aside class="mu-svg-editor-tool">
-            <h3>基础控件</h3>
-        </aside>
+        <Menu :menu="state" />
+        <Tool :tool="state" />
         <main class="mu-svg-editor-work">
             <div class="mu-svg-editor-work-draw" @mousemove="mousemove($event)">
                 <div class="mu-svg-scale" v-show="state.isScale">
@@ -101,10 +92,8 @@ onUnmounted(() => {
                 </div>
             </div>
         </main>
-        <Attr />
-        <footer class="mu-svg-editor-info">
-            <p>坐标信息 X：<b>{{state.lineX}}</b> px，Y：<b>{{state.lineY}}</b> px</p>
-        </footer>
+        <Attr :attr="state" />
+        <Info :info="state" />
 
     </section>
 </template>
@@ -122,20 +111,6 @@ onUnmounted(() => {
     grid-template-rows: 50px calc(100vh - 80px) 30px;
     grid-template-columns: 180px 1fr 280px;
     grid-template-areas: "menu menu menu" "tool work attr" "tool info info";
-
-    &-menu {
-        grid-area: menu;
-        background-color: rgb(60, 60, 60);
-        border-bottom: 1px solid rgb(100, 100, 100);
-        line-height: 50px;
-    }
-
-
-    &-tool {
-        grid-area: tool;
-        background-color: rgb(45, 45, 45);
-        border-right: 1px solid rgb(100, 100, 100);
-    }
 
     &-work {
         grid-area: work;
@@ -237,24 +212,9 @@ onUnmounted(() => {
         }
     }
 
-    &-attr {
-        grid-area: attr;
-        background-color: rgb(80, 80, 80);
-        border-left: 1px solid rgb(100, 100, 100);
-        box-shadow: -2px 0px 6px 0px rgba(30, 30, 30, .6);
-        padding: 0 10px;
-    }
+  
 
-    &-info {
-        grid-area: info;
-        background: rgb(60, 60, 60);
-        border-top: 1px solid rgb(100, 100, 100);
 
-        p {
-            line-height: 28px;
-            text-align: center;
-        }
-    }
 }
 
 // ::-webkit-scrollbar {
