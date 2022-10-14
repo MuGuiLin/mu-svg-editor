@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MuSvgEditor from '@/components/MuSvgEditor';
+import MuSvgEditor from '@/components/MuSvgEditor/index.vue';
 </script>
 
 <template>
@@ -7,5 +7,4 @@ import MuSvgEditor from '@/components/MuSvgEditor';
 </template>
 
 <style scoped lang="less">
-
 </style>

@@ -82,7 +82,7 @@ onUnmounted(() => {
             <h3>基础控件</h3>
         </aside>
         <main class="mu-svg-editor-work">
-            <div class="mu-svg-editor-work-draw" @mousemove="mousemove">
+            <div class="mu-svg-editor-work-draw" @mousemove="mousemove($event)">
                 <div class="mu-svg-scale" v-show="state.isScale">
                     <div class="mu-svg-scale-x-box">
                         <canvas class="mu-svg-scale-x"></canvas>
@@ -101,7 +101,7 @@ onUnmounted(() => {
                 </div>
             </div>
         </main>
-        <Attr/>
+        <Attr />
         <footer class="mu-svg-editor-info">
             <p>坐标信息 X：<b>{{state.lineX}}</b> px，Y：<b>{{state.lineY}}</b> px</p>
         </footer>

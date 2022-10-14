@@ -1,30 +1,55 @@
 <script setup lang="ts">
+import { ConfigProvider } from 'ant-design-vue';
 import { log } from 'console';
 import { ref, reactive, onMounted, defineEmits, defineExpose } from 'vue';
+
 interface IState {
-    a: string;
+    color: string;
 };
 
-// const props = withDefaults(defineProps({
-//     width: {
-//         type: Number,
-//         default: 1008,
-//         required: true,
-//         validator: (val: any) => val > 1008,
-//     },
-//     height: Number,
-//     activeKey: String,
-// }), {
+const props = defineProps<{
+    height: Number;
+    activeKey: String;
+}>({
+    width: {
+        type: Number,
+        default: 1008,
+        required: true,
+        validator: (val: any) => val > 1008,
+    },
+    
+})
+// const props = withDefaults(, {
 //     activeKey: '1',
 //     height: 567,
 // });
 
+console.log(props);
+
+
 const state: IState = reactive({
-    a: ''
+    color: '#1890FF'
 });
 
 const emit = defineEmits(['xxx']);
 
+const input = ({ target }: Event | any) => {
+    state.color = target.value;
+
+    console.log(ConfigProvider);
+    // 注：只有在main.ts中使用了antd.variable.min.css这里才生效哦！！
+    ConfigProvider.config({
+        // prefixCls: 'mu-',
+        theme: {
+            primaryColor: state.color, // 全局主色
+            successColor: `#52c41a`, // 成功色
+            warningColor: `#faad14`, // 警告色
+            errorColor: `#f5222d`, // 错误色
+            infoColor: `#1890ff`,
+            processingColor: `#1890ff`,
+        },
+    });
+}
 emit("xxx", 6666);
 
 onMounted(() => {
@@ -38,8 +63,8 @@ defineExpose({
 
 <template>
     <aside class="mu-svg-editor-attr">
-        
-        <a-tabs >
+
+        <a-tabs>
             <a-tab-pane key="1">
                 <template #tab>
                     <control-outlined />控件属性
@@ -52,12 +77,14 @@ defineExpose({
                 </template>
                 <a-form>
                     <a-form-item label="画布宽度" :rules="[{ required: true }]">
-                        <a-input  :rules="[{ type: 'number', min: 1, max: 1008 }]"
-                            placeholder="画布宽度" allow-clear />
+                        <a-input :rules="[{ type: 'number', min: 1, max: 1008 }]" placeholder="画布宽度" allow-clear />
                     </a-form-item>
                     <a-form-item label="画布高度" :rules="[{ required: true }]">
-                        <a-input  :rules="[{ type: 'number', min: 1, max: 567 }]"
-                            placeholder="画布高度" allow-clear />
+                        <a-input :rules="[{ type: 'number', min: 1, max: 567 }]" placeholder="画布高度" allow-clear />
+                    </a-form-item>
+                    <a-form-item label="主题颜色" :rules="[{ required: true }]">
+                        <a-input type="color" :value="state.color" @input="input($event)" placeholder="主题颜色"
+                            allow-clear />
                     </a-form-item>
                     <a-form-item :name="['user', 'about']" label="关于编辑器">
                         <a-textarea placeholder="mu-sve-editor" />
