@@ -14,7 +14,7 @@ export const routes: Array<RouteRecordRaw> = [
     {
         path: "/svgEditor",
         name: "SvgEditor",
-        component: () => import("@/views/SvgEditor/index.vue"),
+        component: () => import("@/views/SvgEditor.vue"),
     },
     {
         path: "/:pathMatch(.*)*",

@@ -20,7 +20,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
         <a href="https://vuejs.org/" target="_blank">
             <img src="@/assets/svg/vue.svg" class="logo vue" alt="Vue logo" />
         </a>
-        <a href="https://antdv.com" target="_blank">
+        <a href="https://antdv.com/docs/vue/introduce-cn" target="_blank">
             <img src="/antdv.svg" class="logo antdv" alt="AntDV logo" />
         </a>
 
