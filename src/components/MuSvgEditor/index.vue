@@ -52,7 +52,6 @@ const mousemove = ({ clientX, clientY }: Event | any) => {
     }
 }
 
-
 onMounted(() => {
     state.scale = new scale({
         draw: '.mu-svg-editor-work-draw',
@@ -103,7 +102,7 @@ onUnmounted(() => {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    background: radial-gradient(#250058 -100%, rgb(30, 30, 30) 100%);
+    background: radial-gradient(#0229A0 -150%, rgb(30, 30, 30) 100%);
     overflow: hidden;
     box-sizing: border-box;
     display: grid;
@@ -211,9 +210,6 @@ onUnmounted(() => {
             }
         }
     }
-
-  
-
 
 }
 
