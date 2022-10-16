@@ -29,7 +29,7 @@ const state = <IState>reactive({
     lineX: 100,
     lineY: 100,
     scale: null,
-    activeKey: '1',
+    activeKey: '2',
 });
 
 const resize = ({ target }: Event | any) => {
