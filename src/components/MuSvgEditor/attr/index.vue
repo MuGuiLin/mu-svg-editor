@@ -88,7 +88,7 @@ defineExpose({
                 <template #tab>
                     <setting-outlined />画布设置
                 </template>
-                <a-form>
+                <a-form layout="vertical">
                     <a-form-item label="画布宽度" :rules="[{ required: true }]">
                         <a-input v-model:value="width" :rules="[{ type: 'number', min: 1, max: 1008 }]"
                             placeholder="画布宽度" allow-clear />

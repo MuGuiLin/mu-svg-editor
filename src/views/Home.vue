@@ -24,7 +24,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
             <img src="/antdv.svg" class="logo antdv" alt="AntDV logo" />
         </a>
 
-        <HelloWorld msg="Vite + Vue + TypeScript + AntDV" />
+        <HelloWorld msg="Vite + Vue + Tsx + AntDV" />
     </section>
 </template>
 
