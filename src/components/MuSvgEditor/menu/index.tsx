@@ -23,9 +23,9 @@ export default defineComponent({
         return (
             <header class={style.menu}>
                 <a-menu v-model:selectedKeys={current} mode="horizontal">
-                    <a-menu-item key="file" icon={<mail-outlined />}>文件</a-menu-item>
-                    <a-menu-item key="edit" icon={<appstore-outlined />}>编辑</a-menu-item>
-                    <a-sub-menu key="view" icon={<setting-outlined /> } title="视图">
+                    <a-menu-item key="file" icon={<folder-open-outlined />}>文件</a-menu-item>
+                    <a-menu-item key="edit" icon={<form-outlined />}>编辑</a-menu-item>
+                    <a-sub-menu key="view" icon={<folder-view-outlined /> } title="视图">
                         <a-menu-item-group title="Item 1">
                             <a-menu-item key="setting:1">
                             <label>
@@ -44,11 +44,21 @@ export default defineComponent({
                             <a-menu-item key="setting:4">Option 4</a-menu-item>
                         </a-menu-item-group>
                     </a-sub-menu>
-                    <a-menu-item key="about">
-                        <a href="https://github.com/MuGuiLin/mu-svg-editor" target="_blank" rel="noopener noreferrer">
-                            关于
-                        </a>
-                    </a-menu-item>
+                    <a-sub-menu key="about" title="关于">
+                        <a-menu-item-group title="">
+                            <a-menu-item key="about" icon={<github-outlined />}>
+                                <a href="https://github.com/MuGuiLin" target="_blank" rel="noopener noreferrer">
+                                    GitHub
+                                </a>
+                            </a-menu-item>
+                            <a-menu-item key="about" icon={<logout-outlined />}>
+                                <a href="https://github.com/MuGuiLin/mu-svg-editor" target="_blank" rel="noopener noreferrer">
+                                    mu-svg-editor
+                                </a>
+                            </a-menu-item>
+                        </a-menu-item-group>
+                    </a-sub-menu>
+                   
                 </a-menu>
                
             </header>
