@@ -96,7 +96,7 @@ export default defineComponent({
     render() {
         const { attr, tabicon, input, state, onFinish, onFinishFailed, onValuesChange }: any = this;
         return (<aside class={style.attr}>
-            <a-tabs v-model:activeKey={attr.activeKey}>
+            <a-tabs v-model:activeKey={attr.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']}>
                     单体
                 </a-tab-pane>
