@@ -20,7 +20,7 @@ export default defineComponent({
 
         return (
             <header class={style.menu}>
-                <a-menu v-model:selectedKeys={current} mode="horizontal">
+                <a-menu class={style.nav} v-model:selectedKeys={current} mode="horizontal">
                     <a-menu-item key="file" icon={<folder-open-outlined />}>文件</a-menu-item>
                     <a-menu-item key="edit" icon={<form-outlined />}>编辑</a-menu-item>
                     <a-sub-menu key="view" title="视图" icon={<pic-right-outlined />} >
@@ -38,7 +38,7 @@ export default defineComponent({
                             </a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="SVG">
-                            <a-menu-item key="view:3">源代码</a-menu-item>
+                            <a-menu-item key="view:3">SVG代码</a-menu-item>
                             <a-menu-item key="view:4">视图预览</a-menu-item>
                         </a-menu-item-group>
                     </a-sub-menu>
