@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, onMounted, onUnmounted } from 'vue';
+import { reactive, onMounted, watch, onUnmounted } from 'vue';
 
 import Menu from './menu';
 import Tool from './tool';
@@ -7,6 +7,7 @@ import Attr from './attr';
 import Info from './info';
 
 import scale from "./hook/scale";
+import { log } from 'console';
 
 interface IState {
     width: number;
@@ -51,6 +52,12 @@ const mousemove = ({ clientX, clientY }: Event | any) => {
         return false;
     }
 }
+
+watch(() => [state.width, state.height], (n1, n2) => {
+    setTimeout(() => {
+        state.scale.reset();
+    }, 300);
+}, { immediate: true });
 
 onMounted(() => {
     state.scale = new scale({
@@ -174,10 +181,7 @@ onUnmounted(() => {
             .mu-svg-canvas {
                 box-sizing: border-box;
                 position: absolute;
-                top: 50%;
-                left: 50%;
                 background-image: url(data:image/png;base64,R0lGODlhEAAQAIAAAP///9bW1iH5BAAAAAAALAAAAAAQABAAAAIfjG+gq4jM3IFLJgpswNly/XkcBpIiVaInlLJr9FZWAQA7);
-                transform: translate(-50%, -50%);
 
                 #svg {
                     transition: all 500ms cubic-bezier(0.16, 0.66, 0.28, 0.96);

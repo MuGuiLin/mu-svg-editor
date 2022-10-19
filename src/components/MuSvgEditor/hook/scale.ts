@@ -146,7 +146,7 @@ export default class scale {
     }
 
     public reset() {
-        const { oCanvas, oScaleX, oScaleY } = this;
+        const { oDraw, oCanvas, oScaleX, oScaleY } = this;
 
         const width = (window.innerWidth ||
             document.body.clientWidth ||
@@ -157,12 +157,30 @@ export default class scale {
             document.documentElement.clientHeight
         );
 
-        this.scaleXW = oScaleX.width = oCanvas.offsetWidth > width ? oCanvas.offsetWidth : width;
-        this.scaleYH = oScaleY.height = oCanvas.offsetHeight > heihgt ? oCanvas.offsetHeight : heihgt;
+        // this.scaleXW = oScaleX.width = oCanvas.offsetWidth > width ? oCanvas.offsetWidth : width;
+        // this.scaleYH = oScaleY.height = oCanvas.offsetHeight > heihgt ? oCanvas.offsetHeight : heihgt;
 
-        this.scaleXZ = oCanvas.offsetLeft - Math.round(oCanvas.offsetWidth / 2);
-        this.scaleYZ = oCanvas.offsetTop - Math.round(oCanvas.offsetHeight / 2);
+        this.scaleXW = oScaleX.width = oCanvas.offsetWidth > oDraw.offsetWidth ? oCanvas.offsetWidth : oDraw.offsetWidth;
+        this.scaleYH = oScaleY.height = oCanvas.offsetHeight > oDraw.offsetHeight ? oCanvas.offsetHeight : oDraw.offsetHeight;
 
+        if (oCanvas.offsetWidth > oDraw.offsetWidth) {
+            this.scaleXZ = oScaleY.width;
+            this.oCanvas.style.left = `${this.scaleXZ}px`;
+            this.oCanvas.style.transform = `translate(0)`;
+        } else {
+            this.scaleXZ = oCanvas.offsetLeft - Math.round(oCanvas.offsetWidth / 2);
+            this.oCanvas.style.left = `50%`;
+            this.oCanvas.style.transform = `translate(-50%, -50%)`;
+        }
+        if (oCanvas.offsetHeight > oDraw.offsetHeight) {
+            this.scaleYZ = oScaleX.height;
+            this.oCanvas.style.top = `${this.scaleYZ}px`;
+            this.oCanvas.style.transform = `translate(0)`;
+        } else {
+            this.scaleYZ = oCanvas.offsetTop - Math.round(oCanvas.offsetHeight / 2);
+            this.oCanvas.style.top = `50%`;
+            this.oCanvas.style.transform = `translate(-50%, -50%)`;
+        }
         this.draw();
     }
 
