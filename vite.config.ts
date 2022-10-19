@@ -64,7 +64,7 @@ export default defineConfig((config: UserConfig) => {
       host: true,
       port: 666,
       strictPort: 888,
-      open: false,
+      open: true,
       https: false,
       proxy: {
         '/api': {
