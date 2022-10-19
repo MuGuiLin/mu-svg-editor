@@ -160,23 +160,27 @@ export default class scale {
         // this.scaleXW = oScaleX.width = oCanvas.offsetWidth > width ? oCanvas.offsetWidth : width;
         // this.scaleYH = oScaleY.height = oCanvas.offsetHeight > heihgt ? oCanvas.offsetHeight : heihgt;
 
-        this.scaleXW = oScaleX.width = oCanvas.offsetWidth > oDraw.offsetWidth ? oCanvas.offsetWidth : oDraw.offsetWidth;
-        this.scaleYH = oScaleY.height = oCanvas.offsetHeight > oDraw.offsetHeight ? oCanvas.offsetHeight : oDraw.offsetHeight;
+        // this.scaleXW = oScaleX.width = oCanvas.offsetWidth > oDraw.offsetWidth ? oCanvas.offsetWidth : oDraw.offsetWidth;
+        // this.scaleYH = oScaleY.height = oCanvas.offsetHeight > oDraw.offsetHeight ? oCanvas.offsetHeight : oDraw.offsetHeight;
 
         if (oCanvas.offsetWidth > oDraw.offsetWidth) {
+            this.scaleXW = oCanvas.offsetWidth;
             this.scaleXZ = oScaleY.width;
             this.oCanvas.style.left = `${this.scaleXZ}px`;
             this.oCanvas.style.transform = `translate(0)`;
         } else {
+            this.scaleXW = oDraw.offsetWidth;
             this.scaleXZ = oCanvas.offsetLeft - Math.round(oCanvas.offsetWidth / 2);
             this.oCanvas.style.left = `50%`;
             this.oCanvas.style.transform = `translate(-50%, -50%)`;
         }
         if (oCanvas.offsetHeight > oDraw.offsetHeight) {
+            this.scaleYH = oCanvas.offsetHeight;
             this.scaleYZ = oScaleX.height;
             this.oCanvas.style.top = `${this.scaleYZ}px`;
             this.oCanvas.style.transform = `translate(0)`;
         } else {
+            this.scaleYH = oDraw.offsetHeight;
             this.scaleYZ = oCanvas.offsetTop - Math.round(oCanvas.offsetHeight / 2);
             this.oCanvas.style.top = `50%`;
             this.oCanvas.style.transform = `translate(-50%, -50%)`;
@@ -186,7 +190,8 @@ export default class scale {
 
     public init() {
         const { oDraw, oScaleX, oScaleY } = this;
-
+        console.log(66666, oScaleX.width, oScaleX.height);
+        
         this.scaleXW = oScaleX.width = oDraw.offsetWidth;
         this.scaleXH = oScaleX.height = 19;
 
