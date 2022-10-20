@@ -4,7 +4,6 @@ interface IScale {
     scale_x: string;
     scale_y: string;
 };
-
 export default class scale {
     private readonly oDraw: HTMLDivElement;
     private readonly oCanvas: HTMLDivElement;
@@ -38,7 +37,7 @@ export default class scale {
             | CanvasRenderingContext2D
             | any;
         this.init();
-    }
+    };
 
     private draw() {
         const {
@@ -143,7 +142,7 @@ export default class scale {
             cScaleX.stroke();
             cScaleY.stroke();
         }
-    }
+    };
 
     public reset() {
         const { oDraw, oCanvas, oScaleX, oScaleY } = this;
@@ -186,11 +185,10 @@ export default class scale {
             this.oCanvas.style.transform = `translate(-50%, -50%)`;
         }
         this.draw();
-    }
+    };
 
     public init() {
         const { oDraw, oScaleX, oScaleY } = this;
-        console.log(66666, oScaleX.width, oScaleX.height);
         
         this.scaleXW = oScaleX.width = oDraw.offsetWidth;
         this.scaleXH = oScaleX.height = 19;
@@ -203,5 +201,5 @@ export default class scale {
         };
 
         this.reset();
-    }
-}
+    };
+};
