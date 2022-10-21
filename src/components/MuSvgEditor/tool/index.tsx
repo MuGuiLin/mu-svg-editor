@@ -11,7 +11,8 @@ export default defineComponent({
     render() {
         return (
             <aside class={style.tool}>
-                <h3>基础控件</h3>
+                <h3>绘图</h3>
+                <h3>控件</h3>
             </aside>
         );
     }
