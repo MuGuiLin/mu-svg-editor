@@ -31,8 +31,6 @@ interface IProps {
 }
 
 interface IState {
-    width: string | number;
-    height: string | number;
     remember: boolean;
     color: string;
     about: string;
@@ -45,8 +43,6 @@ export default defineComponent({
     },
     setup(props) {
         const state = reactive<IState>({
-            width: '',
-            height: '',
             color: '#1890FF',
             remember: true,
             about: 'Mu-SVG-Editor'

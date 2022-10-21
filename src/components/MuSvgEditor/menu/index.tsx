@@ -4,20 +4,19 @@ import style from './style.module.less'
 export default defineComponent({
     name: 'Menu',
     props: {
-        menu: {}
+        attr: {}
     },
     setup(props, ctx) {
-        const current = ref<string[]>(['files']);
-        console.log(111, props)
+        let current = ref<string[]>(['file']);
+
         return {
             current,
         };
     },
     render() {
-        console.log(666, this);
-        const { menu, current }: any = this;
-        console.log(333, menu);
 
+        const { attr, current }: any = this;
+     
         return (
             <header class={style.menu}>
                 <a-menu class={style.nav} v-model:selectedKeys={current} mode="horizontal">
@@ -27,13 +26,13 @@ export default defineComponent({
                         <a-menu-item-group title="辅助">
                             <a-menu-item key="view:1">
                             <label>
-                                <a-switch v-model:checked={menu.isScale} size="small" checked-children="开" un-checked-children="关" /> 显示标尺
+                                <a-switch v-model:checked={attr.isScale} size="small" checked-children="开" un-checked-children="关" /> 显示标尺
                             </label>
                
                             </a-menu-item>
                             <a-menu-item key="view:2">
                             <label>
-                                <a-switch v-model:checked={menu.isLine} size="small" checked-children="开" un-checked-children="关" /> 显示坐标
+                                <a-switch v-model:checked={attr.isLine} size="small" checked-children="开" un-checked-children="关" /> 显示坐标
                             </label>
                             </a-menu-item>
                         </a-menu-item-group>
