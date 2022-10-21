@@ -16,8 +16,6 @@ const state = <Iprops>reactive({
     isScale: true,
     lineX: 100,
     lineY: 100,
-    scale: null,
-    activeKey: '2',
 });
 
 const mousemove = ({ clientX, clientY }: Event | any) => {
@@ -25,21 +23,6 @@ const mousemove = ({ clientX, clientY }: Event | any) => {
     state.lineX = clientX - 180;
     state.lineY = clientY - 50;
 };
-
-// watch(() => [state.width, state.height], (n1, n2) => {
-//     setTimeout(() => {
-//         state.scale.reset();
-//     }, 300);
-// }, { immediate: true });
-
-// onMounted(() => {
-//     state.scale = new scale({
-//         draw: '.mu-svg-editor-work-draw',
-//         canvas: '.mu-svg-canvas',
-//         scale_x: '#scale-x',
-//         scale_y: '#scale-y'
-//     });
-// });
 
 </script>
 
