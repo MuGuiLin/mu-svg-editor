@@ -1,106 +1,38 @@
 <script setup lang="ts">
-import { reactive, onMounted, watch, onUnmounted } from 'vue';
+import { reactive } from 'vue';
+
+import { Iprops } from './types/props'
 
 import Menu from './menu';
 import Tool from './tool';
+import Work from './work';
 import Attr from './attr';
 import Info from './info';
 
-import scale from "./hook/scale";
-import { log } from 'console';
-
-interface IState {
-    width: number;
-    height: number;
-    scale: any;
-    isLine: boolean;
-    isScale: boolean;
-    lineX: number;
-    lineY: number;
-    activeKey: string;
-};
-
-const state = <IState>reactive({
+const state = <Iprops>reactive({
     width: 1008,
     height: 567,
-    // width: 1920,
-    // height: 1080,
     isLine: true,
     isScale: true,
     lineX: 100,
     lineY: 100,
-    scale: null,
-    activeKey: '2',
 });
-
-const resize = ({ target }: Event | any) => {
-    if ('width' === target.name) {
-        state.width = target.value;
-    } else if ('height' === target.name) {
-        state.height = target.value;
-    }
-    setTimeout(() => {
-        state.scale.reset();
-    }, 300);
-};
 
 const mousemove = ({ clientX, clientY }: Event | any) => {
-    if (state.isLine) {
-        state.lineX = clientX - 180;
-        state.lineY = clientY - 50;
-    } else {
-        return false;
-    }
-}
-
-watch(() => [state.width, state.height], (n1, n2) => {
-    setTimeout(() => {
-        state.scale.reset();
-    }, 300);
-}, { immediate: true });
-
-onMounted(() => {
-    state.scale = new scale({
-        draw: '.mu-svg-editor-work-draw',
-        canvas: '.mu-svg-canvas',
-        scale_x: '.mu-svg-scale-x',
-        scale_y: '.mu-svg-scale-y'
-    });
-});
-
-onUnmounted(() => {
-    window.onresize = null;
-});
+    if (!state.isLine) return;
+    state.lineX = clientX - 180;
+    state.lineY = clientY - 50;
+};
 
 </script>
 
 <template>
     <section class="mu-svg-editor">
-        <Menu :menu="state" />
-        <Tool :tool="state" />
-        <main class="mu-svg-editor-work">
-            <div class="mu-svg-editor-work-draw" @mousemove="mousemove($event)">
-                <div class="mu-svg-scale" v-show="state.isScale">
-                    <div class="mu-svg-scale-x-box">
-                        <canvas class="mu-svg-scale-x"></canvas>
-                    </div>
-                    <div class="mu-svg-scale-y-box">
-                        <canvas class="mu-svg-scale-y"></canvas>
-                    </div>
-                </div>
-                <div class="mu-svg-canvas">
-                    <svg id="svg" xmlns="http://www.w3.org/2000/svg" :width="state.width" :height="state.height"
-                        :viewBox="`0 0 ${state.width} ${state.height}`"></svg>
-                </div>
-                <div class="mu-svg-subline" v-show="state.isLine">
-                    <div class="mu-svg-subline-x" :style="{top: state.lineY + 'px'}"></div>
-                    <div class="mu-svg-subline-y" :style="{left: state.lineX + 'px'}"></div>
-                </div>
-            </div>
-        </main>
+        <Menu :attr="state" />
+        <Tool :attr="state" />
+        <Work v-bind:attr="state" :mousemove="mousemove" />
         <Attr :attr="state" />
-        <Info :info="state" />
-
+        <Info :attr="state" />
     </section>
 </template>
 
@@ -117,104 +49,6 @@ onUnmounted(() => {
     grid-template-rows: 50px calc(100vh - 80px) 30px;
     grid-template-columns: 180px 1fr 280px;
     grid-template-areas: "menu menu menu" "tool work attr" "tool info info";
-
-    &-work {
-        grid-area: work;
-        box-sizing: border-box;
-        display: flex;
-        overflow: hidden;
-
-        &-draw {
-            box-sizing: border-box;
-            position: relative;
-            flex: 1;
-            overflow: auto;
-            cursor: crosshair;
-
-            .mu-svg-scale {
-                position: relative;
-                z-index: 1;
-
-                &::after {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    display: block;
-                    width: 18px;
-                    height: 18px;
-                    background: rgb(70, 70, 70);
-                    box-shadow: 2px 6px 12px 4px rgba(30, 30, 30, .6);
-                }
-
-                &-x-box {
-                    position: sticky;
-                    top: 0;
-                    left: 0;
-                    // width: 100%;
-                    height: 18px;
-                    background: rgb(80, 80, 80);
-
-                    &>canvas {
-                        background: rgb(80, 80, 80);
-                        box-shadow: 0px 2px 6px 0px rgba(30, 30, 30, .6);
-                    }
-                }
-
-                &-y-box {
-                    position: sticky;
-                    top: 0;
-                    left: 0;
-                    width: 18px;
-                    // height: 100%;
-                    background: rgb(80, 80, 80);
-
-                    &>canvas {
-                        position: relative;
-                        top: -17px;
-                        background: rgb(80, 80, 80);
-                        box-shadow: 2px 0px 6px 0px rgba(30, 30, 30, .6);
-                    }
-                }
-            }
-
-            .mu-svg-canvas {
-                box-sizing: border-box;
-                position: absolute;
-                background-image: url(data:image/png;base64,R0lGODlhEAAQAIAAAP///9bW1iH5BAAAAAAALAAAAAAQABAAAAIfjG+gq4jM3IFLJgpswNly/XkcBpIiVaInlLJr9FZWAQA7);
-
-                #svg {
-                    transition: all 500ms cubic-bezier(0.16, 0.66, 0.28, 0.96);
-                }
-            }
-
-            .mu-svg-subline {
-                user-select: none;
-
-                &>div {
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
-                    background-color: blueviolet;
-                }
-
-                &-x {
-                    top: 0;
-                    height: 1px;
-                    background-image: linear-gradient(to right, blueviolet, deepskyblue);
-                }
-
-                &-y {
-                    left: 0;
-                    width: 1px;
-                    background-image: linear-gradient(deeppink, deepskyblue);
-                }
-            }
-        }
-    }
-
 }
 
 // ::-webkit-scrollbar {

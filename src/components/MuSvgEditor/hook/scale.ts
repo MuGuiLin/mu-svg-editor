@@ -4,14 +4,16 @@ interface IScale {
     scale_x: string;
     scale_y: string;
 };
+
+
 export default class scale {
-    private readonly oDraw: HTMLDivElement;
-    private readonly oCanvas: HTMLDivElement;
+    private readonly oDraw: HTMLDivElement | any;
+    private readonly oCanvas: HTMLDivElement | any;
 
     private readonly cScaleX: HTMLCanvasElement | any;
     private readonly cScaleY: HTMLCanvasElement | any;
-    private readonly oScaleX: HTMLCanvasElement;
-    private readonly oScaleY: HTMLCanvasElement;
+    private readonly oScaleX: HTMLCanvasElement | any;
+    private readonly oScaleY: HTMLCanvasElement | any;
 
     public scaleXW: number = 0;
     public scaleXH: number = 19;
@@ -23,20 +25,25 @@ export default class scale {
     constructor({
         draw = '.draw',
         canvas = '.canvas',
-        scale_x = '.scale-x',
-        scale_y = '.scale-y'
+        scale_x = '#scale-x',
+        scale_y = '#scale-y'
     }: IScale) {
-        this.oDraw = document.querySelector(draw) as HTMLDivElement;
-        this.oCanvas = document.querySelector(canvas) as HTMLDivElement;
-        this.oScaleX = document.querySelector(scale_x) as HTMLCanvasElement;
-        this.oScaleY = document.querySelector(scale_y) as HTMLCanvasElement;
-        this.cScaleX = this.oScaleX.getContext("2d") as
-            | CanvasRenderingContext2D
-            | any;
-        this.cScaleY = this.oScaleY.getContext("2d") as
-            | CanvasRenderingContext2D
-            | any;
-        this.init();
+        try {
+            this.oDraw = document.querySelector(draw) as HTMLDivElement;
+            this.oCanvas = document.querySelector(canvas) as HTMLDivElement;
+            this.oScaleX = document.querySelector(scale_x)?.querySelector('canvas') as HTMLCanvasElement;
+            this.oScaleY = document.querySelector(scale_y)?.querySelector('canvas') as HTMLCanvasElement;
+            
+            this.cScaleX = this.oScaleX.getContext("2d") as
+                | CanvasRenderingContext2D
+                | any;
+            this.cScaleY = this.oScaleY.getContext("2d") as
+                | CanvasRenderingContext2D
+                | any;
+            this.init();
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     private draw() {
@@ -50,6 +57,7 @@ export default class scale {
             scaleXZ,
             scaleYZ,
         } = this;
+        if (!cScaleX || !cScaleY) return;
 
         cScaleX.clearRect(0, 0, scaleXW, scaleXH);
         cScaleY.clearRect(0, 0, scaleYW, scaleYH);
@@ -189,7 +197,7 @@ export default class scale {
 
     public init() {
         const { oDraw, oScaleX, oScaleY } = this;
-        
+
         this.scaleXW = oScaleX.width = oDraw.offsetWidth;
         this.scaleXH = oScaleX.height = 19;
 

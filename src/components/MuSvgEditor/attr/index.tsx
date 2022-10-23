@@ -18,21 +18,18 @@ interface IState {
 //         type: Number,
 //         default: 567,
 //     },
-//     activeKey: String,
 //     arr: Array
 // });
 
 interface IProps {
     width: number;
-    height: number;
-    activeKey?: string | number; //未设置默认值为undefined
+    height: number; //未设置默认值为undefined
     arr?: Array<any>;
     eame: 'A' | 'B' | 'C' // 限定父组件传 eame 的值
 }
 
 interface IState {
-    width: string | number;
-    height: string | number;
+    activeKey: string,
     remember: boolean;
     color: string;
     about: string;
@@ -45,8 +42,7 @@ export default defineComponent({
     },
     setup(props) {
         const state = reactive<IState>({
-            width: '',
-            height: '',
+            activeKey: '2',
             color: '#1890FF',
             remember: true,
             about: 'Mu-SVG-Editor'
@@ -96,7 +92,7 @@ export default defineComponent({
     render() {
         const { attr, tabicon, input, state, onFinish, onFinishFailed, onValuesChange }: any = this;
         return (<aside class={style.attr}>
-            <a-tabs v-model:activeKey={attr.activeKey} centered>
+            <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']}>
                     单体
                 </a-tab-pane>

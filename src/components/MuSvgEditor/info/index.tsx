@@ -9,16 +9,16 @@ interface IProps {
 export default defineComponent({
     name: 'Info',
     props: {
-        info: {}
+        attr: {}
     },
     setup(props: IProps, stx) {
 
-        const { info }: any = props;
+        const { attr }: any = props;
 
         return (a: any, b: any, c: any) => {
             // console.log(a, b, c);
             return <footer class={style.info}>
-                <p>坐标信息 X：<b>{info.lineX}</b> px，Y：<b>{info.lineY}</b> px</p>
+                <p>坐标信息 X：<b>{attr.lineX}</b> px，Y：<b>{attr.lineY}</b> px</p>
             </footer>
         };
     }

@@ -1,31 +1,66 @@
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, watch, onMounted, onUnmounted } from 'vue';
+import { Iprops } from '../types/props'
+import scale from "../hook/scale";
+
 import style from './style.module.less'
 
 export default defineComponent({
+    props: {
+        attr: {},
+        mousemove: Function
+    },
 
-    setup(this, props, ctx) {
+    setup(props: any, ctx) {
+        console.log(props);
 
+        const state: Iprops = reactive({
+            scale: null,
+        });
+
+        watch(() => [props.attr.width, props.attr.height], (n1, n2) => {
+            setTimeout(() => {
+                state.scale.reset();
+            }, 100);
+        }, { immediate: true });
+
+        onMounted(() => {
+            state.scale = new scale({
+                draw: `.${style.draw}`,
+                canvas: `.${style.canvas}`,
+                scale_x: `.${style.scale_x}`,
+                scale_y: `.${style.scale_y}`
+            });
+        });
+
+        onUnmounted(() => {
+            window.onresize = null;
+        });
+
+        return {
+            state
+        };
     },
     render() {
-        const { work }: any = this;
-        return <main class="{style.work}">
-            <div class="mu-svg-editor-work-draw" onmousemove={() => { work.mousemove(event) }}>
-                <div class="mu-svg-scale" v-show={work.isScale}>
-                    <div class="mu-svg-scale-x-box">
-                        <canvas class="mu-svg-scale-x"></canvas>
+        const { attr, state, mousemove }: any = this;
+
+        return <main class={style.work}>
+            <div class={style.draw} onmousemove={($event: Event) => mousemove($event)}>
+                <div class={style.scale} v-show={attr.isScale}>
+                    <div class={style.scale_x}>
+                        <canvas></canvas>
                     </div>
-                    <div class="mu-svg-scale-y-box">
-                        <canvas class="mu-svg-scale-y"></canvas>
+                    <div class={style.scale_y}>
+                        <canvas></canvas>
                     </div>
                 </div>
-                <div class="mu-svg-canvas">
-                    <svg id="svg" xmlns="http://www.w3.org/2000/svg" width="{work.width}" height="{work.height}" viewBox="{`0 0 ${work.width} ${work.height}`}"></svg>
+                <div class={style.canvas}>
+                    <svg class={style.svg} id="svg" xmlns="http://www.w3.org/2000/svg" width={attr.width} height={attr.height} viewBox={`0 0 ${attr.width} ${attr.height}`}></svg>
                 </div>
-                <div class="mu-svg-subline" v-show="{work.isLine}">
-                    <div class="mu-svg-subline-x" style="{{top: work.lineY + 'px'}}"></div>
-                    <div class="mu-svg-subline-y" style="{{left: work.lineX + 'px'}}"></div>
+                <div class={style.subline} v-show={attr.isLine}>
+                    <div class={style.subline_x} style={{ top: attr.lineY + 'px' }}></div>
+                    <div class={style.subline_y} style={{ left: attr.lineX + 'px' }}></div>
                 </div>
             </div>
-        </main >;
+        </main>;
     }
 });
