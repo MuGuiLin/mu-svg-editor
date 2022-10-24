@@ -5,23 +5,19 @@ interface IScale {
     scale_y: string;
 };
 
-
 export default class scale {
     private readonly oDraw: HTMLDivElement | any;
     private readonly oCanvas: HTMLDivElement | any;
-
     private readonly cScaleX: HTMLCanvasElement | any;
     private readonly cScaleY: HTMLCanvasElement | any;
     private readonly oScaleX: HTMLCanvasElement | any;
     private readonly oScaleY: HTMLCanvasElement | any;
-
     public scaleXW: number = 0;
     public scaleXH: number = 19;
     public scaleYH: number = 0;
     public scaleYW: number = 18;
     public scaleXZ: number = 0;
     public scaleYZ: number = 0;
-
     constructor({
         draw = '.draw',
         canvas = '.canvas',
@@ -33,7 +29,6 @@ export default class scale {
             this.oCanvas = document.querySelector(canvas) as HTMLDivElement;
             this.oScaleX = document.querySelector(scale_x)?.querySelector('canvas') as HTMLCanvasElement;
             this.oScaleY = document.querySelector(scale_y)?.querySelector('canvas') as HTMLCanvasElement;
-            
             this.cScaleX = this.oScaleX.getContext("2d") as
                 | CanvasRenderingContext2D
                 | any;
@@ -45,7 +40,6 @@ export default class scale {
             console.error(error);
         }
     };
-
     private draw() {
         const {
             cScaleX,
@@ -58,13 +52,10 @@ export default class scale {
             scaleYZ,
         } = this;
         if (!cScaleX || !cScaleY) return;
-
         cScaleX.clearRect(0, 0, scaleXW, scaleXH);
         cScaleY.clearRect(0, 0, scaleYW, scaleYH);
-
         const scale = 50;
         const loop = (scaleXW / scale) < 25 ? 25 : (scaleXW / scale);
-
         for (let i = 0; i < 100; i++) {
             cScaleX.beginPath();
             cScaleY.beginPath();
@@ -146,7 +137,6 @@ export default class scale {
             (String(-i * scale).split('') || []).forEach((item, index) => {
                 cScaleY.fillText(item, 3, scaleYZ - i * scale + 9 * (index + 1));
             });
-
             cScaleX.stroke();
             cScaleY.stroke();
         }
@@ -154,7 +144,6 @@ export default class scale {
 
     public reset() {
         const { oDraw, oCanvas, oScaleX, oScaleY } = this;
-
         const width = (window.innerWidth ||
             document.body.clientWidth ||
             document.documentElement.clientWidth
@@ -197,17 +186,13 @@ export default class scale {
 
     public init() {
         const { oDraw, oScaleX, oScaleY } = this;
-
         this.scaleXW = oScaleX.width = oDraw.offsetWidth;
         this.scaleXH = oScaleX.height = 19;
-
         this.scaleYH = oScaleY.height = oDraw.offsetHeight;
         this.scaleYW = oScaleY.width = 18;
-
         window.onresize = () => {
             this.reset();
         };
-
         this.reset();
     };
 };
