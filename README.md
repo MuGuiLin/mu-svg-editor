@@ -1,4 +1,4 @@
-# mu-svg-editor（SVG编辑器）
+# mu-svg-editor（SVG在线编辑器）
 
 
 # Vite + Vue3 + TSX + AntDV
