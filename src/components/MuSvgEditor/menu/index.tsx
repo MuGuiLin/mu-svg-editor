@@ -64,7 +64,7 @@ export default defineComponent({
                         <a-menu-item key="sort:5" icon={<group-outlined />}>对象组合</a-menu-item>
                         <a-menu-item key="sort:6" icon={<ungroup-outlined />}>对象分解</a-menu-item>
                     </a-sub-menu>
-                    <a-sub-menu key="page" title="页面" icon={<pic-center-outlined />} >
+                    <a-sub-menu key="page" title="页面" icon={<layout-outlined />} >
                         <a-menu-item-group title="网格大小">
                             <a-menu-item key="file:1" icon={<fullscreen-exit-outlined />}>微小</a-menu-item>
                             <a-menu-item key="file:2" icon={<vertical-align-middle-outlined />}>正常</a-menu-item>
