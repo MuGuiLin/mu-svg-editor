@@ -64,18 +64,26 @@ export default defineComponent({
                         <a-menu-item key="sort:5" icon={<group-outlined />}>对象组合</a-menu-item>
                         <a-menu-item key="sort:6" icon={<ungroup-outlined />}>对象分解</a-menu-item>
                     </a-sub-menu>
-                    <a-sub-menu key="about" title="关于" icon={<trademark-outlined />}>
-                        <a-menu-item key="about:1" icon={<github-outlined />}>
+                    <a-sub-menu key="page" title="页面" icon={<pic-center-outlined />} >
+                        <a-menu-item-group title="网格大小">
+                            <a-menu-item key="file:1" icon={<fullscreen-exit-outlined />}>微小</a-menu-item>
+                            <a-menu-item key="file:2" icon={<vertical-align-middle-outlined />}>正常</a-menu-item>
+                            <a-menu-item key="file:3" icon={<drag-outlined />}>略大</a-menu-item>
+                            <a-menu-item key="file:4" icon={<fullscreen-outlined />}>超大</a-menu-item>
+                        </a-menu-item-group>
+                    </a-sub-menu>
+                    <a-sub-menu key="help" title="帮助" icon={<question-circle-outlined />}>
+                        <a-menu-item key="help:1" icon={<github-outlined />}>
                             <a href="https://github.com/MuGuiLin" target="_blank" rel="noopener noreferrer">
                                 GitHub
                             </a>
                         </a-menu-item>
-                        <a-menu-item key="about:2" icon={<ie-outlined />}>
+                        <a-menu-item key="help:2" icon={<trademark-outlined />}>
                             <a href="http://www.muguilin.com" target="_blank" rel="noopener noreferrer">
                                 About
                             </a>
                         </a-menu-item>
-                        <a-menu-item key="about:3" icon={<logout-outlined />}>
+                        <a-menu-item key="help:3" icon={<logout-outlined />}>
                             <a href="https://github.com/MuGuiLin/mu-svg-editor" target="_blank" rel="noopener noreferrer">
                                 Mu-Svg-Editor
                             </a>
