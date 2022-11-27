@@ -31,7 +31,7 @@ export default defineComponent({
                         <p><stock-outlined /> 曲线</p>
                         <p><border-outlined /> 矩形</p>
                         <p><loading3-quarters-outlined /> 圆形</p>
-                        <p><highlight-outlined /> 路径</p>
+                        <p><node-index-outlined /> 路径</p>
                         <p><font-size-outlined /> 文本</p>
                         <p><bg-colors-outlined /> 填充</p>
                     </a-collapse-panel>

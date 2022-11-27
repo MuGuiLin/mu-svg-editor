@@ -38,7 +38,7 @@ export default defineComponent({
                         <a-menu-item key="edit:5" icon={<snippets-outlined />}>粘贴</a-menu-item>
                         <a-menu-item key="edit:6" icon={<delete-outlined />}>删除</a-menu-item>
                     </a-sub-menu>
-                    <a-sub-menu key="view" title="视图" icon={<pic-right-outlined />} >
+                    <a-sub-menu key="view" title="视图" icon={<eye-outlined />} >
                         <a-menu-item-group title="查看">
                             <a-menu-item key="view:1" icon={<folder-view-outlined />}>视图预览</a-menu-item>
                             <a-menu-item key="view:2" icon={<code-outlined />}>SVG代码</a-menu-item>
@@ -55,6 +55,14 @@ export default defineComponent({
                                 </label>
                             </a-menu-item>
                         </a-menu-item-group>
+                    </a-sub-menu>
+                    <a-sub-menu key="sort" title="排列" icon={<pic-center-outlined />} >
+                        <a-menu-item key="sort:1" icon={<insert-row-above-outlined />}>置于顶层</a-menu-item>
+                        <a-menu-item key="sort:2" icon={<insert-row-below-outlined />}>置于底层</a-menu-item>
+                        <a-menu-item key="sort:3" icon={<vertical-align-top-outlined />}>置上一层</a-menu-item>
+                        <a-menu-item key="sort:4" icon={<vertical-align-bottom-outlined />}>置下一层</a-menu-item>
+                        <a-menu-item key="sort:5" icon={<group-outlined />}>对象组合</a-menu-item>
+                        <a-menu-item key="sort:6" icon={<ungroup-outlined />}>对象分解</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="about" title="关于" icon={<trademark-outlined />}>
                         <a-menu-item key="about:1" icon={<github-outlined />}>
