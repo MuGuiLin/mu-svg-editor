@@ -20,8 +20,10 @@ const state = <Iprops>reactive({
 
 const mousemove = ({ clientX, clientY }: Event | any) => {
     if (!state.isLine) return;
-    state.lineX = clientX - 180;
-    state.lineY = clientY - 50;
+    // state.lineX = clientX - 180;
+    // state.lineY = clientY - 50;
+    state.lineX = clientX + Number(state.width) - 1188;
+    state.lineY = clientY + Number(state.height) - 618;
 };
 
 </script>

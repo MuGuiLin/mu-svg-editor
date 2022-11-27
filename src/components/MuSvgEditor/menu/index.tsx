@@ -16,24 +16,33 @@ export default defineComponent({
     render() {
 
         const { attr, current }: any = this;
-     
+
         return (
             <header class={style.menu}>
                 <a-menu class={style.nav} v-model:selectedKeys={current} mode="horizontal">
-                    <a-menu-item key="file" icon={<folder-open-outlined />}>文件</a-menu-item>
+                    <a-sub-menu key="file" title="文件" icon={<folder-open-outlined />}>
+                        <a-menu-item-group title="打开">
+                            <a-menu-item key="file:1" icon={<github-outlined />}>打开SVG</a-menu-item>
+                            <a-menu-item key="file:2" icon={<github-outlined />}>导入图片</a-menu-item>
+                        </a-menu-item-group>
+                        <a-menu-item-group title="输出">
+                            <a-menu-item key="file:3" icon={<github-outlined />}>保存SVG</a-menu-item>
+                            <a-menu-item key="file:4" icon={<github-outlined />}>导出PNG</a-menu-item>
+                        </a-menu-item-group>
+                    </a-sub-menu>
                     <a-menu-item key="edit" icon={<form-outlined />}>编辑</a-menu-item>
                     <a-sub-menu key="view" title="视图" icon={<pic-right-outlined />} >
                         <a-menu-item-group title="辅助">
                             <a-menu-item key="view:1">
-                            <label>
-                                <a-switch v-model:checked={attr.isScale} size="small" checked-children="开" un-checked-children="关" /> 显示标尺
-                            </label>
-               
+                                <label>
+                                    <a-switch v-model:checked={attr.isScale} size="small" checked-children="开" un-checked-children="关" /> 显示标尺
+                                </label>
+
                             </a-menu-item>
                             <a-menu-item key="view:2">
-                            <label>
-                                <a-switch v-model:checked={attr.isLine} size="small" checked-children="开" un-checked-children="关" /> 显示坐标
-                            </label>
+                                <label>
+                                    <a-switch v-model:checked={attr.isLine} size="small" checked-children="开" un-checked-children="关" /> 显示坐标
+                                </label>
                             </a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="SVG">
