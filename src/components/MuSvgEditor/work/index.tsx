@@ -44,24 +44,24 @@ export default defineComponent({
         const { attr, state, mousemove }: any = this;
 
         return <main class={style.work}>
-            <div  >
-                <div class={style.draw} style={{width:attr.width+'px',height:attr.height+'px'}} onmousemove={($event: Event) => mousemove($event)}>
-                    <div class={style.scale} v-show={attr.isScale}>
-                        <div class={style.scale_x}>
-                            <canvas></canvas>
-                        </div>
-                        <div class={style.scale_y}>
-                            <canvas></canvas>
-                        </div>
+            <div class={style.draw} onmousemove={($event: Event) => mousemove($event)}>
+                {/* <div style={{width:attr.width+'px',height:attr.height+'px'}}> </div> */}
+                <div class={style.scale} v-show={attr.isScale}>
+                    <div class={style.scale_x}>
+                        <canvas></canvas>
                     </div>
-                    <div class={style.canvas}>
-                        <svg class={style.svg} id="svg" xmlns="http://www.w3.org/2000/svg" width={attr.width} height={attr.height} viewBox={`0 0 ${attr.width} ${attr.height}`}></svg>
-                    </div>
-                    <div class={style.subline}  v-show={attr.isLine}>
-                        <div class={style.subline_x} style={{ top: attr.lineY + 'px' }}></div>
-                        <div class={style.subline_y} style={{ left: attr.lineX + 'px' }}></div>
+                    <div class={style.scale_y}>
+                        <canvas></canvas>
                     </div>
                 </div>
+                <div class={style.canvas}>
+                    <svg class={style.svg} id="svg" xmlns="http://www.w3.org/2000/svg" width={attr.width} height={attr.height} viewBox={`0 0 ${attr.width} ${attr.height}`}></svg>
+                </div>
+                <div class={style.subline} v-show={attr.isLine}>
+                    <div class={style.subline_x} style={{ top: attr.lineY + 'px' }}></div>
+                    <div class={style.subline_y} style={{ left: attr.lineX + 'px' }}></div>
+                </div>
+
             </div>
         </main>;
     }
