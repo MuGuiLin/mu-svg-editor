@@ -1,6 +1,6 @@
 import { defineComponent, ref, reactive } from 'vue'
 
-import NotFound from '@/assets/imgs/404.png'
+import NotFound from '@/assets/img/404.png'
 
 export default defineComponent({
     name: '404',

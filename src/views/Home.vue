@@ -8,7 +8,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
     <section id="root">
         <nav class="nav">
             <router-link to="/">Home</router-link> |
-            <router-link to="/svgEditor">SvgEditor</router-link> |
+            <router-link to="/svgEditor">MuSvgEditor</router-link> |
             <router-link to="/404">404</router-link>
         </nav>
         <hr />
@@ -19,6 +19,9 @@ import HelloWorld from '@/components/HelloWorld.vue'
         </a>
         <a href="https://vuejs.org/" target="_blank">
             <img src="@/assets/svg/vue.svg" class="logo vue" alt="Vue logo" />
+        </a>
+        <a href="https://www.tslang.cn/" target="_blank">
+            <img src="@/assets/img/ts.webp" class="logo antdv" alt="TS logo" />
         </a>
         <a href="https://antdv.com/docs/vue/introduce-cn" target="_blank">
             <img src="/antdv.svg" class="logo antdv" alt="AntDV logo" />
