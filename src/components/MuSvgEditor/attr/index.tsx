@@ -94,7 +94,18 @@ export default defineComponent({
         return (<aside class={style.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']}>
-                    单体
+                    <a-form model={state}
+                        name="cancaSetup"
+                        layout="vertical"
+                        autocomplete="off"
+                        onValuesChange={onValuesChange}
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                    >
+                        <a-form-item label="按件ID" name="id">
+                            <a-input v-model:value={attr.width} prefix={<ColumnWidthOutlined />} placeholder="自动生成！" />
+                        </a-form-item>
+                    </a-form>
                 </a-tab-pane>
                 <a-tab-pane key="2" tab={[tabicon(2), '画布设置']}>
                     <a-form model={state}
