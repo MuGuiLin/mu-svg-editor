@@ -26,7 +26,8 @@ export default defineComponent({
         return (
             <aside class={style.tool}>
                 <a-collapse v-model:activeKey={activeKey} bordered={false} expandIconPosition="left">
-                    <a-collapse-panel key="1" header="基本绘图">
+                    <a-collapse-panel key="1" header="基本绘制">
+                        <p><send-outlined /> 选择</p>
                         <p><line-outlined /> 直线</p>
                         <p><stock-outlined /> 曲线</p>
                         <p><border-outlined /> 矩形</p>
