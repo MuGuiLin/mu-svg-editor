@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
+import {} from './utils/draw';
 
 import { Iprops } from './types/props'
 
