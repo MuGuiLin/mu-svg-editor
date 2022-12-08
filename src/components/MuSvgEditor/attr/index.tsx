@@ -42,7 +42,7 @@ export default defineComponent({
     },
     setup(props) {
         const state = reactive<IState>({
-            activeKey: '2',
+            activeKey: '1',
             color: '#1890FF',
             remember: true,
             about: 'Mu-SVG-Editor'
@@ -103,19 +103,64 @@ export default defineComponent({
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']}>
                     <a-form model={state}
                         name="cancaSetup"
-                        layout="vertical"
+                        layout="horizontal"
                         autocomplete="off"
                         onValuesChange={onValuesChange}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                     >
+                        {/* <a-row>
+                            <a-col span="12">
+                                <a-form-item label="坐标X" name="x">
+                                    <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} />
+                                </a-form-item>
+                            </a-col>
+                            <a-col span="12">
+                                <a-form-item label="坐标Y" name="y">
+                                    <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} />
+                                </a-form-item>
+                            </a-col>
+                        </a-row>
+                        <a-row>
+                            <a-col span="12">
+                                <a-form-item label="宽度" name="width">
+                                    <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} />
+                                </a-form-item>
+                            </a-col>
+                            <a-col span="12">
+                                <a-form-item label="高度" name="height">
+                                    <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} />
+                                </a-form-item>
+                            </a-col>
+                        </a-row>
+                        <a-row>
+                            <a-col span="12">
+                                <a-form-item label="缩放" name="scale">
+                                    <a-input-number v-model:value={ctrl.scale} prefix={<expand-alt-outlined />} />
+                                </a-form-item>
+                            </a-col>
+                            <a-col span="12">
+                                <a-form-item label="旋转" name="rotate">
+                                    <a-input-number v-model:value={ctrl.rotate} prefix={<sync-outlined />} />
+                                </a-form-item>
+                            </a-col>
+                        </a-row> */}
                         <a-form-item label="标识" name="id">
                             <a-input v-model:value={ctrl.id} prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
+                        <a-form-item label="名称" name="name">
+                            <a-input v-model:value={ctrl.id} prefix={<field-number-outlined />} placeholder="自动生成！" />
+                        </a-form-item>
                         <a-form-item label="坐标X" name="x">
-                            <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} addon-after="px"/>
+                            <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="坐标Y" name="y">
+                            <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                        </a-form-item>
+                        <a-form-item label="宽度" name="width">
+                            <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                        </a-form-item>
+                        <a-form-item label="高度" name="height">
                             <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="缩放" name="scale">

@@ -52,7 +52,7 @@ const mousemove = ({ clientX, clientY }: Event | any) => {
     display: grid;
     grid-gap: 0;
     grid-template-rows: 50px calc(100vh - 80px) 30px;
-    grid-template-columns: 180px 1fr 280px;
+    grid-template-columns: 180px 1fr 260px;
     grid-template-areas: "menu menu menu" "tool work attr" "tool info info";
 }
 

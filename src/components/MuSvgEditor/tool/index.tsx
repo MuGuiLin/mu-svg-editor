@@ -1,4 +1,4 @@
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, reactive, toRefs, watch } from 'vue'
 import style from './style.module.less'
 
 export default defineComponent({
@@ -10,12 +10,19 @@ export default defineComponent({
     setup(props) {
         // const activeKey = ref({ activeKey: ['1', 2, 3] });
         let activeKey = ref([0, 1, 2]);
+        const state = reactive({
+            fill: '#2F2F2C', // 
+        });
         const text = `A dog is a type of domesticated animal.Known for its loyalty and faithfulness,it can be found as a welcome guest in many households across the world.`;
         const customStyle =
             'background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden';
         watch(activeKey, val => {
             console.log(val);
         });
+
+        const dragsvg = (e: DragEvent, o: any) => {
+            state.fill = '#0092FF'
+        };
 
         const dragstart = (e: DragEvent, o: any) => {
 
@@ -34,12 +41,14 @@ export default defineComponent({
             activeKey,
             text,
             customStyle,
+            dragsvg,
             dragstart,
-            dragend
+            dragend,
+            ...toRefs(state),
         };
     },
     render() {
-        const { attr: { tool }, activeKey, text, customStyle, dragstart, dragend }: any = this;
+        const { attr: { tool }, activeKey, text, customStyle, dragsvg, dragstart, dragend, fill }: any = this;
         return (
             <aside class={style.tool}>
                 <a-collapse v-model:activeKey={activeKey} bordered={false} expandIconPosition="left">
@@ -48,7 +57,12 @@ export default defineComponent({
                             <a-collapse-panel key={i} header={o.title}>
                                 {
                                     o?.child.map((m) => (
-                                        <div class={style.drag} draggable="true" dragstart={(e: Event) => dragstart(e, m)} dragend={(e: Event) => dragend(e, m)}>
+                                        (1 === m.draw) ? <div class={style.drag} onClick={(e: Event) => dragsvg(e, m)}>
+                                            <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+                                                <path fill={fill} d={m.path}></path>
+                                            </svg>
+                                            <b>{m.name}</b>
+                                        </div> : <div class={style.drag} draggable="true" dragstart={(e: Event) => dragstart(e, m)} dragend={(e: Event) => dragend(e, m)}>
                                             <i class={style.drag + '-' + m.draw}></i>
                                             <b>{m.name}</b>
                                         </div>
