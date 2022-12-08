@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
+import tool from './config/tool';
 import {} from './utils/draw';
 
 import { Iprops } from './types/props'
@@ -17,6 +18,7 @@ const state = <Iprops>reactive({
     isScale: true,
     lineX: 100,
     lineY: 100,
+    tool
 });
 
 const mousemove = ({ clientX, clientY }: Event | any) => {
