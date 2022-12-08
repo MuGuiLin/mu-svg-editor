@@ -1,5 +1,6 @@
 import { defineComponent, ref, reactive, toRefs, watch } from 'vue'
 import style from './style.module.less'
+import './style.module.less'
 
 export default defineComponent({
     props: {
@@ -62,8 +63,8 @@ export default defineComponent({
                                                 <path fill={fill} d={m.path}></path>
                                             </svg>
                                             <b>{m.name}</b>
-                                        </div> : <div class={style.drag} draggable="true" dragstart={(e: Event) => dragstart(e, m)} dragend={(e: Event) => dragend(e, m)}>
-                                            <i class={style.drag + '-' + m.draw}></i>
+                                        </div> : <div class={style.drag}>
+                                            <i class={`${style.drag}-${m.type}`} draggable="true" dragstart={(e: Event) => dragstart(e, m)} dragend={(e: Event) => dragend(e, m)}></i>
                                             <b>{m.name}</b>
                                         </div>
                                     ))

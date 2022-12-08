@@ -16,8 +16,8 @@ const state = <Iprops>reactive({
     height: 567,
     isLine: true,
     isScale: true,
-    lineX: 100,
-    lineY: 100,
+    lineX: 730,
+    lineY: 430,
     tool
 });
 

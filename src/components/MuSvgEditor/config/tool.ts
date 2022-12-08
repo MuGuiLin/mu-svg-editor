@@ -128,7 +128,7 @@ export default [
                 template: ''
             },
             {
-                type: 'redundancy',
+                type: 'redundancy-group',
                 name: '冗余组',
                 icon: '',
                 attr: {
@@ -172,7 +172,7 @@ export default [
                 template: ''
             },
             {
-                type: '',
+                type: 'visitor',
                 name: '访问人',
                 icon: '',
                 attr: {
@@ -183,18 +183,7 @@ export default [
                 template: ''
             },
             {
-                type: 'redundancy',
-                name: '路由器',
-                icon: '',
-                attr: {
-                    ...attrs,
-                },
-                ctrl: '',
-                draw: 2,
-                template: ''
-            },
-            {
-                type: '',
+                type: 'switch',
                 name: '交换机',
                 icon: '',
                 attr: {
@@ -205,7 +194,7 @@ export default [
                 template: ''
             },
             {
-                type: '',
+                type: 'core-switch',
                 name: '核心交换机',
                 icon: '',
                 attr: {
