@@ -22,6 +22,7 @@ const state = <Iprops>reactive({
     lineY: 430,
     tool, 
     nowTool: {},
+    nowAttr: {},
 });
 
 const mousemove = ({ clientX, clientY }: Event | any) => {

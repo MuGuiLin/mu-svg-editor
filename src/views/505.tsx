@@ -2,7 +2,6 @@ import { defineComponent, ref, reactive } from 'vue'
 
 import NotFound from '@/assets/img/404.png';
 import './404.less';
-import Drop505 from './505';
 
 export default defineComponent({
     name: '404',
@@ -21,7 +20,7 @@ export default defineComponent({
 
         function ondragenter(event) {
             document.getElementById("demo").innerHTML = "进入放置区域";
-
+            
             if (event.target.className == "droptarget") {
                 event.target.style.border = "3px dotted red";
             }
@@ -75,16 +74,16 @@ export default defineComponent({
         // </h1>
 
         return <div>
-            <h2>在两个矩形框中来回拖动 p 元素:</h2>
-            <hr />
+            <br />
+            <br />
+            <h2>505在两个矩形框中来回拖动 p 元素:</h2>
+            
+            <p id="dragtarget" ondragstart={(e: Event) => ondragstart(e)} draggable={true} >拖动我505!</p>
 
-            <p id="dragtarget" ondragstart={(e: Event) => ondragstart(e)} draggable={true} >拖动我404!</p>
             <div class="droptarget" ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragleave={(e: Event) => ondragleave(e)} ondragover={(e: Event) => ondragover(e)}></div>
             <div class="droptarget" ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragleave={(e: Event) => ondragleave(e)} ondragover={(e: Event) => ondragover(e)}></div>
 
             <h1 id="demo"></h1>
-            <hr />
-            <Drop505/>
         </div>
     }
 });

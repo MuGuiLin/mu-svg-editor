@@ -25,49 +25,45 @@ export default defineComponent({
             }, 100);
         }, { immediate: true });
 
-        // 控件拖动进入画布区域
-        const ondragenter = (e: DragEvent) => {
-            console.log('进入放置区域');
-            // rightnav_open.value = false;
-            e.preventDefault();
-        };
 
-        // 控件在画布区域拖动中
-        const ondragover = (e: DragEvent) => {
-            e.preventDefault();
-        };
-
-        // 控件在画布上拖动结束
-        const ondrop = (e: DragEvent) => {
-            // 未选择任何组件
-            if (!Object.keys(props.attr.nowTool).length) {
-                return false;
-            }
-            const { type, name, attr } = props.attr.nowTool;
-            console.log(props.attr.nowTool)
-            attr.x = e.offsetX;
-            attr.y = e.offsetY;
+        const onDrop = (e: DragEvent) => {
+            //当左侧工具栏拖动到此处时在画布上创建该组件
+            // if (Object.keys(select_lefttool.value).length < 1) {
+            //     //未选择任何组件
+            //     return;
+            // }
+            
+            console.log(666666, props.attr.nowTool)
 
             //在鼠标位置创建当前组件
-            const ctrl: any = {
-                id: `${new Date().getTime()}`,
-                type,
-                name,
-                svgPositionX: e.offsetX,
-                svgPositionY: e.offsetY,
-                angle: 0,
-                size: 1,
-                attr: JSON.parse(JSON.stringify(attr))
-            }
-            svgData.push(ctrl);
-
-            props.attr.nowAttr = ctrl;
+            // const create_svg: ISvgDataLists = {
+            //     id: `${new Date().getTime()}`,
+            //     type: select_lefttool.value.type,
+            //     title: select_lefttool.value.title,
+            //     svgPositionX: e.offsetX,
+            //     svgPositionY: e.offsetY,
+            //     angle: 0,
+            //     size: 1,
+            //     extend_attr: JSON.parse(JSON.stringify(select_lefttool.value.extend_attr))
+            // }
+            // svgData.push(create_svg);
 
             //清空左侧工具选中
             // select_lefttool.value = {};
 
         };
 
+        const onDragenter = (e: DragEvent) => {
+            //dragenter和dragover一定要阻止浏览器默认行为 不然不会触发drop
+            console.log('进入放置区域');
+            // rightnav_open.value = false;
+            e.preventDefault();
+        };
+
+        const onDragover = (e: DragEvent) => {
+            //dragenter和dragover一定要阻止浏览器默认行为 不然不会触发drop
+            e.preventDefault();
+        };
 
         onMounted(() => {
             state.scale = new scale({
@@ -78,21 +74,19 @@ export default defineComponent({
             });
         });
 
-
-
         onUnmounted(() => {
             window.onresize = null;
         });
 
         return {
             state,
-            ondrop,
-            ondragenter,
-            ondragover
+            onDrop,
+            onDragenter,
+            onDragover
         };
     },
     render() {
-        const { attr, state, mousemove, ondrop, ondragenter, ondragover }: any = this;
+        const { attr, state, mousemove, onDrop, onDragenter, onDragover }: any = this;
 
         return <main class={style.work}>
             <div class={style.draw} onmousemove={($event: Event) => mousemove($event)}>
@@ -105,7 +99,7 @@ export default defineComponent({
                         <canvas></canvas>
                     </div>
                 </div>
-                <div class={style.canvas} ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragover={(e: Event) => ondragover(e)} >
+                <div class={style.canvas} ondrop={(e: Event) => onDrop(e)} ondragleave={(e: Event) => onDragenter(e)} ondragenter={(e: Event) => onDragover(e)}>
                     <svg class={style.svg} id="svg" xmlns="http://www.w3.org/2000/svg" width={attr.width} height={attr.height} viewBox={`0 0 ${attr.width} ${attr.height}`}>
                         <g id="selectorGroup0" transform="" display="inline">
                             <path id="selectedBox0" fill="none" stroke="#4F80FF" shape-rendering="crispEdges" style="pointer-events:none" d="M387.625044659974,39.32717778101342 L466.37503444715003,39.32717778101342 466.37503444715003,120.0771671280991 387.625044659974,120.0771671280991z"></path>

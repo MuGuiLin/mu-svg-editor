@@ -1,5 +1,5 @@
 import { ConfigProvider } from 'ant-design-vue';
-import { defineComponent, ref, reactive, onMounted, defineEmits, defineExpose } from 'vue';
+import { defineComponent, ref, reactive, onMounted, watch, defineEmits, defineExpose } from 'vue';
 import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue';
 import style from './style.module.less';
 
@@ -33,6 +33,7 @@ interface IState {
     remember: boolean;
     color: string;
     about: string;
+    attrs: object;
 }
 
 export default defineComponent({
@@ -45,8 +46,14 @@ export default defineComponent({
             activeKey: '1',
             color: '#1890FF',
             remember: true,
-            about: 'Mu-SVG-Editor'
+            about: 'Mu-SVG-Editor',
+            attrs: {},
         });
+
+        watch(() => props.attr?.nowAttr, (attr) => {
+            state.attrs = attr;
+            console.log(8888, state.attrs);
+        }, { deep: true, immediate: true });
         const onFinish = (values: any) => {
             console.log('Success:', values);
         };
@@ -91,6 +98,7 @@ export default defineComponent({
 
     render() {
         const { attr, tabicon, input, state, onFinish, onFinishFailed, onValuesChange }: any = this;
+        console.log(11111, attr)
         const ctrl = {
             id: Math.random(),
             x: 0.00,
@@ -146,10 +154,10 @@ export default defineComponent({
                             </a-col>
                         </a-row> */}
                         <a-form-item label="标识" name="id">
-                            <a-input v-model:value={ctrl.id} prefix={<field-number-outlined />} placeholder="自动生成！" />
+                            <a-input v-model:value={state.attrs.id} prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
                         <a-form-item label="名称" name="name">
-                            <a-input v-model:value={ctrl.id} prefix={<field-number-outlined />} placeholder="自动生成！" />
+                            <a-input v-model:value={state.attrs.name} prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
                         <a-form-item label="坐标X" name="x">
                             <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} addon-after="px" />

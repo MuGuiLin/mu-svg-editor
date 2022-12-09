@@ -1,8 +1,8 @@
 import { defineComponent, ref, reactive } from 'vue'
 
 import NotFound from '@/assets/img/404.png';
-import './404.less';
-import Drop505 from './505';
+
+
 
 export default defineComponent({
     name: '404',
