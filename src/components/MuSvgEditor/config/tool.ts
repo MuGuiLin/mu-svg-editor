@@ -8,7 +8,6 @@ export const attrs = {
     scale: 0,
     rotate: 0,
     is_show: true,
-
 };
 
 export default [
@@ -339,17 +338,6 @@ export default [
             {
                 type: '',
                 name: '集群',
-                icon: '',
-                attr: {
-                    ...attrs,
-                },
-                ctrl: '',
-                draw: 2,
-                template: ''
-            },
-            {
-                type: '',
-                name: '',
                 icon: '',
                 attr: {
                     ...attrs,

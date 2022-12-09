@@ -17,11 +17,53 @@ export default defineComponent({
             scale: null,
         });
 
+        const svgData: any = reactive([]);
+
         watch(() => [props.attr.width, props.attr.height], (n1, n2) => {
             setTimeout(() => {
                 state.scale.reset();
             }, 100);
         }, { immediate: true });
+
+
+        const onDrop = (e: DragEvent) => {
+            //当左侧工具栏拖动到此处时在画布上创建该组件
+            // if (Object.keys(select_lefttool.value).length < 1) {
+            //     //未选择任何组件
+            //     return;
+            // }
+            
+            console.log(666666, props.attr.nowTool)
+
+            //在鼠标位置创建当前组件
+            // const create_svg: ISvgDataLists = {
+            //     id: `${new Date().getTime()}`,
+            //     type: select_lefttool.value.type,
+            //     title: select_lefttool.value.title,
+            //     svgPositionX: e.offsetX,
+            //     svgPositionY: e.offsetY,
+            //     angle: 0,
+            //     size: 1,
+            //     extend_attr: JSON.parse(JSON.stringify(select_lefttool.value.extend_attr))
+            // }
+            // svgData.push(create_svg);
+
+            //清空左侧工具选中
+            // select_lefttool.value = {};
+
+        };
+
+        const onDragenter = (e: DragEvent) => {
+            //dragenter和dragover一定要阻止浏览器默认行为 不然不会触发drop
+            console.log('进入放置区域');
+            // rightnav_open.value = false;
+            e.preventDefault();
+        };
+
+        const onDragover = (e: DragEvent) => {
+            //dragenter和dragover一定要阻止浏览器默认行为 不然不会触发drop
+            e.preventDefault();
+        };
 
         onMounted(() => {
             state.scale = new scale({
@@ -37,11 +79,14 @@ export default defineComponent({
         });
 
         return {
-            state
+            state,
+            onDrop,
+            onDragenter,
+            onDragover
         };
     },
     render() {
-        const { attr, state, mousemove }: any = this;
+        const { attr, state, mousemove, onDrop, onDragenter, onDragover }: any = this;
 
         return <main class={style.work}>
             <div class={style.draw} onmousemove={($event: Event) => mousemove($event)}>
@@ -54,7 +99,7 @@ export default defineComponent({
                         <canvas></canvas>
                     </div>
                 </div>
-                <div class={style.canvas}>
+                <div class={style.canvas} ondrop={(e: Event) => onDrop(e)} ondragleave={(e: Event) => onDragenter(e)} ondragenter={(e: Event) => onDragover(e)}>
                     <svg class={style.svg} id="svg" xmlns="http://www.w3.org/2000/svg" width={attr.width} height={attr.height} viewBox={`0 0 ${attr.width} ${attr.height}`}>
                         <g id="selectorGroup0" transform="" display="inline">
                             <path id="selectedBox0" fill="none" stroke="#4F80FF" shape-rendering="crispEdges" style="pointer-events:none" d="M387.625044659974,39.32717778101342 L466.37503444715003,39.32717778101342 466.37503444715003,120.0771671280991 387.625044659974,120.0771671280991z"></path>
@@ -73,7 +118,7 @@ export default defineComponent({
                                 <rect id="selectorGrip_resize_w" width="8" height="8" fill="#4F80FF" stroke="rgba(0,0,0,0)" style="cursor:w-resize" pointer-events="all" x="384" y="76"></rect>
                             </g>
                         </g>
-                        
+
                         <g id="selectorParentGroup" transform="translate(0, 0)">
                             <g id="selectorGroup0" transform="rotate(0,0,0)" display="inline">
                                 <path id="selectedBox0" fill="none" stroke="#0091f2" stroke-dasharray="5,5" style="pointer-events:none" d="M69,267 L201,267 201,407 69,407z"></path>
@@ -102,6 +147,6 @@ export default defineComponent({
                 </div>
 
             </div>
-        </main>;
+        </main >;
     }
 });

@@ -11,6 +11,8 @@ import Work from './work';
 import Attr from './attr';
 import Info from './info';
 
+const nowTool = reactive({});
+
 const state = <Iprops>reactive({
     width: 1008,
     height: 567,
@@ -18,7 +20,8 @@ const state = <Iprops>reactive({
     isScale: true,
     lineX: 730,
     lineY: 430,
-    tool
+    tool, 
+    nowTool: {},
 });
 
 const mousemove = ({ clientX, clientY }: Event | any) => {

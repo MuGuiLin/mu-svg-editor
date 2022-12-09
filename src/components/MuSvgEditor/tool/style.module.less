@@ -6,6 +6,7 @@
     border-right    : 1px solid rgb(100, 100, 100);
     overflow-y      : auto;
     text-align      : center;
+    user-select     : none;
 
     .drag {
         display: inline-block;
@@ -38,6 +39,7 @@
         }
 
         &:nth-child(1) {
+            // composes: local(drag); 
             background     : url(@/assets/icon/tool/monomer.webp) no-repeat center 0;
             background-size: contain;
         }
@@ -86,6 +88,6 @@
 
 }
 
-.ant-collapse-content-box {
+:global(.ant-collapse-content-box) {
     padding: 0;
 }

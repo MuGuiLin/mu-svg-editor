@@ -25,14 +25,15 @@ export default defineComponent({
             state.fill = '#0092FF'
         };
 
-        const dragstart = (e: DragEvent, o: any) => {
-
+        const onDragstart = (e: DragEvent, o: any) => {
+            console.log(333, o);
+            props.attr.nowTool = o;
         };
 
-        const dragend = (e: DragEvent, o: any) => {
+        const onDragend = (e: DragEvent, o: any) => {
             //拖动时记录拖动的svg信息
             if (e.dataTransfer?.dropEffect !== 'copy') {
-                console.error('请将组件拖到画布中!');
+                alert('请将组件拖到画布中！');
                 //清空已选择的信息
                 return;
             }
@@ -43,13 +44,13 @@ export default defineComponent({
             text,
             customStyle,
             dragsvg,
-            dragstart,
-            dragend,
+            onDragstart,
+            onDragend,
             ...toRefs(state),
         };
     },
     render() {
-        const { attr: { tool }, activeKey, text, customStyle, dragsvg, dragstart, dragend, fill }: any = this;
+        const { attr: { tool }, activeKey, text, customStyle, dragsvg, onDragstart, onDragend, fill }: any = this;
         return (
             <aside class={style.tool}>
                 <a-collapse v-model:activeKey={activeKey} bordered={false} expandIconPosition="left">
@@ -64,7 +65,7 @@ export default defineComponent({
                                             </svg>
                                             <b>{m.name}</b>
                                         </div> : <div class={style.drag}>
-                                            <i class={`${style.drag}-${m.type}`} draggable="true" dragstart={(e: Event) => dragstart(e, m)} dragend={(e: Event) => dragend(e, m)}></i>
+                                            <i class={`${style.drag}-${m.type}`} draggable onDragstart={(e: Event) => onDragstart(e, m)} onDragend={(e: Event) => onDragend(e, m)}></i>
                                             <b>{m.name}</b>
                                         </div>
                                     ))
