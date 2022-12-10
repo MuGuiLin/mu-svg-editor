@@ -39,6 +39,8 @@ export default defineComponent({
 
         // 控件在画布上拖动结束
         const ondrop = (e: DragEvent) => {
+            props.attr.dragstart = false;
+
             // 未选择任何组件
             if (!Object.keys(props.attr.nowTool).length) {
                 return false;
@@ -68,7 +70,6 @@ export default defineComponent({
 
         };
 
-
         onMounted(() => {
             state.scale = new scale({
                 draw: `.${style.draw}`,
@@ -77,8 +78,6 @@ export default defineComponent({
                 scale_y: `.${style.scale_y}`
             });
         });
-
-
 
         onUnmounted(() => {
             window.onresize = null;
@@ -105,7 +104,7 @@ export default defineComponent({
                         <canvas></canvas>
                     </div>
                 </div>
-                <div class={style.canvas} ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragover={(e: Event) => ondragover(e)} >
+                <div class={[style.canvas, attr.dragstart && style.dragstart]} ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragover={(e: Event) => ondragover(e)} >
                     <svg class={style.svg} id="svg" xmlns="http://www.w3.org/2000/svg" width={attr.width} height={attr.height} viewBox={`0 0 ${attr.width} ${attr.height}`}>
                         <g id="selectorGroup0" transform="" display="inline">
                             <path id="selectedBox0" fill="none" stroke="#4F80FF" shape-rendering="crispEdges" style="pointer-events:none" d="M387.625044659974,39.32717778101342 L466.37503444715003,39.32717778101342 466.37503444715003,120.0771671280991 387.625044659974,120.0771671280991z"></path>

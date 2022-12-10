@@ -21,6 +21,7 @@ const state = <Iprops>reactive({
     lineX: 730,
     lineY: 430,
     tool, 
+    dragstart: false,
     nowTool: {},
     nowAttr: {},
 });
