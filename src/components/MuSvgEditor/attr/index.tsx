@@ -160,22 +160,22 @@ export default defineComponent({
                             <a-input v-model:value={state.attrs.name} prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
                         <a-form-item label="坐标X" name="x">
-                            <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={state.attrs.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="坐标Y" name="y">
-                            <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={state.attrs.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="宽度" name="width">
-                            <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={state.attrs.width} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="高度" name="height">
-                            <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={state.attrs.height} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="缩放" name="scale">
-                            <a-input-number v-model:value={ctrl.scale} prefix={<expand-alt-outlined />} addon-after="px" />
+                            <a-input-number v-model:value={state.attrs.scale} prefix={<expand-alt-outlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="旋转" name="rotate">
-                            <a-input-number v-model:value={ctrl.rotate} prefix={<sync-outlined />} addon-after="px" />
+                            <a-input-number v-model:value={state.attrs.rotate} prefix={<sync-outlined />} addon-after="px" />
                         </a-form-item>
                     </a-form>
                 </a-tab-pane>

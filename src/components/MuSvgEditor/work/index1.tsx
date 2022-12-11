@@ -3,6 +3,7 @@ import { Iprops } from '../types/props'
 import scale from "../hook/scale";
 
 import style from './style.module.less'
+import Components from './components.vue';
 
 export default defineComponent({
     props: {
@@ -92,8 +93,13 @@ export default defineComponent({
     },
     render() {
         const { attr, state, mousemove, ondrop, ondragenter, ondragover }: any = this;
-
+        var obj = {
+            template
+                :
+                "<polygon  points=\"0,8 5,0 10,8\" :fill=\"prop_data.extend_attr.color.val\" :stroke=\"prop_data.extend_attr.color.val\" stroke-width=\"2\" transform=\"translate(-5,0)\"></polygon>"
+        }
         return <main class={style.work}>
+            <component is="input"></component>
             <div class={style.draw} onmousemove={($event: Event) => mousemove($event)}>
                 {/* <div style={{width:attr.width+'px',height:attr.height+'px'}}> </div> */}
                 <div class={style.scale} v-show={attr.isScale}>
@@ -104,8 +110,14 @@ export default defineComponent({
                         <canvas></canvas>
                     </div>
                 </div>
+                <component is='input'></component>
                 <div class={[style.canvas, attr.dragstart && style.dragstart]} ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragover={(e: Event) => ondragover(e)} >
                     <svg class={style.svg} id="svg" xmlns="http://www.w3.org/2000/svg" width={attr.width} height={attr.height} viewBox={`0 0 ${attr.width} ${attr.height}`}>
+
+                        <g>
+                            <Components is={'input'} />
+                        </g>
+
                         <g id="selectorGroup0" transform="" display="inline">
                             <path id="selectedBox0" fill="none" stroke="#4F80FF" shape-rendering="crispEdges" style="pointer-events:none" d="M387.625044659974,39.32717778101342 L466.37503444715003,39.32717778101342 466.37503444715003,120.0771671280991 387.625044659974,120.0771671280991z"></path>
                             <g display="inline">
