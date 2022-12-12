@@ -40,37 +40,4 @@ export interface IAttrParops extends IBaseParops {
     is_show: boolean;
 };
 
-export interface IChildProps {
-    length: number;
-    [index: number]: {
-        type: string;
-        name: string;
-        icon?: string;
-        path?: string;
-        attr: IAttrParops;
-        ctrl?: string;
-        event: number;
-        template?: string;
-    }
-};
-
-export interface IToolProps {
-    length: number;
-    [index: number]: {
-        title: string,
-        child: Array<IChildProps>
-        [key: string]: any;
-    };
-
-    forEach(arg0: (o: any) => any): any;
-    filter(
-        arg0: (o: any) => boolean,
-    ):
-        | unknown[]
-        | Iterable<unknown>
-        | import('d3-selection').ValueFn<
-        SVGSVGElement,
-        unknown,
-        unknown[] | Iterable<unknown>
-        >;
-};
+export default IAttrParops;

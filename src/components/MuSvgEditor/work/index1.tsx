@@ -1,5 +1,5 @@
 import { defineComponent, reactive, watch, onMounted, onUnmounted } from 'vue';
-import { Iprops } from '../types/props'
+import propsType from '../types/propsType'
 import scale from "../hook/scale";
 
 import style from './style.module.less'
@@ -14,7 +14,7 @@ export default defineComponent({
     setup(props: any, ctx) {
         console.log(props);
 
-        const state: Iprops = reactive({
+        const state: propsType = reactive({
             scale: null,
         });
 

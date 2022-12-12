@@ -1,47 +1,48 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
-import tool from './config/tool';
-import {} from './utils/draw';
+import { reactive } from "vue";
+import type IStateType from "./types/propsType";
+import tool from "./config/tool.config";
 
-import { Iprops } from './types/props'
+import Menu from "./menu";
+import Tool from "./tool";
+import Work from "./work";
+import Attr from "./attr";
+import Info from "./info";
 
-import Menu from './menu';
-import Tool from './tool';
-import Work from './work';
-import Attr from './attr';
-import Info from './info';
+import { } from "./utils/draw";
 
-const nowTool = reactive({});
-
-const state = <Iprops>reactive({
-    width: 1008,
-    height: 567,
-    isLine: true,
-    isScale: true,
-    lineX: 730,
-    lineY: 430,
-    tool, 
-    dragstart: false,
+const state = <IStateType>reactive({
+    canvas: {
+        lineX: 730,
+        lineY: 430,
+        width: 1008,
+        height: 567,
+        isLine: true,
+        isDrag: false,
+        isScale: true,
+    },
+    tool,
     nowTool: {},
     nowAttr: {},
 });
 
-const mousemove = ({ clientX, clientY }: Event | any) => {
-    if (!state.isLine) return;
-    // state.lineX = clientX - 180;
-    // state.lineY = clientY - 50;
-    state.lineX = clientX + Number(state.width) - 1188;
-    state.lineY = clientY + Number(state.height) - 618;
+// 鼠标坐标
+const onMousemove = ({ clientX, clientY }: Event | any): void => {
+    const { canvas } = state;
+    if (!canvas.isLine) return;
+    // canvas.lineX = clientX - 180;
+    // canvas.lineY = clientY - 50;
+    canvas.lineX = clientX + Number(canvas.width) - 1188;
+    canvas.lineY = clientY + Number(canvas.height) - 618;
 };
-
 </script>
 
 <template>
     <section class="mu-svg-editor">
         <Menu :attr="state" />
-        <Tool :attr="state" />
-        <Work v-bind:attr="state" :mousemove="mousemove" />
-        <Attr :attr="state" />
+        <Tool :prop="state" />
+        <Work v-bind:prop="state" :onMousemove="onMousemove" />
+        <Attr :prop="state" />
         <Info :attr="state" />
     </section>
 </template>
@@ -51,7 +52,7 @@ const mousemove = ({ clientX, clientY }: Event | any) => {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    background: radial-gradient(#0229A0 -150%, rgb(30, 30, 30) 100%);
+    background: radial-gradient(#0229a0 -150%, rgb(30, 30, 30) 100%);
     overflow: hidden;
     box-sizing: border-box;
     display: grid;

@@ -3,10 +3,6 @@ import { defineComponent, ref, reactive, onMounted, watch, defineEmits, defineEx
 import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue';
 import style from './style.module.less';
 
-interface IState {
-    color: string;
-};
-
 // const props = defineProps({
 //     width: {
 //         type: Number,
@@ -21,39 +17,34 @@ interface IState {
 //     arr: Array
 // });
 
-interface IProps {
-    width: number;
-    height: number; //未设置默认值为undefined
-    arr?: Array<any>;
-    eame: 'A' | 'B' | 'C' // 限定父组件传 eame 的值
-}
-
 interface IState {
     activeKey: string,
     remember: boolean;
     color: string;
     about: string;
-    attrs: object;
 }
 
 export default defineComponent({
     name: 'Attr',
     props: {
-        attr: {}
+        prop: {
+            type: Object,
+            default: {}
+        }
     },
-    setup(props) {
+    setup(props: { prop: any }) {
         const state = reactive<IState>({
-            activeKey: '1',
+            activeKey: Object.keys(props.prop.nowAttr).length ? '1' : '2',
             color: '#1890FF',
             remember: true,
             about: 'Mu-SVG-Editor',
-            attrs: {},
         });
 
-        watch(() => props.attr?.nowAttr, (attr) => {
-            state.attrs = attr;
-            console.log(8888, state.attrs);
-        }, { deep: true, immediate: true });
+        watch(() => props.prop?.nowAttr, (prop) => {
+            state.activeKey = Object.keys(prop).length ? '1' : '2';
+            // }, { deep: true, immediate: true });
+        });
+
         const onFinish = (values: any) => {
             console.log('Success:', values);
         };
@@ -97,15 +88,8 @@ export default defineComponent({
     },
 
     render() {
-        const { attr, tabicon, input, state, onFinish, onFinishFailed, onValuesChange }: any = this;
-        console.log(11111, attr)
-        const ctrl = {
-            id: Math.random(),
-            x: 0.00,
-            y: 0.00,
-            scale: 0.00,
-            rotate: 0.00,
-        }
+        const { prop: { nowAttr: { attr }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
+
         return (<aside class={style.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']}>
@@ -128,54 +112,30 @@ export default defineComponent({
                                     <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} />
                                 </a-form-item>
                             </a-col>
-                        </a-row>
-                        <a-row>
-                            <a-col span="12">
-                                <a-form-item label="宽度" name="width">
-                                    <a-input-number v-model:value={ctrl.x} prefix={<ColumnWidthOutlined />} />
-                                </a-form-item>
-                            </a-col>
-                            <a-col span="12">
-                                <a-form-item label="高度" name="height">
-                                    <a-input-number v-model:value={ctrl.y} prefix={<ColumnHeightOutlined />} />
-                                </a-form-item>
-                            </a-col>
-                        </a-row>
-                        <a-row>
-                            <a-col span="12">
-                                <a-form-item label="缩放" name="scale">
-                                    <a-input-number v-model:value={ctrl.scale} prefix={<expand-alt-outlined />} />
-                                </a-form-item>
-                            </a-col>
-                            <a-col span="12">
-                                <a-form-item label="旋转" name="rotate">
-                                    <a-input-number v-model:value={ctrl.rotate} prefix={<sync-outlined />} />
-                                </a-form-item>
-                            </a-col>
                         </a-row> */}
                         <a-form-item label="标识" name="id">
-                            <a-input v-model:value={state.attrs.id} prefix={<field-number-outlined />} placeholder="自动生成！" />
+                            <a-input v-model:value={attr.id} readonly prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
-                        <a-form-item label="名称" name="name">
-                            <a-input v-model:value={state.attrs.name} prefix={<field-number-outlined />} placeholder="自动生成！" />
+                        <a-form-item label="文本" name="text">
+                            <a-input v-model:value={attr.text} prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
                         <a-form-item label="坐标X" name="x">
-                            <a-input-number v-model:value={state.attrs.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="坐标Y" name="y">
-                            <a-input-number v-model:value={state.attrs.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="宽度" name="width">
-                            <a-input-number v-model:value={state.attrs.width} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.width} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="高度" name="height">
-                            <a-input-number v-model:value={state.attrs.height} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.height} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="缩放" name="scale">
-                            <a-input-number v-model:value={state.attrs.scale} prefix={<expand-alt-outlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.scale} prefix={<expand-alt-outlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="旋转" name="rotate">
-                            <a-input-number v-model:value={state.attrs.rotate} prefix={<sync-outlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.r} prefix={<sync-outlined />} addon-after="px" />
                         </a-form-item>
                     </a-form>
                 </a-tab-pane>
@@ -189,10 +149,10 @@ export default defineComponent({
                         onFinishFailed={onFinishFailed}
                     >
                         <a-form-item label="画布宽度" name="width" rules={[{ required: false, message: '请输入画布宽度！' }]}>
-                            <a-input v-model:value={attr.width} prefix={<ColumnWidthOutlined />} suffix="px" />
+                            <a-input v-model:value={canvas.width} prefix={<ColumnWidthOutlined />} suffix="px" />
                         </a-form-item>
                         <a-form-item label="画布高度" name="height" rules={[{ required: false, message: '请输入画布高度！' }]}>
-                            <a-input v-model:value={attr.height} prefix={<ColumnHeightOutlined />} suffix="px" />
+                            <a-input v-model:value={canvas.height} prefix={<ColumnHeightOutlined />} suffix="px" />
                         </a-form-item>
                         <a-form-item label="主题颜色" name="color" rules={[{ required: false, message: '请输入主题颜色！' }]}>
                             <a-input type="color" v-model:value={state.color} onInput={input} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
