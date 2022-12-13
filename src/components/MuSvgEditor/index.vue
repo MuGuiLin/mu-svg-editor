@@ -11,7 +11,7 @@ import Info from "./info";
 
 import { } from "./utils/draw";
 
-const state = <IStateType>reactive({
+const state: IStateType = reactive({
     canvas: {
         lineX: 730,
         lineY: 430,
@@ -39,11 +39,11 @@ const onMousemove = ({ clientX, clientY }: Event | any): void => {
 
 <template>
     <section class="mu-svg-editor">
-        <Menu :attr="state" />
+        <Menu :prop="state" />
         <Tool :prop="state" />
         <Work v-bind:prop="state" :onMousemove="onMousemove" />
         <Attr :prop="state" />
-        <Info :attr="state" />
+        <Info :prop="state" />
     </section>
 </template>
 

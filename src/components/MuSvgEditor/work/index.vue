@@ -2,6 +2,7 @@
 import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
 import stateType from '../types/propsType'
 import scale from "../hook/scale";
+import { getLocalFile } from '@/utils'
 
 import Components from './components.vue';
 
@@ -17,7 +18,8 @@ const { prop, prop: { canvas } } = props;
 const rstate = ref();
 
 const state = reactive({
-    event: 0
+    event: 0,
+    selected: -1
 });
 
 const svgData: any = ref([]);
@@ -63,6 +65,7 @@ const onDrop = (e: DragEvent) => {
             ...JSON.parse(JSON.stringify(attr)),
             id,
             text: name,
+            // icon: getLocalFile(`icon/tool/${type}.webp`),
             x: e.offsetX,
             y: e.offsetY,
         }
@@ -74,11 +77,12 @@ const onDrop = (e: DragEvent) => {
 };
 
 // 鼠标左键在画布中的组件上按下
-const onMousedown = (e: MouseEvent, o: Object, i: number) => {
+const onMousedown = (e: MouseEvent, o: any, i: number) => {
     e.stopPropagation();
     e.preventDefault();
 
     state.event = 1;
+    state.selected = o.id;
     prop.nowAttr = o;
 
     console.log(o, i);
@@ -86,21 +90,21 @@ const onMousedown = (e: MouseEvent, o: Object, i: number) => {
 };
 
 // 鼠标坐标
-// const onMousemove = ({ clientX, clientY }: Event | any): void => {
-//     const { canvas } = props;
-//     if (!canvas.isLine) return;
-//     // canvas.lineX = clientX - 180;
-//     // canvas.lineY = clientY - 50;
-//     canvas.lineX = clientX + Number(canvas.width) - 1188;
-//     canvas.lineY = clientY + Number(canvas.height) - 618;
-// };
+const onMousemove = ({ clientX, clientY }: Event | any): void => {
+    if (!canvas.isLine) return;
+    // canvas.lineX = clientX - 180;
+    // canvas.lineY = clientY - 50;
+    canvas.lineX = clientX + Number(canvas.width) - 1188;
+    canvas.lineY = clientY + Number(canvas.height) - 618;
+};
 
 // 鼠标左键在画布中的组件上移动
 const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
     if (state.event && prop.nowAttr.id) {
         const { clientX, clientY } = e;
-        prop.nowAttr.attr.x = clientX + Number(canvas.width) - 1188;
-        prop.nowAttr.attr.y = clientY + Number(canvas.height) - 618;
+        // prop.nowAttr.attr.x = clientX - 230;
+        prop.nowAttr.attr.x = clientX - 430;
+        prop.nowAttr.attr.y = clientY - 195
     }
     return false;
 };
@@ -112,6 +116,7 @@ const onMouseup = (e: MouseEvent, o: Object, i: number) => {
 };
 
 onMounted(() => {
+    console.log(333333, process.env)
     rstate.value = new scale({
         draw: `.${style.draw}`,
         canvas: `.${style.canvas}`,
@@ -146,10 +151,16 @@ onUnmounted(() => {
 
                 <svg :class="style.svg" id="svg" xmlns="http://www.w3.org/2000/svg" :width="canvas.width"
                     :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
-                    <g v-for="(o, i) in svgData" :key="i" @mousedown="onMousedown($event, o, i)">
+                    <g v-for="(o, i) in svgData" :key="i" :class="o.id === state.selected ? style.selected : ''"
+                        @mousedown="onMousedown($event, o, i)">
                         <!-- <component is='image' src="@/assets/icon/tool/computer.webp" width="50px"></component> -->
-                        <image :x="o.attr.x - 25" :y="o.attr.y - 25" href="@/assets/icon/tool/computer.webp"
-                            :width="o.attr.width" />
+
+                        <image :x="o.attr.x - (o.attr.width / 2)" :y="o.attr.y - (o.attr.height / 2)"
+                            href="@/assets/icon/tool/computer.webp" :width="o.attr.width" :height="o.attr.height" />
+
+                        <!-- <image :x="o.attr.x - (o.attr.width / 2)" :y="o.attr.y - (o.attr.height / 2)"
+                            :href="'https://qn.antdv.com/vue.png'" :width="o.attr.width"
+                            :height="o.attr.height" /> -->
                     </g>
                 </svg>
             </div>

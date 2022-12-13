@@ -11,8 +11,8 @@ export interface IStateType {
         isScale: boolean;
     },
     tool: Array<any>;
-    nowTool: ITool;
-    nowAttr: IAttr;
+    nowTool: ITool | any;
+    nowAttr: IAttr | any;
 };
 
 export default IStateType;

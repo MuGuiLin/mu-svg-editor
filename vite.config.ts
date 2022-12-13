@@ -18,7 +18,11 @@ export default defineConfig((config: UserConfig) => {
       })
     ],
 
-    // base: '/',
+    define: {
+      'process.env': {}
+    },
+
+    base: './',
 
     // mode: (config.mode || process.env.NODE_ENV),
 

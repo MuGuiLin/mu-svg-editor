@@ -63,6 +63,7 @@
             box-sizing      : border-box;
             position        : absolute;
             background-image: url(data:image/png;base64,R0lGODlhEAAQAIAAAP///9bW1iH5BAAAAAAALAAAAAAQABAAAAIfjG+gq4jM3IFLJgpswNly/XkcBpIiVaInlLJr9FZWAQA7);
+            border          : 5px dashed transparent;
 
             .svg {
                 transition: all 500ms cubic-bezier(0.16, 0.66, 0.28, 0.96);
@@ -70,11 +71,16 @@
                 .rotate {
                     cursor: url(@/assets/img/editor/rotate.png) 12 12, auto;
                 }
+
+                g.selected {
+                    outline: 2px double #166FFF;
+                }
             }
         }
 
         .dragstart {
-            box-shadow: 0 0 10px 0 deepskyblue;
+            box-shadow: 0 0 10px 0 #166FFF;
+            border    : 5px dashed #166FFF;
         }
 
         .subline {
