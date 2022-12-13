@@ -78,8 +78,9 @@ const onDrop = (e: DragEvent) => {
 
 // 鼠标左键在画布中的组件上按下
 const onMousedown = (e: MouseEvent, o: any, i: number) => {
-    e.stopPropagation();
+    
     e.preventDefault();
+    e.stopPropagation();
 
     state.event = 1;
     state.selected = o.id;

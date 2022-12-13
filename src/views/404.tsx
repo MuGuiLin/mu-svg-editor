@@ -2,7 +2,6 @@ import { defineComponent, ref, reactive } from 'vue'
 
 import NotFound from '@/assets/img/404.png';
 import './404.less';
-import Drop505 from './505';
 
 export default defineComponent({
     name: '404',
@@ -14,36 +13,40 @@ export default defineComponent({
             count: 404
         });
 
+        const $getDom = (el: HTMLElement, doc = document) => {
+            return doc.querySelector(el);
+        }
+
         function ondragstart(event) {
-            console.log('开始')
             event.dataTransfer.setData("Text", event.target.id);
         };
 
         function ondragenter(event) {
-            document.getElementById("demo").innerHTML = "进入放置区域";
+            $getDom("#tips").innerHTML = "进入放置区域！";
 
-            if (event.target.className == "droptarget") {
-                event.target.style.border = "3px dotted red";
+            if (event.target.className == "drop") {
+                event.target.style.border = "5px dotted red";
             }
         };
 
         function ondragleave(event) {
-            document.getElementById("demo").innerHTML = "离开放置区域";
-            if (event.target.className == "droptarget") {
+            $getDom("#tips").innerHTML = "离开放置区域！";
+
+            if (event.target.className == "drop") {
                 event.target.style.border = "";
             }
         };
 
         function ondragover(event) {
-            event.preventDefault();
+            // event.preventDefault();
+            return false; // return false; 等于  event.preventDefault(); 加 e.stopPropagation();
         };
 
         function ondrop(event) {
-            console.log('drop')
-
-            event.preventDefault();
+            // event.preventDefault();
             var data = event.dataTransfer.getData("Text");
             event.target.appendChild(document.getElementById(data));
+            return false;
         };
 
         // return () => {
@@ -63,28 +66,47 @@ export default defineComponent({
         };
     },
     render() {
-        console.log(this);
-        const { msg, state, ondragstart,
+        console.log('render', this);
+        const { msg, state,
+            ondragstart,
             ondragenter,
             ondragleave,
             ondragover,
             ondrop,
         } = this;
-        // return <h1 style={{ textAlign: 'center', lineHeight: '100vh', background: `url(${NotFound}) no-repeat center ` }} onClick={($event: any) => (state.count++)}>
-        //     {msg}<b>{state.count}</b>
-        // </h1>
 
-        return <div>
-            <h2>在两个矩形框中来回拖动 p 元素:</h2>
+        return <h1 style={{ textAlign: 'center', lineHeight: '100vh', background: `url(${NotFound}) no-repeat center ` }} onClick={($event: any) => (state.count++)}>
+            {msg}<b>{state.count}</b>
+        </h1>
+
+        return <section class="box">
+            <h2>在两个矩形框中来回拖动 DOM元素:</h2>
             <hr />
 
-            <p id="dragtarget" ondragstart={(e: Event) => ondragstart(e)} draggable={true} >拖动我404!</p>
-            <div class="droptarget" ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragleave={(e: Event) => ondragleave(e)} ondragover={(e: Event) => ondragover(e)}></div>
-            <div class="droptarget" ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragleave={(e: Event) => ondragleave(e)} ondragover={(e: Event) => ondragover(e)}></div>
+            <div class="drag" id="drag" draggable={true} ondragstart={(e: Event) => ondragstart(e)} >DOM拖动我试试！</div>
+            <div class="drop" ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragleave={(e: Event) => ondragleave(e)} ondragover={(e: Event) => ondragover(e)}></div>
+            <div class="drop" ondrop={(e: Event) => ondrop(e)} ondragenter={(e: Event) => ondragenter(e)} ondragleave={(e: Event) => ondragleave(e)} ondragover={(e: Event) => ondragover(e)}></div>
 
-            <h1 id="demo"></h1>
-            <hr />
-            <Drop505/>
-        </div>
+            <h1 class="tips" id="tips"></h1>
+
+            <pre class="pre">
+                <code>
+                    <br />注意： 为了让元素可拖动，需要使用 HTML5 draggable 属性，而链接 和 图片默认是可拖动的，不需要 draggable 属性。
+                    <br />
+                    <br />在拖放的过程中会触发以下事件：
+                    <br />
+                    <br />在拖动目标上触发事件 (源元素):
+                    <br />    ondragstart - 用户开始拖动元素时触发
+                    <br />    ondrag - 元素正在拖动时触发
+                    <br />    ondragend - 用户完成元素拖动后触发
+                    <br />
+                    <br />释放目标时触发的事件:
+                    <br />    ondragenter - 当被鼠标拖动的对象进入其容器范围内时触发此事件
+                    <br />    ondragover - 当某被拖动的对象在另一对象容器范围内拖动时触发此事件
+                    <br />    ondragleave - 当被鼠标拖动的对象离开其容器范围内时触发此事件
+                    <br />    ondrop - 在一个拖动过程中，释放鼠标键时触发此事件
+                </code>
+            </pre>
+        </section>
     }
 });
