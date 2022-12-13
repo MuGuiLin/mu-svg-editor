@@ -7,31 +7,36 @@ const { prop }: any = defineProps({
 });
 
 const state = reactive({
-    activeKey: ['0', '1']
+    activeKey: ['0', '1'],
+    clickDraw: 0,
+    clickFill: '#0092FF',
 });
 
 watch(() => state.activeKey, val => {
     console.log(val);
 });
 
-const clickDrag = (e: Event, m: any, i: number) => {
-    console.log(e, m);
-    prop.tool[0].child.map((o: any) => o.select = false);
-    prop.tool[0].child[i].select = true;
+// 点击左侧工具栏 基本绘制分类中的组件
+const clickDraw = (e: Event, m: any, i: number) => {
+    // prop.tool[0].child.map((o: any) => o.select = false);
+    // prop.tool[0].child[i].select = true;
+    state.clickDraw = i;
+    prop.nowTool = i ? m : {};
 };
 
-const onDragstart = (e: DragEvent, o: any) => {
-    console.log(333, o);
-    prop.nowTool = o;
+// 开始拖拽左侧工具栏 拓扑组件分类中的组件
+const onDragstart = (e: DragEvent, m: any) => {
+    prop.nowTool = m;
     prop.canvas.isDrag = true;
 };
 
-const onDragend = (e: DragEvent, o: any) => {
-    //拖动时记录拖动的svg信息
+// 结束拖拽左侧工具栏 拓扑组件分类中的组件
+const onDragend = (e: DragEvent, m: any) => {
     if (e.dataTransfer?.dropEffect !== 'copy') {
-        message.warning('请将组件拖到画布中！');
-        prop.canvas.isDrag = false;
         //清空已选择的信息
+        prop.nowTool = {};
+        prop.canvas.isDrag = false;
+        message.warning('请将组件拖到画布中！');
         return;
     }
 };
@@ -44,9 +49,9 @@ const onDragend = (e: DragEvent, o: any) => {
             <a-collapse-panel v-for="(t, i) in prop.tool" :key="i" :header="t.title">
                 <div class="drag" v-for="(m, j) in t.child" :key="j">
                     <template v-if="1 === m.event">
-                        <svg @click="clickDrag($event, m, j)" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg"
+                        <svg @click="clickDraw($event, m, j)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
                             version="1.1">
-                            <path :fill="m.select && '#0092FF'" :d="m.path"></path>
+                            <path :fill="j === state.clickDraw ? state.clickFill : '#FFF'" :d="m.path"></path>
                         </svg>
                         <b>{{ m.name }}</b>
                     </template>
@@ -84,8 +89,8 @@ const onDragend = (e: DragEvent, o: any) => {
             width: 50px;
             height: 50px;
             border: 1px solid gray;
-            background-color: #0092ff;
-            background-color: #fff;
+            fill: #fff;
+            // background-color: #0092FF;
             cursor: pointer;
 
             g {

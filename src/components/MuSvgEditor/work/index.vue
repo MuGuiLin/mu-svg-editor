@@ -9,14 +9,22 @@ import style from './style.module.less'
 
 const props: any = defineProps({
     prop: Object,
-    onMousemove: Function
+    // onMousemove: Function
 });
 
 const { prop, prop: { canvas } } = props;
 
 const rstate = ref();
 
+const state = reactive({
+    event: 0
+});
+
 const svgData: any = ref([]);
+const svgNows: any = reactive({
+    index: 0,
+    data: {}
+});
 
 watch(() => [canvas.width, canvas.height], (n1, n2) => {
     console.log(666666)
@@ -25,19 +33,19 @@ watch(() => [canvas.width, canvas.height], (n1, n2) => {
     }, 100);
 }, { immediate: true });
 
-// 控件拖动进入画布区域
+// 左侧组件拖动进入画布区域
 const onDragenter = (e: DragEvent) => {
     console.log('进入放置区域');
     // rightnav_open.value = false;
     e.preventDefault();
 };
 
-// 控件在画布区域拖动中
+// 左侧组件在画布区域拖动中
 const onDragover = (e: DragEvent) => {
     e.preventDefault();
 };
 
-// 控件在画布上拖动结束
+// 左侧组件在画布上拖动结束
 const onDrop = (e: DragEvent) => {
     // 清空左侧工具选中
     canvas.isDrag = false;
@@ -65,6 +73,44 @@ const onDrop = (e: DragEvent) => {
     console.log('svgData', svgData)
 };
 
+// 鼠标左键在画布中的组件上按下
+const onMousedown = (e: MouseEvent, o: Object, i: number) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    state.event = 1;
+    prop.nowAttr = o;
+
+    console.log(o, i);
+    console.log(svgData)
+};
+
+// 鼠标坐标
+// const onMousemove = ({ clientX, clientY }: Event | any): void => {
+//     const { canvas } = props;
+//     if (!canvas.isLine) return;
+//     // canvas.lineX = clientX - 180;
+//     // canvas.lineY = clientY - 50;
+//     canvas.lineX = clientX + Number(canvas.width) - 1188;
+//     canvas.lineY = clientY + Number(canvas.height) - 618;
+// };
+
+// 鼠标左键在画布中的组件上移动
+const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
+    if (state.event && prop.nowAttr.id) {
+        const { clientX, clientY } = e;
+        prop.nowAttr.attr.x = clientX + Number(canvas.width) - 1188;
+        prop.nowAttr.attr.y = clientY + Number(canvas.height) - 618;
+    }
+    return false;
+};
+
+// 鼠标左键在画布中的组件上抬起
+const onMouseup = (e: MouseEvent, o: Object, i: number) => {
+    state.event = 0;
+    return false;
+};
+
 onMounted(() => {
     rstate.value = new scale({
         draw: `.${style.draw}`,
@@ -83,6 +129,7 @@ onUnmounted(() => {
 <template>
     <main :class="style.work">
         <div :class="style.draw" @mousemove="onMousemove($event)">
+            <!-- <div :class="style.draw"> -->
 
             <div :class="style.scale" v-show="canvas.isScale">
                 <div :class="style.scale_x">
@@ -94,11 +141,12 @@ onUnmounted(() => {
             </div>
 
             <div :class="[style.canvas, canvas.isDrag && style.dragstart]" @drop="onDrop($event)"
-                @dragenter="onDragenter($event)" @dragover="onDragover($event)">
+                @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousemove="mouseMoveEvent"
+                @mouseup="onMouseup">
 
                 <svg :class="style.svg" id="svg" xmlns="http://www.w3.org/2000/svg" :width="canvas.width"
                     :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
-                    <g v-for="(o, i) in svgData" :key="i">
+                    <g v-for="(o, i) in svgData" :key="i" @mousedown="onMousedown($event, o, i)">
                         <!-- <component is='image' src="@/assets/icon/tool/computer.webp" width="50px"></component> -->
                         <image :x="o.attr.x - 25" :y="o.attr.y - 25" href="@/assets/icon/tool/computer.webp"
                             :width="o.attr.width" />
