@@ -2,6 +2,7 @@
 import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
 import stateType from '../types/propsType'
 import scale from "../hook/scale";
+import { NS } from "../config";
 import { getLocalFile } from '@/utils'
 
 import Components from './components.vue';
@@ -28,8 +29,8 @@ const svgNows: any = reactive({
     data: {}
 });
 
+// 画布宽高改变，更新标尺刻度
 watch(() => [canvas.width, canvas.height], (n1, n2) => {
-    console.log(666666)
     setTimeout(() => {
         rstate.value.reset();
     }, 100);
@@ -58,16 +59,15 @@ const onDrop = (e: DragEvent) => {
     };
 
     // 在画布中创建组件
-    const { type, name, attr } = prop.nowTool, id = `${new Date().getTime()}`, nowData: any = {
+    const { type, name, attr } = prop.nowTool, id = `${new Date().getTime()}`, { offsetX, offsetY } = e, nowData: any = {
         id,
         type,
         attr: {
             ...JSON.parse(JSON.stringify(attr)),
             id,
             text: name,
-            // icon: getLocalFile(`icon/tool/${type}.webp`),
-            x: e.offsetX,
-            y: e.offsetY,
+            x: offsetX - (attr.width / 2),
+            y: offsetY - (attr.height / 2),
         }
     };
     svgData.value.push(nowData);
@@ -78,7 +78,7 @@ const onDrop = (e: DragEvent) => {
 
 // 鼠标左键在画布中的组件上按下
 const onMousedown = (e: MouseEvent, o: any, i: number) => {
-    
+
     e.preventDefault();
     e.stopPropagation();
 
@@ -104,8 +104,8 @@ const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
     if (state.event && prop.nowAttr.id) {
         const { clientX, clientY } = e;
         // prop.nowAttr.attr.x = clientX - 230;
-        prop.nowAttr.attr.x = clientX - 430;
-        prop.nowAttr.attr.y = clientY - 195
+        prop.nowAttr.attr.x = clientX - 438;
+        prop.nowAttr.attr.y = clientY - 220
     }
     return false;
 };
@@ -117,7 +117,7 @@ const onMouseup = (e: MouseEvent, o: Object, i: number) => {
 };
 
 onMounted(() => {
-    console.log(333333, process.env)
+    console.log(333333, process)
     rstate.value = new scale({
         draw: `.${style.draw}`,
         canvas: `.${style.canvas}`,
@@ -150,18 +150,17 @@ onUnmounted(() => {
                 @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousemove="mouseMoveEvent"
                 @mouseup="onMouseup">
 
-                <svg :class="style.svg" id="svg" xmlns="http://www.w3.org/2000/svg" :width="canvas.width"
-                    :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
+                <svg :class="style.svg" :style="{ background: canvas.background }" id="svg" :xmlns="NS.SVG"
+                    :width="canvas.width" :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <g v-for="(o, i) in svgData" :key="i" :class="o.id === state.selected ? style.selected : ''"
                         @mousedown="onMousedown($event, o, i)">
                         <!-- <component is='image' src="@/assets/icon/tool/computer.webp" width="50px"></component> -->
 
-                        <image :x="o.attr.x - (o.attr.width / 2)" :y="o.attr.y - (o.attr.height / 2)"
-                            href="@/assets/icon/tool/computer.webp" :width="o.attr.width" :height="o.attr.height" />
-
                         <!-- <image :x="o.attr.x - (o.attr.width / 2)" :y="o.attr.y - (o.attr.height / 2)"
-                            :href="'https://qn.antdv.com/vue.png'" :width="o.attr.width"
-                            :height="o.attr.height" /> -->
+                            href="@/assets/icon/tool/computer.webp" :width="o.attr.width" :height="o.attr.height" /> -->
+
+                        <image :x="o.attr.x" :y="o.attr.y" :href="getLocalFile(`icon/tool/${o.type}.webp`)"
+                            :width="o.attr.width" :height="o.attr.height" />
                     </g>
                 </svg>
             </div>

@@ -78,9 +78,13 @@ const onDragend = (e: DragEvent, m: any) => {
     text-align: center;
     user-select: none;
 
+    :deep(.ant-collapse-content-box) {
+        padding: 16px 0;
+    }
+
     .drag {
         display: inline-block;
-        margin: 10px 5px;
+        margin: 10px;
         width: 50px;
         height: 60px;
 

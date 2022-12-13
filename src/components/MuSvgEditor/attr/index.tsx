@@ -1,6 +1,8 @@
 import { ConfigProvider } from 'ant-design-vue';
 import { defineComponent, ref, reactive, onMounted, watch, defineEmits, defineExpose } from 'vue';
 import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue';
+import { canvasBackground } from '../config';
+
 import style from './style.module.less';
 
 // const props = defineProps({
@@ -92,7 +94,7 @@ export default defineComponent({
 
         return (<aside class={style.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
-                <a-tab-pane key="1" tab={[tabicon(1), '控件属性']}>
+                <a-tab-pane key="1" tab={[tabicon(1), '控件属性']} >
                     <a-form model={state}
                         name="cancaSetup"
                         layout="horizontal"
@@ -137,6 +139,9 @@ export default defineComponent({
                         <a-form-item label="旋转" name="rotate">
                             <a-input-number v-model:value={attr.r} prefix={<sync-outlined />} addon-after="px" />
                         </a-form-item>
+                        <a-form-item label="ICON" name={'about'}>
+                            <a-textarea v-model:value={state.icon} placeholder="ICON" />
+                        </a-form-item>
                     </a-form>
                 </a-tab-pane>
                 <a-tab-pane key="2" tab={[tabicon(2), '画布设置']}>
@@ -149,10 +154,13 @@ export default defineComponent({
                         onFinishFailed={onFinishFailed}
                     >
                         <a-form-item label="画布宽度" name="width" rules={[{ required: false, message: '请输入画布宽度！' }]}>
-                            <a-input v-model:value={canvas.width} prefix={<ColumnWidthOutlined />} suffix="px" />
+                            <a-input-number v-model:value={canvas.width} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="画布高度" name="height" rules={[{ required: false, message: '请输入画布高度！' }]}>
-                            <a-input v-model:value={canvas.height} prefix={<ColumnHeightOutlined />} suffix="px" />
+                            <a-input-number v-model:value={canvas.height} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                        </a-form-item>
+                        <a-form-item label="画布背景" name="height" rules={[{ required: false, message: '请输选择画布背景！' }]}>
+                            <a-select v-model:value={canvas.background} prefix={<ColumnHeightOutlined />} options={canvasBackground}></a-select>
                         </a-form-item>
                         <a-form-item label="主题颜色" name="color" rules={[{ required: false, message: '请输入主题颜色！' }]}>
                             <a-input type="color" v-model:value={state.color} onInput={input} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />

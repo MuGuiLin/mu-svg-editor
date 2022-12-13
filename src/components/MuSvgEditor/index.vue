@@ -9,7 +9,7 @@ import Work from "./work";
 import Attr from "./attr";
 import Info from "./info";
 
-import { } from "./utils/draw";
+import { canvasBackground } from "./config";
 
 const state: IStateType = reactive({
     canvas: {
@@ -20,6 +20,7 @@ const state: IStateType = reactive({
         isLine: true,
         isDrag: false,
         isScale: true,
+        background: [canvasBackground[0].value]
     },
     tool,
     nowTool: {},

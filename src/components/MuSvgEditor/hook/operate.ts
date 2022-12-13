@@ -6,3 +6,13 @@
 export function hookDelete(arr: Array<any>, index: number) {
     arr.splice(index, 1);
 };
+
+
+export function hookSeveSvg() {
+    const href = 'data:text;charset=utf-8,' + encodeURIComponent(document.querySelector('#svg').outerHTML);
+    const a = document.createElement('a');
+    a.setAttribute('href', href);
+    a.setAttribute('download', `${new Date().getTime()}.svg`);
+    a.click();
+    a.remove();
+}

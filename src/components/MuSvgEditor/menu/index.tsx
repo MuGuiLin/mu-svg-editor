@@ -1,5 +1,6 @@
 import { defineComponent, ref } from 'vue';
 import style from './style.module.less'
+import { hookSeveSvg } from '../hook/operate'
 
 export default defineComponent({
     name: 'Menu',
@@ -24,7 +25,7 @@ export default defineComponent({
                             <a-menu-item key="file:2" icon={<export-outlined />}>导入图片 （Ctrl + I）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="输出">
-                            <a-menu-item key="file:3" icon={<save-outlined />}>保存SVG （Ctrl + S）</a-menu-item>
+                            <a-menu-item key="file:3" onClick={() => hookSeveSvg()} icon={<save-outlined />}>保存SVG （Ctrl + S）</a-menu-item>
                             <a-menu-item key="file:4" icon={<import-outlined />}>导出PNG （Ctrl + E）</a-menu-item>
                         </a-menu-item-group>
                     </a-sub-menu>
@@ -59,11 +60,11 @@ export default defineComponent({
                         <a-menu-item key="sort:2" icon={<insert-row-below-outlined />}>置于底层 （Ctrl + ⇠）</a-menu-item>
                         <a-menu-item key="sort:3" icon={<vertical-align-top-outlined />}>置上一层 （Ctrl + ⇡）</a-menu-item>
                         <a-menu-item key="sort:4" icon={<vertical-align-bottom-outlined />}>置下一层 （Ctrl + ⇣）</a-menu-item>
-                        <a-menu-item key="sort:5" icon={<group-outlined />}>对象组合 （Ctrl + G）</a-menu-item>
-                        <a-menu-item key="sort:6" icon={<ungroup-outlined />}>对象分解 （Ctrl + D）</a-menu-item>
+                        <a-menu-item key="sort:5" icon={<group-outlined />}>图层组合 （Ctrl + G）</a-menu-item>
+                        <a-menu-item key="sort:6" icon={<ungroup-outlined />}>图层分解 （Ctrl + D）</a-menu-item>
                     </a-sub-menu>
                     <a-sub-menu key="page" title="页面（P）" icon={<layout-outlined />} >
-                        <a-menu-item-group title="网格大小">
+                        <a-menu-item-group title="画布网格大小">
                             <a-menu-item key="file:1" icon={<fullscreen-exit-outlined />}>微小</a-menu-item>
                             <a-menu-item key="file:2" icon={<vertical-align-middle-outlined />}>正常</a-menu-item>
                             <a-menu-item key="file:3" icon={<drag-outlined />}>略大</a-menu-item>
