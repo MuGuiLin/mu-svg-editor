@@ -1,13 +1,13 @@
 <script setup lang="ts" >
 import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
-import stateType from '../types/propsType'
+import stateType from '../types/propsType';
 import scale from "../hook/scale";
+import { hookOpenSvg, hookSeveSvg } from "../hook/operate";
 import { NS } from "../config";
-import { getLocalFile } from '@/utils'
-
+import { getLocalFile } from '@/utils';
 import Components from './components.vue';
 
-import style from './style.module.less'
+import style from './style.module.less';
 
 const props: any = defineProps({
     prop: Object,
@@ -32,7 +32,7 @@ const svgNows: any = reactive({
 // 画布宽高改变，更新标尺刻度
 watch(() => [canvas.width, canvas.height], (n1, n2) => {
     setTimeout(() => {
-        rstate.value.reset();
+        rstate.value?.reset?.();
     }, 100);
 }, { immediate: true });
 
@@ -70,8 +70,16 @@ const onDrop = (e: DragEvent) => {
             y: offsetY - (attr.height / 2),
         }
     };
+
     svgData.value.push(nowData);
-    prop.nowAttr = svgData.value.at(-1);
+    try {
+        prop.nowAttr = svgData.value.at(-1);
+
+    } catch (error) {
+        prop.nowAttr = svgData.value[svgData.value.length - 1];
+    } finally {
+        prop.nowAttr.index = svgData.value.length;
+    }
 
     console.log('svgData', svgData)
 };
@@ -85,6 +93,7 @@ const onMousedown = (e: MouseEvent, o: any, i: number) => {
     state.event = 1;
     state.selected = o.id;
     prop.nowAttr = o;
+    prop.nowAttr.index = i;
 
     console.log(o, i);
     console.log(svgData)
@@ -116,18 +125,90 @@ const onMouseup = (e: MouseEvent, o: Object, i: number) => {
     return false;
 };
 
+// 监听键盘事件
+const onKeydown = (e: KeyboardEvent) => {
+    e.preventDefault();
+    if (0 > state.selected || !prop.nowAttr.id) {
+        return false;
+    }
+    const { key, ctrlKey } = e;
+    console.log(key)
+    switch (key) {
+        // 删除组件
+        case 'Delete':
+            svgData.value.splice(prop.nowAttr.index, 1);
+            state.selected = -1;
+            break;
+        // 组件向上移动
+        case !ctrlKey && 'ArrowUp':
+            prop.nowAttr.attr.y--;
+            break;
+        // 组件向下移动
+        case !ctrlKey && 'ArrowDown':
+            prop.nowAttr.attr.y++;
+            break;
+        // 组件向左移动
+        case !ctrlKey && 'ArrowLeft':
+            prop.nowAttr.attr.x--;
+            break;
+        // 组件向右移动
+        case !ctrlKey && 'ArrowRight':
+            prop.nowAttr.attr.x++;
+            break;
+        // 置上一层
+        case ctrlKey && 'ArrowUp':
+            alert('置上一层！');
+            break;
+        // 置下一层
+        case ctrlKey && 'ArrowDown':
+            alert('置下一层！');
+            break;
+        // 置于顶层
+        case ctrlKey && 'ArrowRight':
+            alert('置于顶层！');
+            break;
+        // 置于底层
+        case ctrlKey && 'ArrowLeft':
+            alert('置于底层！');
+            break;
+        // 打开SVG文件
+        case ctrlKey && 'o':
+            hookOpenSvg();
+            break;
+        // 保存为SVG文件
+        case ctrlKey && 's':
+            hookSeveSvg();
+            break;
+        // 剪切组件
+        case ctrlKey && 'x':
+            alert('对不起：不能剪切！');
+            break;
+        // 复制组件
+        case ctrlKey && 'c':
+            alert('对不起：不能复制！');
+            break;
+        // 粘贴组件
+        case ctrlKey && 'v':
+            alert('对不起：粘贴板是空的！');
+            break;
+        default:
+            break;
+    }
+};
+
 onMounted(() => {
-    console.log(333333, process)
     rstate.value = new scale({
         draw: `.${style.draw}`,
         canvas: `.${style.canvas}`,
         scale_x: `.${style.scale_x}`,
         scale_y: `.${style.scale_y}`
     });
+    window.addEventListener('keydown', onKeydown, false);
 });
 
 onUnmounted(() => {
     window.onresize = null;
+    window.removeEventListener('keydown', onKeydown);
 });
 
 </script>
