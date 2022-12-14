@@ -20,7 +20,6 @@ const rstate = ref();
 
 const state = reactive({
     event: 0,
-    selected: -1
 });
 
 const svgData: any = ref([]);
@@ -59,44 +58,41 @@ const onDrop = (e: DragEvent) => {
     };
 
     // 在画布中创建组件
-    const { type, name, attr } = prop.nowTool, id = `${new Date().getTime()}`, { offsetX, offsetY } = e, nowData: any = {
+    const { type, name, icon, attr } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, nowData: any = {
         id,
         type,
         attr: {
             ...JSON.parse(JSON.stringify(attr)),
             id,
+            icon,
             text: name,
             x: offsetX - (attr.width / 2),
             y: offsetY - (attr.height / 2),
         }
     };
-
     svgData.value.push(nowData);
     try {
         prop.nowAttr = svgData.value.at(-1);
-
     } catch (error) {
         prop.nowAttr = svgData.value[svgData.value.length - 1];
     } finally {
         prop.nowAttr.index = svgData.value.length;
     }
 
-    console.log('svgData', svgData)
+    console.info('svgData', svgData)
 };
 
 // 鼠标左键在画布中的组件上按下
 const onMousedown = (e: MouseEvent, o: any, i: number) => {
-
     e.preventDefault();
     e.stopPropagation();
-
     state.event = 1;
-    state.selected = o.id;
+
     prop.nowAttr = o;
     prop.nowAttr.index = i;
+    prop.nowAttr.selected = o.id;
 
-    console.log(o, i);
-    console.log(svgData)
+    console.info(o, i, svgData);
 };
 
 // 鼠标坐标
@@ -125,75 +121,102 @@ const onMouseup = (e: MouseEvent, o: Object, i: number) => {
     return false;
 };
 
+// 取消组件选中状态
+const selectedCancel = () => {
+    state.event = 0;
+    prop.nowAttr.selected = null;
+};
+
 // 监听键盘事件
 const onKeydown = (e: KeyboardEvent) => {
-    e.preventDefault();
-    if (0 > state.selected || !prop.nowAttr.id) {
+    if (0 > prop.nowAttr.selected || !prop.nowAttr.id) {
         return false;
     }
-    const { key, ctrlKey } = e;
-    console.log(key)
-    switch (key) {
-        // 删除组件
-        case 'Delete':
-            svgData.value.splice(prop.nowAttr.index, 1);
-            state.selected = -1;
-            break;
-        // 组件向上移动
-        case !ctrlKey && 'ArrowUp':
-            prop.nowAttr.attr.y--;
-            break;
-        // 组件向下移动
-        case !ctrlKey && 'ArrowDown':
-            prop.nowAttr.attr.y++;
-            break;
-        // 组件向左移动
-        case !ctrlKey && 'ArrowLeft':
-            prop.nowAttr.attr.x--;
-            break;
-        // 组件向右移动
-        case !ctrlKey && 'ArrowRight':
-            prop.nowAttr.attr.x++;
-            break;
-        // 置上一层
-        case ctrlKey && 'ArrowUp':
-            alert('置上一层！');
-            break;
-        // 置下一层
-        case ctrlKey && 'ArrowDown':
-            alert('置下一层！');
-            break;
-        // 置于顶层
-        case ctrlKey && 'ArrowRight':
-            alert('置于顶层！');
-            break;
-        // 置于底层
-        case ctrlKey && 'ArrowLeft':
-            alert('置于底层！');
-            break;
-        // 打开SVG文件
-        case ctrlKey && 'o':
-            hookOpenSvg();
-            break;
-        // 保存为SVG文件
-        case ctrlKey && 's':
-            hookSeveSvg();
-            break;
-        // 剪切组件
-        case ctrlKey && 'x':
-            alert('对不起：不能剪切！');
-            break;
-        // 复制组件
-        case ctrlKey && 'c':
-            alert('对不起：不能复制！');
-            break;
-        // 粘贴组件
-        case ctrlKey && 'v':
-            alert('对不起：粘贴板是空的！');
-            break;
-        default:
-            break;
-    }
+    try {
+        const { key, ctrlKey } = e;
+        switch (key) {
+            // 删除组件
+            case 'Delete':
+                e.preventDefault();
+                svgData.value.splice(prop.nowAttr.index, 1);
+                prop.nowAttr = {
+                    index: null,
+                    selected: null,
+                    attr: {}
+                };
+                break;
+            // 组件向上移动
+            case !ctrlKey && 'ArrowUp':
+                e.preventDefault();
+                prop.nowAttr.attr.y--;
+                break;
+            // 组件向下移动
+            case !ctrlKey && 'ArrowDown':
+                e.preventDefault();
+                prop.nowAttr.attr.y++;
+                break;
+            // 组件向左移动
+            case !ctrlKey && 'ArrowLeft':
+                e.preventDefault();
+                prop.nowAttr.attr.x--;
+                break;
+            // 组件向右移动
+            case !ctrlKey && 'ArrowRight':
+                e.preventDefault();
+                prop.nowAttr.attr.x++;
+                break;
+            // 置上一层
+            case ctrlKey && 'ArrowUp':
+                e.preventDefault();
+                alert('置上一层！');
+                break;
+            // 置下一层
+            case ctrlKey && 'ArrowDown':
+                e.preventDefault();
+                alert('置下一层！');
+                break;
+            // 置于顶层
+            case ctrlKey && 'ArrowRight':
+                e.preventDefault();
+                alert('置于顶层！');
+                break;
+            // 置于底层
+            case ctrlKey && 'ArrowLeft':
+                e.preventDefault();
+                alert('置于底层！');
+                break;
+            // 打开SVG文件
+            case ctrlKey && 'o':
+                e.preventDefault();
+                hookOpenSvg();
+                break;
+            // 保存为SVG文件
+            case ctrlKey && 's':
+                e.preventDefault();
+                hookSeveSvg();
+                break;
+            // 剪切组件
+            case ctrlKey && 'x':
+                e.preventDefault();
+                alert('对不起：不能剪切！');
+                break;
+            // 复制组件
+            case ctrlKey && 'c':
+                e.preventDefault();
+                alert('对不起：不能复制！');
+                break;
+            // 粘贴组件
+            case ctrlKey && 'v':
+                e.preventDefault();
+                alert('对不起：粘贴板是空的！');
+                break;
+            default:
+                break;
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
+    };
 };
 
 onMounted(() => {
@@ -203,18 +226,18 @@ onMounted(() => {
         scale_x: `.${style.scale_x}`,
         scale_y: `.${style.scale_y}`
     });
-    window.addEventListener('keydown', onKeydown, false);
+    document.addEventListener('keydown', onKeydown, false);
 });
 
 onUnmounted(() => {
     window.onresize = null;
-    window.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('keydown', onKeydown);
 });
 
 </script>
 
 <template>
-    <main :class="style.work">
+    <main :class="style.work" @mousedown="selectedCancel">
         <div :class="style.draw" @mousemove="onMousemove($event)">
             <!-- <div :class="style.draw"> -->
 
@@ -233,15 +256,11 @@ onUnmounted(() => {
 
                 <svg :class="style.svg" :style="{ background: canvas.background }" id="svg" :xmlns="NS.SVG"
                     :width="canvas.width" :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
-                    <g v-for="(o, i) in svgData" :key="i" :class="o.id === state.selected ? style.selected : ''"
+                    <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
                         @mousedown="onMousedown($event, o, i)">
-                        <!-- <component is='image' src="@/assets/icon/tool/computer.webp" width="50px"></component> -->
-
-                        <!-- <image :x="o.attr.x - (o.attr.width / 2)" :y="o.attr.y - (o.attr.height / 2)"
-                            href="@/assets/icon/tool/computer.webp" :width="o.attr.width" :height="o.attr.height" /> -->
-
-                        <image :x="o.attr.x" :y="o.attr.y" :href="getLocalFile(`icon/tool/${o.type}.webp`)"
-                            :width="o.attr.width" :height="o.attr.height" />
+                        <component :is='o.type' :x="o.attr.x" :y="o.attr.y"
+                            :href="getLocalFile(`icon/tool/${o.attr.icon}.webp`)" :width="o.attr.width"
+                            :height="o.attr.height"></component>
                     </g>
                 </svg>
             </div>

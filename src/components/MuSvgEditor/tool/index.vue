@@ -56,7 +56,7 @@ const onDragend = (e: DragEvent, m: any) => {
                         <b>{{ m.name }}</b>
                     </template>
                     <template v-else>
-                        <i :class="m.type" :draggable="true" @dragstart="onDragstart($event, m)"
+                        <i :class="m.icon" :draggable="true" @dragstart="onDragstart($event, m)"
                             @dragend="onDragend($event, m)"></i>
                         <b>{{ m.name }}</b>
                     </template>

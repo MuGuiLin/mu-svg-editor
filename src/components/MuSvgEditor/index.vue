@@ -24,7 +24,11 @@ const state: IStateType = reactive({
     },
     tool,
     nowTool: {},
-    nowAttr: {},
+    nowAttr: {
+        index: null,
+        selected: null,
+        attr: {}
+    },
 });
 
 // 鼠标坐标

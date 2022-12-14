@@ -45,7 +45,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr
             },
-            ctrl: '',
             event: 1,
             select: true,
             template: ''
@@ -58,7 +57,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr
             },
-            ctrl: '',
             event: 1,
             select: false,
             template: ''
@@ -71,7 +69,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 1,
             select: false,
             template: ''
@@ -84,7 +81,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 1,
             select: false,
             template: ''
@@ -97,7 +93,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 1,
             select: false,
             template: ''
@@ -110,7 +105,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 1,
             select: false,
             template: ''
@@ -123,7 +117,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 1,
             select: false,
             template: ''
@@ -136,7 +129,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 1,
             select: false,
             template: ''
@@ -154,244 +146,244 @@ export const topo: IToolProps = {
     title: '拓扑组件',
     child: [
         {
-            type: 'internet',
+            type: 'image',
             name: '互联网',
-            icon: '',
+            icon: 'internet',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'visitor',
+            type: 'image',
             name: '访问人',
-            icon: '',
+            icon: 'visitor',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'computer',
+            type: 'image',
             name: 'PC端',
-            icon: '',
+            icon: 'computer',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'phone',
+            type: 'image',
             name: '移动端',
-            icon: '',
+            icon: 'phone',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'switch',
+            type: 'image',
             name: '交换机',
-            icon: '',
+            icon: 'switch',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'core-switch',
+            type: 'image',
             name: '核心交换机',
-            icon: '',
+            icon: 'core-switch',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'firewall',
+            type: 'image',
             name: '防火墙',
-            icon: '',
+            icon: 'firewall',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'flow-monitor',
+            type: 'image',
             name: '流量监控',
-            icon: '',
+            icon: 'flow-monitor',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'server',
+            type: 'image',
             name: '服务器',
-            icon: '',
+            icon: 'server',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'virtual-machine',
+            type: 'image',
             name: '虚拟机',
-            icon: '',
+            icon: 'virtual-machine',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'load-balancing',
+            type: 'image',
             name: '负载均衡',
-            icon: '',
+            icon: 'load-balancing',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'signal-link',
+            type: 'image',
             name: '信号链路',
-            icon: '',
+            icon: 'signal-link',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'system',
+            type: 'image',
             name: '系统',
-            icon: '',
+            icon: 'system',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'tradition-device',
+            type: 'image',
             name: '传统设备',
-            icon: '',
+            icon: 'tradition-device',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'serve',
+            type: 'image',
             name: '服务',
-            icon: '',
+            icon: 'serve',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'data-base',
+            type: 'image',
             name: '数据库',
-            icon: '',
+            icon: 'data-base',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'redis',
+            type: 'image',
             name: '缓存',
-            icon: '',
+            icon: 'redis',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'storage',
+            type: 'image',
             name: '存储',
-            icon: '',
+            icon: 'storage',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'signal-flow',
+            type: 'image',
             name: '信号流',
-            icon: '',
+            icon: 'signal-flow',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'colony',
+            type: 'image',
             name: '集群',
-            icon: '',
+            icon: 'colony',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'monomer',
+            type: 'image',
             name: '单体',
-            icon: '',
+            icon: 'monomer',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },
         {
-            type: 'redundancy-group',
+            type: 'image',
             name: '冗余组',
-            icon: '',
+            icon: 'redundancy-group',
+            path: '',
             attr: {
                 ...attr,
             },
-            ctrl: '',
             event: 2,
             template: ''
         },

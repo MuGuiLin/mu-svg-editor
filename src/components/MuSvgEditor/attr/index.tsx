@@ -36,13 +36,13 @@ export default defineComponent({
     },
     setup(props: { prop: any }) {
         const state = reactive<IState>({
-            activeKey: Object.keys(props.prop.nowAttr).length ? '1' : '2',
+            activeKey: Object.keys(props.prop.nowAttr.attr).length ? '1' : '2',
             color: '#1890FF',
             remember: true,
             about: 'Mu-SVG-Editor',
         });
 
-        watch(() => props.prop?.nowAttr, (prop) => {
+        watch(() => props.prop?.nowAttr?.attr, (prop) => {
             state.activeKey = Object.keys(prop).length ? '1' : '2';
             // }, { deep: true, immediate: true });
         });
@@ -64,7 +64,6 @@ export default defineComponent({
         };
         const input = ({ target }: Event | any) => {
             state.color = target.value;
-
             console.log(ConfigProvider);
             // 注：只有在main.ts中使用了antd.variable.min.css这里才生效哦！！
             ConfigProvider.config({
@@ -90,13 +89,12 @@ export default defineComponent({
     },
 
     render() {
-        const { prop: { nowAttr: { attr }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
-
+        const { prop: { nowAttr: { attr, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
         return (<aside class={style.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']} >
-                    <a-form model={state}
-                        name="cancaSetup"
+                    <a-form model={state} disabled={0 > selected}
+                        name="controlAttr"
                         layout="horizontal"
                         autocomplete="off"
                         onValuesChange={onValuesChange}
@@ -119,7 +117,7 @@ export default defineComponent({
                             <a-input v-model:value={attr.id} readonly prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
                         <a-form-item label="文本" name="text">
-                            <a-input v-model:value={attr.text} prefix={<field-number-outlined />} placeholder="自动生成！" />
+                            <a-input v-model:value={attr.text} prefix={<font-size-outlined />} placeholder="组件名称！" />
                         </a-form-item>
                         <a-form-item label="坐标X" name="x">
                             <a-input-number v-model:value={attr.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
@@ -146,7 +144,7 @@ export default defineComponent({
                 </a-tab-pane>
                 <a-tab-pane key="2" tab={[tabicon(2), '画布设置']}>
                     <a-form model={state}
-                        name="cancaSetup"
+                        name="canvasSetup"
                         layout="vertical"
                         autocomplete="off"
                         onValuesChange={onValuesChange}
