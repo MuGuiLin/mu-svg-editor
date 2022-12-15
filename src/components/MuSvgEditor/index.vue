@@ -13,8 +13,8 @@ import { canvasBackground } from "./config";
 
 const state: IStateType = reactive({
     canvas: {
-        lineX: 730,
-        lineY: 430,
+        lineX: 830,
+        lineY: 460,
         width: 1008,
         height: 567,
         isLine: true,

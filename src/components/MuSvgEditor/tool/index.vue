@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import { message } from 'ant-design-vue';
+import { isEmptyObj } from '../hook'
 
 const { prop }: any = defineProps({
     prop: Object
@@ -14,6 +15,12 @@ const state = reactive({
 
 watch(() => state.activeKey, val => {
     console.log(val);
+});
+
+watch(() => prop.nowTool, obj => {
+    if (isEmptyObj(obj)) {
+        state.clickDraw = 0;
+    }
 });
 
 // 点击左侧工具栏 基本绘制分类中的组件

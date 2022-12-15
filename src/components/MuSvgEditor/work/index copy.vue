@@ -135,30 +135,28 @@ const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
     }
     const { clientX, clientY } = e;
 
+
     switch (prop.nowAttr.event) {
         // draw
         case 1:
-            if ('text' === prop.nowAttr.type) {
-                prop.nowAttr.attr.x = clientX - 530;
-                prop.nowAttr.attr.y = clientY - 238;
-            } else {
-                prop.nowAttr.attr.x2 = clientX - (state.x || 0);
-                prop.nowAttr.attr.y2 = clientY - (state.y || 0);
-            }
+            prop.nowAttr.attr.x2 = clientX - (state.x || 0);
+            prop.nowAttr.attr.y2 = clientY - (state.y || 0);
             break;
         // drag
         case 2:
-            if (!prop.nowAttr.selected) return;
-            // prop.nowAttr.attr.x = clientX - 438;
-            // prop.nowAttr.attr.y = clientY - 220;
-            prop.nowAttr.attr.x = clientX - 543;
-            prop.nowAttr.attr.y = clientY - 276;
+            prop.nowAttr.attr.x = clientX - 438;
+            prop.nowAttr.attr.y = clientY - 220
             break;
         default:
             break;
     }
     return false;
 };
+
+
+
+
+
 
 // 鼠标左键在画布中的组件上抬起
 const onCanvasMouseup = (e: MouseEvent, o: Object, i: number) => {
@@ -302,15 +300,14 @@ onUnmounted(() => {
                     <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
                         @mousedown="onSvgMousedown($event, o, i)">
                         <!-- <KeepAlive> -->
-                        <component :is='o.type' v-if="1 === o.event" :x="o.attr.x" :y="o.attr.y" :x1="o.attr.x"
-                            :y1="o.attr.y" :x2="o.attr.x2" :y2="o.attr.y2" :stroke="o.attr.style.stroke"
-                            :stroke-width="o.attr.style.stroke_width">{{
-                                    o.attr.text
-                            }}</component>
-                        <component :is='o.type' v-if="2 === o.event" :x="o.attr.x" :y="o.attr.y"
+                        <!-- <component :is='o'></component> -->
+                        <component :is='o.type' :x="o.attr.x" :y="o.attr.y" :x1="o.attr.x" :y1="o.attr.y"
+                            :x2="o.attr.x2" :y2="o.attr.y2" :stroke="o.attr.style.stroke"
+                            :stroke-width="o.attr.style.stroke_width"
                             :href="getLocalFile(`icon/tool/${o.attr.icon}.webp`)" :width="o.attr.width"
-                            :height="o.attr.height"></component>
+                            :height="o.attr.height">{{ o.attr.text }}</component>
 
+                            
                         <!-- </KeepAlive> -->
                     </g>
                 </svg>

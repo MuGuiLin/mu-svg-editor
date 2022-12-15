@@ -6,6 +6,13 @@ export const attr: IAttrParops = {
     text: '',
     status: 1,
     type: '',
+    x: 0,
+    y: 0,
+    r: 0,
+    x2: 0,
+    y2: 0,
+    cx: 0,
+    cy: 0,
     width: 60,
     height: 60,
     icon: '',
@@ -16,12 +23,13 @@ export const attr: IAttrParops = {
     scale: 0,
     style: {
         fill: '',
-        fill_opacity: 1,
         // stroke: '#00FFFF',
         stroke: '#FF0000',
-        stroke_width: 1,
+        stroke_width: 5,
+        opacity: 1,
+        font_size: 12,
+        text_anchor: 'start',
         stroke_dasharray: '',
-        stroke_opacity: 1,
     },
     transform: '',
     is_show: true,
@@ -35,7 +43,9 @@ export const draw: IToolProps = {
             name: '选择',
             icon: 'send-outlined',
             path: 'M17.15 20.76l-2.94 1.5-3.68-6-4.41 3V1.24l12.5 12.01-4.41 1.5 2.94 6z',
-            attr: {},
+            attr: {
+                ...attr
+            },
             event: 1,
             select: true,
             template: '<line :x1=\"prop_data.extend_attr.startpoint_x.val\" :y1=\"prop_data.extend_attr.startpoint_y.val\" :x2=\"prop_data.extend_attr.endpoint_x.val\" :y2=\"prop_data.extend_attr.endpoint_y.val\" :fill=\"prop_data.extend_attr.color.val\" :stroke=\"prop_data.extend_attr.color.val\"  stroke-width=\"2\" :class=\"prop_data.extend_attr.svg_line_ani.val.selectval\"></line>'
@@ -46,11 +56,7 @@ export const draw: IToolProps = {
             path: 'M 2 10 L 23 10 L 23 15 L 2 15 Z',
             icon: 'line-outlined',
             attr: {
-                ...attr,
-                x1: 0,
-                y1: 0,
-                x2: 0,
-                y2: 0,
+                ...attr
             },
             event: 1,
             select: false,
@@ -75,8 +81,6 @@ export const draw: IToolProps = {
             path: 'M 3 4 L 3 21 L 22 21 L 22 4 L 0 4 Z',
             attr: {
                 ...attr,
-                x: 0,
-                y: 0,
             },
             event: 1,
             select: false,
@@ -89,9 +93,6 @@ export const draw: IToolProps = {
             path: 'M27,0H0v27h27 M13.25,7.617c6.742,0,12.207,3.846,12.207,8.59c0,4.745-5.465,8.591-12.207,8.591 S1.042,20.952,1.042,16.207C1.042,11.463,6.508,7.617,13.25,7.617z',
             attr: {
                 ...attr,
-                cx: 0,
-                cy: 0,
-                r: 50
             },
             event: 1,
             select: false,
@@ -104,7 +105,6 @@ export const draw: IToolProps = {
             path: 'M12.2 1.9c0-.36.86 0 .86 0V14a1.3 1.3 0 10.88 0V1.9s.87-.36.87 0c0 6.81 5.22 11.68 5.22 11.68l-3.25 8.2h-6.55l-3.26-8.2s5.22-4.87 5.22-11.68zM7.83 25.26v-2.61h11.32v2.6H7.84z',
             attr: {
                 ...attr,
-                d: ''
             },
             event: 1,
             select: false,
@@ -117,8 +117,6 @@ export const draw: IToolProps = {
             path: 'M5 4v3h5.5v12h3V7H19V4z',
             attr: {
                 ...attr,
-                font_size: 12,
-                text_anchor: 'start',
             },
             event: 1,
             select: false,

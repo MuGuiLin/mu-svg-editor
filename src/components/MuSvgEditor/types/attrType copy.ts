@@ -17,12 +17,12 @@ export interface IStyleParops extends IBaseParops {
 };
 
 export interface IAttrParops extends IBaseParops {
-    id?: string | Array<string>;
+    id: string | Array<string>;
     text?: string;
     status?: TStatusType;
-    type?: string;
-    x?: number;
-    y?: number;
+    type: string;
+    x: number;
+    y: number;
     r?: number;
     x2?: number;
     y2?: number;
@@ -37,7 +37,7 @@ export interface IAttrParops extends IBaseParops {
     class?: string | [];
     style?: IStyleParops;
     transform?: string;
-    is_show?: boolean;
+    is_show: boolean;
     [key: string]: any;
 };
 
