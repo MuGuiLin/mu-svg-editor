@@ -23,8 +23,9 @@ export const attr: IAttrParops = {
     scale: 0,
     style: {
         fill: '',
-        stroke: '#00FFFF',
-        stroke_width: 1,
+        // stroke: '#00FFFF',
+        stroke: '#FF0000',
+        stroke_width: 5,
         opacity: 1,
         font_size: 12,
         text_anchor: 'start',

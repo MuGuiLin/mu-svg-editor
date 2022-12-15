@@ -17,15 +17,13 @@ const props: any = defineProps({
 const { prop, prop: { canvas } } = props;
 
 const rstate = ref();
-
-const state = reactive({
-    event: 0,
-});
-
 const svgData: any = ref([]);
-const svgNows: any = reactive({
-    index: 0,
-    data: {}
+const state = reactive({
+    x: 0,
+    y: 0,
+    x2: 0,
+    y2: 0,
+    event: 0,
 });
 
 // 画布宽高改变，更新标尺刻度
@@ -47,18 +45,10 @@ const onDragover = (e: DragEvent) => {
     e.preventDefault();
 };
 
-// 左侧组件在画布上拖动结束
-const onDrop = (e: DragEvent) => {
-    // 清空左侧工具选中
-    canvas.isDrag = false;
-
-    // 未选择任何组件
-    if (!Object.keys(prop.nowTool).length) {
-        return false;
-    };
+const setSegData = (e: DragEvent) => {
 
     // 在画布中创建组件
-    const { type, name, icon, attr } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, nowData: any = {
+    const { type, name, icon, attr, event } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, nowData: any = {
         id,
         type,
         attr: {
@@ -68,7 +58,8 @@ const onDrop = (e: DragEvent) => {
             text: name,
             x: offsetX - (attr.width / 2),
             y: offsetY - (attr.height / 2),
-        }
+        },
+        event,
     };
     svgData.value.push(nowData);
     try {
@@ -79,19 +70,48 @@ const onDrop = (e: DragEvent) => {
         prop.nowAttr.index = svgData.value.length;
     }
 
+    // prop.nowAttr = o;
+    // prop.nowAttr.index = i;
+    // prop.nowAttr.selected = o.id;
     console.info('svgData', svgData)
 };
 
-// 鼠标左键在画布中的组件上按下
-const onMousedown = (e: MouseEvent, o: any, i: number) => {
+// 鼠标左键在画布上按下
+const onCanvasMousedown = (e: MouseEvent, o: any, i: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+   
+    const { clientX, clientY } = e;
+    state.x = clientX;
+    state.y = clientY;
+    state.event = 1;
+    if (1 === prop.nowTool.event){
+        setSegData(e);
+    };
+    console.info(o, i, svgData);
+};
+
+// 左侧组件在画布上拖动结束
+const onDrop = (e: DragEvent) => {
+    // 清空左侧工具选中
+    canvas.isDrag = false;
+
+    // 未选择任何组件
+    if (!Object.keys(prop.nowTool).length) {
+        return false;
+    };
+
+    setSegData(e);
+};
+
+// 鼠标左键在组件上按下
+const onSvgMousedown = (e: MouseEvent, o: any, i: number) => {
     e.preventDefault();
     e.stopPropagation();
     state.event = 1;
-
     prop.nowAttr = o;
     prop.nowAttr.index = i;
     prop.nowAttr.selected = o.id;
-
     console.info(o, i, svgData);
 };
 
@@ -106,11 +126,31 @@ const onMousemove = ({ clientX, clientY }: Event | any): void => {
 
 // 鼠标左键在画布中的组件上移动
 const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
-    if (state.event && prop.nowAttr.id) {
-        const { clientX, clientY } = e;
-        // prop.nowAttr.attr.x = clientX - 230;
-        prop.nowAttr.attr.x = clientX - 438;
-        prop.nowAttr.attr.y = clientY - 220
+    console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id)
+    if (!state.event || !prop.nowAttr?.id) {
+
+        return false;
+    }
+    const { clientX, clientY } = e;
+
+
+    switch (prop.nowAttr.event) {
+        // draw
+        case 1:
+            // state.x2 = clientX - (state.x || 0);
+            // state.y2 = clientY - (state.y || 0);
+            // prop.nowAttr.attr.x = clientX - 438;
+            // prop.nowAttr.attr.y = clientY - 220
+            prop.nowAttr.attr.x2 = (state.x || 0);
+            prop.nowAttr.attr.y2 = (state.y || 0);
+            break;
+        // drag
+        case 2:
+            prop.nowAttr.attr.x = clientX - 438;
+            prop.nowAttr.attr.y = clientY - 220
+            break;
+        default:
+            break;
     }
     return false;
 };
@@ -252,15 +292,15 @@ onUnmounted(() => {
 
             <div :class="[style.canvas, canvas.isDrag && style.dragstart]" @drop="onDrop($event)"
                 @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousemove="mouseMoveEvent"
-                @mouseup="onMouseup">
+                @mouseup="onMouseup" @mousedown="onCanvasMousedown($event, o, i)">
 
                 <svg :class="style.svg" :style="{ background: canvas.background }" id="svg" :xmlns="NS.SVG"
                     :width="canvas.width" :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
-                        @mousedown="onMousedown($event, o, i)">
-                        <component :is='o.type' :x="o.attr.x" :y="o.attr.y"
-                            :href="getLocalFile(`icon/tool/${o.attr.icon}.webp`)" :width="o.attr.width"
-                            :height="o.attr.height"></component>
+                        @mousedown="onSvgMousedown($event, o, i)">
+                        <component :is='o.type' :x="o.attr.x" :y="o.attr.y" :x1="o.attr.x" :y1="o.attr.y"
+                            :x2="o.attr.x2" :y2="o.attr.y2" :stroke="o.attr.style.stroke" :stroke-width="o.attr.style.stroke_width" :href="getLocalFile(`icon/tool/${o.attr.icon}.webp`)"
+                            :width="o.attr.width" :height="o.attr.height"></component>
                     </g>
                 </svg>
             </div>
