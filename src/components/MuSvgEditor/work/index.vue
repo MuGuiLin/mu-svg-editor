@@ -149,10 +149,10 @@ const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
         // drag
         case 2:
             if (!prop.nowAttr.selected) return;
-            // prop.nowAttr.attr.x = clientX - 438;
-            // prop.nowAttr.attr.y = clientY - 220;
-            prop.nowAttr.attr.x = clientX - 543;
-            prop.nowAttr.attr.y = clientY - 276;
+            prop.nowAttr.attr.x = clientX - 438;
+            prop.nowAttr.attr.y = clientY - 222;
+            // prop.nowAttr.attr.x = clientX - 543;
+            // prop.nowAttr.attr.y = clientY - 276;
             break;
         default:
             break;

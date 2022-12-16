@@ -304,6 +304,28 @@ export const topo: IToolProps = {
         },
         {
             type: 'image',
+            name: '插头',
+            icon: 'plug',
+            path: '',
+            attr: {
+                ...attr,
+            },
+            event: 2,
+            template: ''
+        },
+        {
+            type: 'image',
+            name: '电池',
+            icon: 'battery',
+            path: '',
+            attr: {
+                ...attr,
+            },
+            event: 2,
+            template: ''
+        },
+        {
+            type: 'image',
             name: '服务',
             icon: 'serve',
             path: '',
