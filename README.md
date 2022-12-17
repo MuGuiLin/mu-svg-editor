@@ -1,6 +1,6 @@
 # mu-svg-editor（SVG在线编辑器）
 
-> SVG 在线编辑器！SVG编辑器，SVG图形绘制，网络拓扑绘制
+> SVG 在线编辑器！SVG编辑器，SVG图形绘制，网络拓扑绘制！
 
 ## Demo
 
