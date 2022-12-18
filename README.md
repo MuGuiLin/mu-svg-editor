@@ -6,7 +6,7 @@
 
 ![demo](https://github.com/MuGuiLin/mu-svg-editor/blob/master/src/assets/img/demo.jpg?raw=true)
 
-![demo](https://github.com/MuGuiLin/mu-svg-editor/blob/master/src/assets/img/2022-12-18_2320268.jpg?raw=true)
+![demo](https://github.com/MuGuiLin/mu-svg-editor/blob/master/src/assets/img/home.jpg?raw=true)
 
 # Vite + Vue3 + TSX + Less + AntDV 
 
