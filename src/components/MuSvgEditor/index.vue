@@ -31,15 +31,6 @@ const state: IStateType = reactive({
     },
 });
 
-// 鼠标坐标
-const onMousemove = ({ clientX, clientY }: Event | any): void => {
-    const { canvas } = state;
-    if (!canvas.isLine) return;
-    // canvas.lineX = clientX - 180;
-    // canvas.lineY = clientY - 50;
-    canvas.lineX = clientX + Number(canvas.width) - 1188;
-    canvas.lineY = clientY + Number(canvas.height) - 618;
-};
 </script>
 
 <template>

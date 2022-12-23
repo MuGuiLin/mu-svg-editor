@@ -12,7 +12,6 @@ import style from './style.module.less';
 
 const props: any = defineProps({
     prop: Object,
-    // onMousemove: Function
 });
 
 const { prop, prop: { canvas } } = props;
@@ -122,8 +121,8 @@ const onMousemove = ({ clientX, clientY }: Event | any): void => {
     if (!canvas.isLine) return;
     // canvas.lineX = clientX - 180;
     // canvas.lineY = clientY - 50;
-    // canvas.lineX = clientX + Number(canvas.width) - 1188;
-    // canvas.lineY = clientY + Number(canvas.height) - 618;
+    canvas.lineX = clientX + Number(canvas.width) - 1188;
+    canvas.lineY = clientY + Number(canvas.height) - 618;
 };
 
 // 鼠标左键在画布中的组件上移动
