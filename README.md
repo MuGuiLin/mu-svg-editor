@@ -2,7 +2,7 @@
 
 > SVG 在线编辑器！SVG编辑器，SVG图形绘制，网络拓扑绘制！
 
-## 实例效果：
+## DEMO效果：
 
 ![demo](https://github.com/MuGuiLin/mu-svg-editor/blob/master/src/assets/img/demo.jpg?raw=true)
 
