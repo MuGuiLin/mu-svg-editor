@@ -15,6 +15,8 @@ const props: any = defineProps({
 });
 
 const { prop, prop: { canvas } } = props;
+const draw = <HTMLDivElement>ref(null);
+const drop = <HTMLDivElement>ref(null);
 
 const rstate = ref();
 const svgData: any = ref([]);
@@ -77,10 +79,10 @@ const setSegData = (e: DragEvent) => {
 const onCanvasMousedown = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    const { target, clientX, clientY } = e;
+    const { left, top } = drop.value.getBoundingClientRect();
+    [state.x, state.y] = [clientX - left, clientY - top];
 
-    const { clientX, clientY } = e;
-    state.x = clientX;
-    state.y = clientY;
     state.event = 1;
     if (1 === prop.nowTool.event) {
         setSegData(e);
@@ -118,40 +120,35 @@ const onSvgMousedown = (e: MouseEvent, o: any, i: number) => {
 
 // 鼠标坐标
 const onMousemove = ({ clientX, clientY }: Event | any): void => {
+    const { left, top } = draw.value.getBoundingClientRect();
     if (!canvas.isLine) return;
-    // canvas.lineX = clientX - 180;
-    // canvas.lineY = clientY - 50;
-    canvas.lineX = clientX + Number(canvas.width) - 1188;
-    canvas.lineY = clientY + Number(canvas.height) - 618;
+    [canvas.lineX, canvas.lineY] = [clientX - left, clientY - top];
 };
 
 // 鼠标左键在画布中的组件上移动
-const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
+const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: number) => {
     // console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
-    if (!state.event || !prop.nowAttr?.id) {
+    if (!state.event || !prop.nowAttr?.id) return false;
 
-        return false;
-    }
-    const { clientX, clientY } = e;
-
+    const { left, top } = drop.value.getBoundingClientRect();
+    const [x, y] = [clientX - left, clientY - top];
+    console.info(x, y)
     switch (prop.nowAttr.event) {
         // draw
         case 1:
             if ('text' === prop.nowAttr.type) {
-                prop.nowAttr.attr.x = clientX - 530;
-                prop.nowAttr.attr.y = clientY - 238;
+                prop.nowAttr.attr.x = x;
+                prop.nowAttr.attr.y = y;
             } else {
-                prop.nowAttr.attr.x2 = clientX - (state.x || 0);
-                prop.nowAttr.attr.y2 = clientY - (state.y || 0);
+                prop.nowAttr.attr.x2 = x - (state.x || 0);
+                prop.nowAttr.attr.y2 = y - (state.y || 0);
             }
             break;
         // drag
         case 2:
             if (!prop.nowAttr.selected) return;
-            prop.nowAttr.attr.x = clientX - 438;
-            prop.nowAttr.attr.y = clientY - 222;
-            // prop.nowAttr.attr.x = clientX - 543;
-            // prop.nowAttr.attr.y = clientY - 276;
+            prop.nowAttr.attr.x = (x - prop.nowAttr.attr.width / 2) - 4;
+            prop.nowAttr.attr.y = (y - prop.nowAttr.attr.height / 2) - 4;
             break;
         default:
             break;
@@ -280,8 +277,7 @@ onUnmounted(() => {
 
 <template>
     <main :class="style.work">
-        <div :class="style.draw" @mousemove="onMousemove">
-            <!-- <div :class="style.draw"> -->
+        <div :class="style.draw" ref="draw" @mousemove="onMousemove">
 
             <div :class="style.scale" v-show="canvas.isScale">
                 <div :class="style.scale_x">
@@ -292,7 +288,7 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <div :class="[style.canvas, canvas.isDrag && style.dragstart]" @drop="onDrop($event)"
+            <div :class="[style.canvas, canvas.isDrag && style.dragstart]" ref="drop" @drop="onDrop($event)"
                 @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousedown="onCanvasMousedown"
                 @mousemove="mouseMoveEvent($event)" @mouseup="onCanvasMouseup($event)">
 
@@ -306,6 +302,7 @@ onUnmounted(() => {
                             :stroke-width="o.attr.style.stroke_width">{{
                                     o.attr.text
                             }}</component>
+
                         <component :is='o.type' v-if="2 === o.event" :x="o.attr.x" :y="o.attr.y"
                             :href="getLocalFile(`icon/tool/${o.attr.icon}.webp`)" :width="o.attr.width"
                             :height="o.attr.height"></component>

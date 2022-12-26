@@ -110,6 +110,7 @@ export const draw: IToolProps = {
             path: 'M5 4v3h5.5v12h3V7H19V4z',
             attr: {
                 ...attr,
+                text_anchor: 'middle',
                 x: 0,
                 y: 0
             },

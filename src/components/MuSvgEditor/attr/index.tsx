@@ -90,7 +90,7 @@ export default defineComponent({
 
     render() {
         const { prop: { nowAttr: { attr, event, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
-        console.info(88888888888, event)
+
         return (<aside class={style.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']} >
