@@ -33,7 +33,7 @@ export const draw: IToolProps = {
             type: 'select',
             name: '选择',
             icon: 'send-outlined',
-            path: 'M17.15 20.76l-2.94 1.5-3.68-6-4.41 3V1.24l12.5 12.01-4.41 1.5 2.94 6z',
+            path: 'M18 20.76l-2.94 1.5-3.68-6-4.41 3V1.24l12.5 12.01-4.41 1.5 2.94 6z',
             attr: {},
             event: 1,
             template: '<line :x1=\"prop_data.extend_attr.startpoint_x.val\" :y1=\"prop_data.extend_attr.startpoint_y.val\" :x2=\"prop_data.extend_attr.endpoint_x.val\" :y2=\"prop_data.extend_attr.endpoint_y.val\" :fill=\"prop_data.extend_attr.color.val\" :stroke=\"prop_data.extend_attr.color.val\"  stroke-width=\"2\" :class=\"prop_data.extend_attr.svg_line_ani.val.selectval\"></line>'
@@ -81,7 +81,7 @@ export const draw: IToolProps = {
             type: 'circle',
             name: '圆形',
             icon: 'loading3-quarters-outlined',
-            path: 'M27,0H0v27h27 M13.25,7.617c6.742,0,12.207,3.846,12.207,8.59c0,4.745-5.465,8.591-12.207,8.591 S1.042,20.952,1.042,16.207C1.042,11.463,6.508,7.617,13.25,7.617z',
+            path: 'M 22.1, 2.5, m -10, 0 a 10, 10 0 1, 0 1, 0 Z',
             attr: {
                 ...attr,
                 cx: 0,
@@ -95,7 +95,7 @@ export const draw: IToolProps = {
             type: 'path',
             name: '路径',
             icon: 'node-index-outlined',
-            path: 'M12.2 1.9c0-.36.86 0 .86 0V14a1.3 1.3 0 10.88 0V1.9s.87-.36.87 0c0 6.81 5.22 11.68 5.22 11.68l-3.25 8.2h-6.55l-3.26-8.2s5.22-4.87 5.22-11.68zM7.83 25.26v-2.61h11.32v2.6H7.84z',
+            path: 'M11.5 1.9c0-.36.86 0 .86 0V14a1.3 1.3 0 10.88 0V1.9s.87-.36.87 0c0 6.81 5.22 11.68 5.22 11.68l-3.25 8.2h-6.55l-3.26-8.2s5.22-4.87 5.22-11.68zM7 24.5v-2h11.32v2z',
             attr: {
                 ...attr,
                 d: ''
@@ -107,7 +107,7 @@ export const draw: IToolProps = {
             type: 'text',
             name: '文本',
             icon: 'font-size-outlined',
-            path: 'M5 4v3h5.5v12h3V7H19V4z',
+            path: 'M 5 4 v 3 h 6 v 14 h 3 V 7 H 20 V 4 Z',
             attr: {
                 ...attr,
                 text_anchor: 'middle',
