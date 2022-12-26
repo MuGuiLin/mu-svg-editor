@@ -127,7 +127,7 @@ const onMousemove = ({ clientX, clientY }: Event | any): void => {
 
 // 鼠标左键在画布中的组件上移动
 const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
-    console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id)
+    // console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
     if (!state.event || !prop.nowAttr?.id) {
 
         return false;

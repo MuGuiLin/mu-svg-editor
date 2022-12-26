@@ -89,7 +89,8 @@ export default defineComponent({
     },
 
     render() {
-        const { prop: { nowAttr: { attr, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
+        const { prop: { nowAttr: { attr, event, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
+        console.info(88888888888, event)
         return (<aside class={style.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']} >
@@ -137,6 +138,19 @@ export default defineComponent({
                         <a-form-item label="旋转" name="rotate">
                             <a-input-number v-model:value={attr.r} prefix={<sync-outlined />} addon-after="px" />
                         </a-form-item>
+                        {
+                            1 === event ? <>
+                                <a-form-item label="边框" name="stroke_width">
+                                    <a-input-number v-model:value={attr.style.stroke_width} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                                </a-form-item>
+                                <a-form-item label="填充" name="fill">
+                                    <a-input type="color" v-model:value={attr.style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                                </a-form-item>
+                                <a-form-item label="轮廓" name="stroke">
+                                    <a-input type="color" v-model:value={attr.style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                                </a-form-item>
+                            </> : ''
+                        }
                         <a-form-item label="ICON" name={'about'}>
                             <a-textarea v-model:value={state.icon} placeholder="ICON" />
                         </a-form-item>

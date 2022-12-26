@@ -15,16 +15,15 @@ export const attr: IAttrParops = {
     class: '',
     scale: 0,
     style: {
-        fill: '',
+        fill: '#00FFFF',
         fill_opacity: 1,
-        // stroke: '#00FFFF',
-        stroke: '#FF0000',
+        stroke: '#166FFF',
         stroke_width: 1,
         stroke_dasharray: '',
         stroke_opacity: 1,
     },
     transform: '',
-    is_show: true,
+    hidden: true,
 };
 
 export const draw: IToolProps = {
@@ -37,7 +36,6 @@ export const draw: IToolProps = {
             path: 'M17.15 20.76l-2.94 1.5-3.68-6-4.41 3V1.24l12.5 12.01-4.41 1.5 2.94 6z',
             attr: {},
             event: 1,
-            select: true,
             template: '<line :x1=\"prop_data.extend_attr.startpoint_x.val\" :y1=\"prop_data.extend_attr.startpoint_y.val\" :x2=\"prop_data.extend_attr.endpoint_x.val\" :y2=\"prop_data.extend_attr.endpoint_y.val\" :fill=\"prop_data.extend_attr.color.val\" :stroke=\"prop_data.extend_attr.color.val\"  stroke-width=\"2\" :class=\"prop_data.extend_attr.svg_line_ani.val.selectval\"></line>'
         },
         {
@@ -53,7 +51,6 @@ export const draw: IToolProps = {
                 y2: 0,
             },
             event: 1,
-            select: false,
             template: ''
         },
         {
@@ -65,7 +62,6 @@ export const draw: IToolProps = {
                 ...attr,
             },
             event: 1,
-            select: false,
             template: ''
         },
         {
@@ -79,7 +75,6 @@ export const draw: IToolProps = {
                 y: 0,
             },
             event: 1,
-            select: false,
             template: ''
         },
         {
@@ -94,7 +89,6 @@ export const draw: IToolProps = {
                 r: 50
             },
             event: 1,
-            select: false,
             template: ''
         },
         {
@@ -107,7 +101,6 @@ export const draw: IToolProps = {
                 d: ''
             },
             event: 1,
-            select: false,
             template: ''
         },
         {
@@ -121,7 +114,6 @@ export const draw: IToolProps = {
                 y: 0
             },
             event: 1,
-            select: false,
             template: ''
         },
         {
@@ -133,7 +125,6 @@ export const draw: IToolProps = {
                 ...attr,
             },
             event: 1,
-            select: false,
             template: ''
         },
     ],
