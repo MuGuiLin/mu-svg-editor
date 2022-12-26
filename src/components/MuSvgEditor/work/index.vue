@@ -129,10 +129,8 @@ const onMousemove = ({ clientX, clientY }: Event | any): void => {
 const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: number) => {
     // console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
     if (!state.event || !prop.nowAttr?.id) return false;
-
     const { left, top } = drop.value.getBoundingClientRect();
     const [x, y] = [clientX - left, clientY - top];
-    console.info(x, y)
     switch (prop.nowAttr.event) {
         // draw
         case 1:

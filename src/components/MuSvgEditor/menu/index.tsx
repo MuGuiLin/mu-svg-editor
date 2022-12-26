@@ -1,6 +1,6 @@
 import { defineComponent, ref } from 'vue';
 import style from './style.module.less'
-import { hookSeveSvg } from '../hook/operate'
+import { hookOpenSvg, hookSeveSvg, hookImportImage } from '../hook/operate'
 
 export default defineComponent({
     name: 'Menu',
@@ -21,8 +21,8 @@ export default defineComponent({
                 <a-menu class={style.nav} v-model:selectedKeys={this.current} mode="horizontal">
                     <a-sub-menu key="file" title="文件（F）" icon={<folder-open-outlined />}>
                         <a-menu-item-group title="打开">
-                            <a-menu-item key="file:1" icon={<folder-open-outlined />}>打开SVG  （Ctrl + O）</a-menu-item>
-                            <a-menu-item key="file:2" icon={<export-outlined />}>导入图片 （Ctrl + I）</a-menu-item>
+                            <a-menu-item key="file:1" onClick={() => hookOpenSvg()} icon={<folder-open-outlined />}>打开SVG  （Ctrl + O）</a-menu-item>
+                            <a-menu-item key="file:2" onClick={() => hookImportImage()} icon={<export-outlined />}>导入图片 （Ctrl + I）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="输出">
                             <a-menu-item key="file:3" onClick={() => hookSeveSvg()} icon={<save-outlined />}>保存SVG （Ctrl + S）</a-menu-item>
