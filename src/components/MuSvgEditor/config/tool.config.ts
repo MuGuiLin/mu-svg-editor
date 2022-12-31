@@ -115,7 +115,11 @@ export const draw: IToolProps = {
                 y: 0
             },
             event: 1,
-            template: ''
+            // template: '<text x="0" y="0" :fill="attr.style.fill">{{attr.text}}</text>'
+            // template: {
+            //     template: '<text x="0" y="0" fill="red">文本文本文本</text>'
+            // },
+            template: '<text x="0" y="0" fill="red">文本文本文本</text>',
         },
         {
             type: 'color',

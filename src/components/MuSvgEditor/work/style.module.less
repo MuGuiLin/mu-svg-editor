@@ -60,16 +60,20 @@
         }
 
         .canvas {
-            padding   : 0;
             box-sizing: border-box;
             position  : absolute;
+            margin    : 0;
+            padding   : 0;
             border    : 5px dashed transparent;
 
             .svg {
+                box-sizing      : border-box;
                 margin          : 0;
-                transition      : all 500ms cubic-bezier(0.16, 0.66, 0.28, 0.96);
+                padding         : 0;
+                transition      : all .3s cubic-bezier(0.16, 0.66, 0.28, 0.96);
                 background-image: url(data:image/png;base64,R0lGODlhEAAQAIAAAP///9bW1iH5BAAAAAAALAAAAAAQABAAAAIfjG+gq4jM3IFLJgpswNly/XkcBpIiVaInlLJr9FZWAQA7);
-                outline: 1px solid #EEE;
+                outline         : 1px solid #EEE;
+
                 .rotate {
                     cursor: url(@/assets/img/editor/rotate.png) 12 12, auto;
                 }

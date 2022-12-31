@@ -75,9 +75,20 @@ export default defineComponent({
             ondrop,
         } = this;
 
-        return <h1 style={{ textAlign: 'center', lineHeight: '100vh', background: `url(${NotFound}) no-repeat center ` }} onClick={($event: any) => (state.count++)}>
-            {msg}<b>{state.count}</b>
-        </h1>
+        const is = {
+            template: `<text x="100" y="100" fill="red">6666666666666</text>`
+        };
+
+        return <>
+            <h1 style={{ textAlign: 'center', lineHeight: '100vh', background: `url(${NotFound}) no-repeat center ` }} onClick={($event: any) => (state.count++)}>
+                {msg}<b>{state.count}</b>
+            </h1>
+
+            <svg xmlns="http://www.w3.org/2000/svg" width={1008} height={567}>
+                <component is={is}></component>
+                <text x="100" y="100" fill="red">6666666666666</text>
+            </svg>
+        </>;
 
         return <section class="box">
             <h2>在两个矩形框中来回拖动 DOM元素:</h2>
