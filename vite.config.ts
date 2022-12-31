@@ -83,7 +83,7 @@ export default defineConfig((config: UserConfig) => {
     },
 
     build: {
-      outDir: 'dist',
+      outDir: 'dist',   // export path
       target: 'modules',
       assetsDir: 'assets',
       assetsInlineLimit: 360000  // 360kb
