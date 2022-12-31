@@ -1,8 +1,10 @@
 import { createApp } from 'vue'
 import Antd, { ConfigProvider } from 'ant-design-vue'
+
 import App from './App.vue'
 import Router from './router'
 import icons from './config/icons'
+
 import './style.css'
 
 // import 'ant-design-vue/dist/antd.less'
