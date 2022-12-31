@@ -86,7 +86,7 @@ export default defineConfig((config: UserConfig) => {
       outDir: 'dist',
       target: 'modules',
       assetsDir: 'assets',
-      assetsInlineLimit: 360000
+      assetsInlineLimit: 360000  // 360kb
     }
   }
 });
