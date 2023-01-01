@@ -10,6 +10,7 @@ export interface IChildProps {
     event: number;
     select?: boolean;
     template?: string;
+    props?: [string];
     [index: number]: {
         type: string;
         name: string;

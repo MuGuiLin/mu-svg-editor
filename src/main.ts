@@ -12,7 +12,8 @@ import 'ant-design-vue/dist/antd.dark.less'
 
 // import 'ant-design-vue/dist/antd.variable.min.css'
 
-const app = createApp(App).use(Router).use(Antd).mount('#mu-svg-editor')
+const app = createApp(App)
+app.use(Router).use(Antd).mount('#mu-svg-editor')
 icons(app)
 
 // const color = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'];
@@ -20,4 +21,4 @@ icons(app)
 //     theme: {
 //         primaryColor: color[parseInt((Math.random() * 3).toString())],
 //     },
-// });
+// }); 

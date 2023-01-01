@@ -1,15 +1,33 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+
 import HelloWorld from '@/components/HelloWorld.vue'
+
+const is = Math.random() > 0.5 ? 'a' : 'router-link';
+
+const linkProps = (to: string) => {
+    return 'a' === is ? {
+        href: to,
+        target: '_blank',
+        rel: 'noopener'
+    } : {
+        to: '/svgEditor'
+    }
+};
+
 </script>
 
 <template>
+
     <section id="root">
         <nav class="nav">
             <router-link to="/">Home</router-link> |
             <router-link to="/svgEditor">MuSvgEditor</router-link> |
-            <router-link to="/404">404</router-link>
+            <router-link to="/404">404</router-link> |
+            <component :is="is" v-bind="linkProps('https://demo.muguilin.com')">
+                <slot /> Demo
+            </component>
         </nav>
         <hr />
         <br />

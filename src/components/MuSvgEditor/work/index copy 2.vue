@@ -294,7 +294,18 @@ onUnmounted(() => {
                     :width="canvas.width" :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
                         @mousedown="onSvgMousedown($event, o, i)">
-                        <components :template="o.template" :attr="o.attr"></components>
+                        <!-- <KeepAlive> -->
+                        <component :is='o.type' v-if="1 === o.event" :x="o.attr.x" :y="o.attr.y" :x1="o.attr.x"
+                            :y1="o.attr.y" :x2="o.attr.x2" :y2="o.attr.y2" :stroke="o.attr.style.stroke"
+                            :stroke-width="o.attr.style.stroke_width">{{
+                                    o.attr.text
+                            }}</component>
+
+                        <component :is='o.type' v-if="2 === o.event" :x="o.attr.x" :y="o.attr.y"
+                            :href="getLocalFile(`icon/tool/${o.attr.icon}.webp`)" :width="o.attr.width"
+                            :height="o.attr.height"></component>
+
+                        <!-- </KeepAlive> -->
                     </g>
                 </svg>
             </div>

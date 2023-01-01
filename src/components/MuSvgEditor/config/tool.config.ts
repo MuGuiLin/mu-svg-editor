@@ -153,7 +153,10 @@ export const topo: IToolProps = {
                 ...attr,
             },
             event: 2,
-            template: ''
+            template: '<image href="icon/tool/internet.webp" width="50" height="50"></image>',
+            props: [
+                'props_attr'
+            ],
         },
         {
             type: 'image',
