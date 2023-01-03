@@ -96,7 +96,7 @@ const onCanvasMousedown = (e: MouseEvent) => {
 // 左侧组件在画布上拖动结束
 const onDrop = (e: DragEvent) => {
     // 清空左侧工具选中
-    canvas.isDrag = false;
+    canvas.showDrag = false;
 
     // 未选择任何组件
     if (!Object.keys(prop.nowTool).length) {
@@ -119,7 +119,7 @@ const onSvgMousedown = (e: MouseEvent, o: any, i: number) => {
 
 // 鼠标坐标
 const onMousemove = ({ clientX, clientY }: Event | any): void => {
-    if (!canvas.isLine) return;
+    if (!canvas.showLine) return;
     // canvas.lineX = clientX - 180;
     // canvas.lineY = clientY - 50;
     // canvas.lineX = clientX + Number(canvas.width) - 1188;
@@ -282,7 +282,7 @@ onUnmounted(() => {
         <div :class="style.draw" @mousemove="onMousemove">
             <!-- <div :class="style.draw"> -->
 
-            <div :class="style.scale" v-show="canvas.isScale">
+            <div :class="style.scale" v-show="canvas.showScale">
                 <div :class="style.scale_x">
                     <canvas></canvas>
                 </div>
@@ -291,7 +291,7 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <div :class="[style.canvas, canvas.isDrag && style.dragstart]" @drop="onDrop($event)"
+            <div :class="[style.canvas, canvas.showDrag && style.dragstart]" @drop="onDrop($event)"
                 @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousedown="onCanvasMousedown"
                 @mousemove="mouseMoveEvent($event)" @mouseup="onCanvasMouseup($event)">
 
@@ -312,7 +312,7 @@ onUnmounted(() => {
                     </g>
                 </svg>
             </div>
-            <div :class="style.subline" v-show="canvas.isLine">
+            <div :class="style.subline" v-show="canvas.showLine">
                 <div :class="style.subline_x" :style="[{ top: canvas.lineY + 'px' }]"></div>
                 <div :class="style.subline_y" :style="[{ left: canvas.lineX + 'px' }]"></div>
             </div>

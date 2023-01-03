@@ -9,6 +9,8 @@ import Work from "./work";
 import Attr from "./attr";
 import Info from "./info";
 
+import { Code, Json } from './code';
+
 import { canvasBackground } from "./config";
 
 const state: IStateType = reactive({
@@ -17,12 +19,17 @@ const state: IStateType = reactive({
         lineY: 420,
         width: 1008,
         height: 567,
-        isLine: true,
-        isDrag: false,
-        isScale: true,
+        showLine: true,
+        showDrag: false,
+        showScale: true,
         background: [canvasBackground[0].value]
     },
     tool,
+    svgData: [],
+    svgCtrl: {
+        showCode: false,
+        showJson: false,
+    },
     nowTool: {},
     nowAttr: {
         index: null,
@@ -41,6 +48,8 @@ const state: IStateType = reactive({
         <Attr :prop="state" />
         <Info :prop="state" />
     </section>
+    <Code :prop="state" />
+    <Json :prop="state" />
 </template>
 
 <style scoped lang="less">

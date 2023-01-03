@@ -1,6 +1,6 @@
 import { defineComponent, ref } from 'vue';
 import style from './style.module.less'
-import { hookOpenSvg, hookSeveSvg, hookImportImage } from '../hook/operate'
+import { hookOpenSvg, hookSeveSvg, hookImportImage, hookSvgCode, hookJsonData } from '../hook/operate'
 
 export default defineComponent({
     name: 'Menu',
@@ -15,17 +15,19 @@ export default defineComponent({
         };
     },
     render() {
-        const { prop: { canvas } }: any = this;
+        const { prop: { canvas, svgCtrl } }: any = this;
+        console.log(1111111, svgCtrl)
         return (
             <header class={style.menu}>
+
                 <a-menu class={style.nav} v-model:selectedKeys={this.current} mode="horizontal">
                     <a-sub-menu key="file" title="文件（F）" icon={<folder-open-outlined />}>
                         <a-menu-item-group title="打开">
-                            <a-menu-item key="file:1" onClick={() => hookOpenSvg()} icon={<folder-open-outlined />}>打开SVG  （Ctrl + O）</a-menu-item>
-                            <a-menu-item key="file:2" onClick={() => hookImportImage()} icon={<export-outlined />}>导入图片 （Ctrl + I）</a-menu-item>
+                            <a-menu-item key="file:1" icon={<folder-open-outlined />} onClick={() => hookOpenSvg()}>打开SVG  （Ctrl + O）</a-menu-item>
+                            <a-menu-item key="file:2" icon={<export-outlined />} onClick={() => hookImportImage()}>导入图片 （Ctrl + I）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="输出">
-                            <a-menu-item key="file:3" onClick={() => hookSeveSvg()} icon={<save-outlined />}>保存SVG （Ctrl + S）</a-menu-item>
+                            <a-menu-item key="file:3" icon={<save-outlined />} onClick={() => hookSeveSvg()}>保存SVG （Ctrl + S）</a-menu-item>
                             <a-menu-item key="file:4" icon={<import-outlined />}>导出PNG （Ctrl + E）</a-menu-item>
                         </a-menu-item-group>
                     </a-sub-menu>
@@ -40,17 +42,18 @@ export default defineComponent({
                     <a-sub-menu key="view" title="视图（V）" icon={<eye-outlined />} >
                         <a-menu-item-group title="查看">
                             <a-menu-item key="view:1" icon={<folder-view-outlined />}>视图预览 （Ctrl + P）</a-menu-item>
-                            <a-menu-item key="view:2" icon={<code-outlined />}>SVG代码 （Ctrl + E）</a-menu-item>
+                            <a-menu-item key="view:2" icon={<code-outlined />} onClick={() => svgCtrl.showCode = true}>SVG代码 （Ctrl + E）</a-menu-item>
+                            <a-menu-item key="view:3" icon={<code-outlined />} onClick={() => svgCtrl.showJson = true}>JSON数据 （Ctrl + J）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="辅助">
-                            <a-menu-item key="view:3">
-                                <label>
-                                    <a-switch v-model:checked={canvas.isScale} size="small" checked-children="开" un-checked-children="关" /> 显示标尺
-                                </label>
-                            </a-menu-item>
                             <a-menu-item key="view:4">
                                 <label>
-                                    <a-switch v-model:checked={canvas.isLine} size="small" checked-children="开" un-checked-children="关" /> 显示坐标
+                                    <a-switch v-model:checked={canvas.showScale} size="small" checked-children="开" un-checked-children="关" /> 显示标尺
+                                </label>
+                            </a-menu-item>
+                            <a-menu-item key="view:5">
+                                <label>
+                                    <a-switch v-model:checked={canvas.showLine} size="small" checked-children="开" un-checked-children="关" /> 显示坐标
                                 </label>
                             </a-menu-item>
                         </a-menu-item-group>
@@ -65,10 +68,10 @@ export default defineComponent({
                     </a-sub-menu>
                     <a-sub-menu key="page" title="页面（P）" icon={<layout-outlined />} >
                         <a-menu-item-group title="画布网格大小">
-                            <a-menu-item key="file:1" icon={<fullscreen-exit-outlined />}>微小</a-menu-item>
-                            <a-menu-item key="file:2" icon={<vertical-align-middle-outlined />}>正常</a-menu-item>
-                            <a-menu-item key="file:3" icon={<drag-outlined />}>略大</a-menu-item>
-                            <a-menu-item key="file:4" icon={<fullscreen-outlined />}>超大</a-menu-item>
+                            <a-menu-item key="page:1" icon={<fullscreen-exit-outlined />}>微小</a-menu-item>
+                            <a-menu-item key="page:2" icon={<vertical-align-middle-outlined />}>正常</a-menu-item>
+                            <a-menu-item key="page:3" icon={<drag-outlined />}>略大</a-menu-item>
+                            <a-menu-item key="page:4" icon={<fullscreen-outlined />}>超大</a-menu-item>
                         </a-menu-item-group>
                     </a-sub-menu>
                     <a-sub-menu key="help" title="帮助（H）" icon={<question-circle-outlined />}>

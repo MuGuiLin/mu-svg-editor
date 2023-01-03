@@ -14,12 +14,11 @@ const props: any = defineProps({
     prop: Object,
 });
 
-const { prop, prop: { canvas } } = props;
+const { prop, prop: { canvas, svgData } } = props;
 const draw = <HTMLDivElement>ref(null);
 const drop = <HTMLDivElement>ref(null);
 
 const rstate = ref();
-const svgData: any = ref([]);
 const state = reactive({
     x: 0,
     y: 0,
@@ -64,13 +63,13 @@ const setSegData = (e: DragEvent) => {
         event,
         template,
     };
-    svgData.value.push(nowData);
+    svgData.push(nowData);
     try {
-        prop.nowAttr = svgData.value.at(-1);
+        prop.nowAttr = svgData.at(-1);
     } catch (error) {
-        prop.nowAttr = svgData.value[svgData.value.length - 1];
+        prop.nowAttr = svgData[svgData.length - 1];
     } finally {
-        prop.nowAttr.index = svgData.value.length;
+        prop.nowAttr.index = svgData.length;
     }
     console.info('svgData', svgData)
 };
@@ -97,7 +96,7 @@ const onCanvasMousedown = (e: MouseEvent) => {
 // 左侧组件在画布上拖动结束
 const onDrop = (e: DragEvent) => {
     // 清空左侧工具选中
-    canvas.isDrag = false;
+    canvas.showDrag = false;
 
     // 未选择任何组件
     if (!Object.keys(prop.nowTool).length) {
@@ -121,7 +120,7 @@ const onSvgMousedown = (e: MouseEvent, o: any, i: number) => {
 // 鼠标坐标
 const onMousemove = ({ clientX, clientY }: Event | any): void => {
     const { left, top } = draw.value.getBoundingClientRect();
-    if (!canvas.isLine) return;
+    if (!canvas.showLine) return;
     [canvas.lineX, canvas.lineY] = [clientX - left, clientY - top];
 };
 
@@ -175,7 +174,7 @@ const onKeydown = (e: KeyboardEvent) => {
             // 删除组件
             case 'Delete':
                 e.preventDefault();
-                svgData.value.splice(prop.nowAttr.index, 1);
+                svgData.splice(prop.nowAttr.index, 1);
                 prop.nowAttr = {
                     index: null,
                     selected: null,
@@ -277,7 +276,7 @@ onUnmounted(() => {
     <main :class="style.work">
         <div :class="style.draw" ref="draw" @mousemove="onMousemove">
 
-            <div :class="style.scale" v-show="canvas.isScale">
+            <div :class="style.scale" v-show="canvas.showScale">
                 <div :class="style.scale_x">
                     <canvas></canvas>
                 </div>
@@ -286,7 +285,7 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <div :class="[style.canvas, canvas.isDrag && style.dragstart]" ref="drop" @drop="onDrop($event)"
+            <div :class="[style.canvas, canvas.showDrag && style.dragstart]" ref="drop" @drop="onDrop($event)"
                 @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousedown="onCanvasMousedown"
                 @mousemove="mouseMoveEvent($event)" @mouseup="onCanvasMouseup($event)">
 
@@ -298,7 +297,7 @@ onUnmounted(() => {
                     </g>
                 </svg>
             </div>
-            <div :class="style.subline" v-show="canvas.isLine">
+            <div :class="style.subline" v-show="canvas.showLine">
                 <div :class="style.subline_x" :style="[{ top: canvas.lineY + 'px' }]"></div>
                 <div :class="style.subline_y" :style="[{ left: canvas.lineX + 'px' }]"></div>
             </div>

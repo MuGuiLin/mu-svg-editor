@@ -102,7 +102,7 @@ export default defineComponent({
             <component is="input"></component>
             <div class={style.draw} onmousemove={($event: Event) => mousemove($event)}>
                 {/* <div style={{width:attr.width+'px',height:attr.height+'px'}}> </div> */}
-                <div class={style.scale} v-show={attr.isScale}>
+                <div class={style.scale} v-show={attr.showScale}>
                     <div class={style.scale_x}>
                         <canvas></canvas>
                     </div>
@@ -158,7 +158,7 @@ export default defineComponent({
 
                     </svg>
                 </div>
-                <div class={style.subline} v-show={attr.isLine}>
+                <div class={style.subline} v-show={attr.showLine}>
                     <div class={style.subline_x} style={{ top: attr.lineY + 'px' }}></div>
                     <div class={style.subline_y} style={{ left: attr.lineX + 'px' }}></div>
                 </div>

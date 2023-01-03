@@ -34,7 +34,7 @@ const clickDraw = (e: Event, m: any, i: number) => {
 // 开始拖拽左侧工具栏 拓扑组件分类中的组件
 const onDragstart = (e: DragEvent, m: any) => {
     prop.nowTool = m;
-    prop.canvas.isDrag = true;
+    prop.canvas.showDrag = true;
 };
 
 // 结束拖拽左侧工具栏 拓扑组件分类中的组件
@@ -42,7 +42,7 @@ const onDragend = (e: DragEvent, m: any) => {
     if (e.dataTransfer?.dropEffect !== 'copy') {
         //清空已选择的信息
         prop.nowTool = {};
-        prop.canvas.isDrag = false;
+        prop.canvas.showDrag = false;
         message.warning('请将组件拖到画布中！');
         return;
     }

@@ -6,9 +6,9 @@ export interface IStateType {
         height: number;
         lineX: number;
         lineY: number;
-        isLine: boolean;
-        isDrag: boolean;
-        isScale: boolean;
+        showLine: boolean;
+        showDrag: boolean;
+        showScale: boolean;
     },
     tool: Array<any>;
     nowTool: ITool | any;

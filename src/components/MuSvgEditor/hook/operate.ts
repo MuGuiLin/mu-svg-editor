@@ -47,3 +47,4 @@ export function hookSeveSvg(callBack?: Function) {
     a.remove();
     callBack?.();
 };
+
