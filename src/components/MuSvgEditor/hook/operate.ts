@@ -39,7 +39,7 @@ export async function hookImportImage(callBack?: Function) {
  * @param callBack 回调方法
  */
 export function hookSeveSvg(callBack?: Function) {
-    const href = 'data:text;charset=utf-8,' + encodeURIComponent(document.querySelector('#svg').outerHTML);
+    const href = 'data:text/html;charset=utf-8,' + encodeURIComponent(document.querySelector('#svg').outerHTML);
     const a = document.createElement('a');
     a.setAttribute('href', href);
     a.setAttribute('download', `${new Date().getTime()}.svg`);

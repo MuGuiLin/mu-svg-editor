@@ -42,7 +42,7 @@ export default defineComponent({
                     <a-sub-menu key="view" title="视图（V）" icon={<eye-outlined />} >
                         <a-menu-item-group title="查看">
                             <a-menu-item key="view:1" icon={<folder-view-outlined />}>视图预览 （Ctrl + P）</a-menu-item>
-                            <a-menu-item key="view:2" icon={<code-outlined />} onClick={() => svgCtrl.showCode = true}>SVG代码 （Ctrl + E）</a-menu-item>
+                            <a-menu-item key="view:2" icon={<code-outlined />} onClick={() => svgCtrl.showCode = true}>SVG代码 （Ctrl + U）</a-menu-item>
                             <a-menu-item key="view:3" icon={<code-outlined />} onClick={() => svgCtrl.showJson = true}>JSON数据 （Ctrl + J）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="辅助">
