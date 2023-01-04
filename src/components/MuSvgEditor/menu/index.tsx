@@ -16,7 +16,6 @@ export default defineComponent({
     },
     render() {
         const { prop: { canvas, svgCtrl } }: any = this;
-        console.log(1111111, svgCtrl)
         return (
             <header class={style.menu}>
 

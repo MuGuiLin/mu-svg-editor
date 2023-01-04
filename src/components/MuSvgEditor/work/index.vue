@@ -5,7 +5,7 @@ import scale from "../hook/scale";
 import { isEmptyObj } from "../hook";
 import { hookOpenSvg, hookSeveSvg } from "../hook/operate";
 import { NS } from "../config";
-import { getLocalFile } from '@/utils';
+
 import Components from './components.vue';
 
 import style from './style.module.less';
@@ -25,6 +25,11 @@ const state = reactive({
     x2: 0,
     y2: 0,
     event: 0,
+
+    posx: 0,
+    posy: 0,
+    angle: 0,
+    scale: 1,
 });
 
 // 画布宽高改变，更新标尺刻度
@@ -165,7 +170,7 @@ const onCanvasMouseup = (e: MouseEvent, o: Object, i: number) => {
 
 // 监听键盘事件
 const onKeydown = (e: KeyboardEvent) => {
-    if (0 > prop.nowAttr.selected || !prop.nowAttr.id) {
+    if (!prop.nowAttr.selected || !prop.nowAttr.id) {
         return false;
     }
     try {
@@ -292,8 +297,9 @@ onUnmounted(() => {
                 <svg :class="style.svg" :style="{ background: canvas.background }" id="svg" :xmlns="NS.SVG"
                     :width="canvas.width" :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
-                        @mousedown="onSvgMousedown($event, o, i)">
-                        <components :template="o.template" :attr="o.attr"></components>
+                        @mousedown="onSvgMousedown($event, o, i)"
+                        :transform="'translate(' + (o.posx) + ',' + (o.posy) + ')' + 'rotate(' + o.angle + ')' + 'scale(' + o.scale + ')'">
+                        <Components :info="o"></Components>
                     </g>
                 </svg>
             </div>
