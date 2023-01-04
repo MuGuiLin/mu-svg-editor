@@ -25,11 +25,6 @@ const state = reactive({
     x2: 0,
     y2: 0,
     event: 0,
-
-    posx: 0,
-    posy: 0,
-    angle: 0,
-    scale: 1,
 });
 
 // 画布宽高改变，更新标尺刻度
@@ -51,10 +46,9 @@ const onDragover = (e: DragEvent) => {
     e.preventDefault();
 };
 
-const setSegData = (e: DragEvent) => {
-
+const setSegData = (e: DragEvent, x: number = 0, y: number = 0) => {
     // 在画布中创建组件
-    const { type, name, icon, attr, event, template } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, nowData: any = {
+    const { type, name, icon, attr, event, template } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, ox = offsetX - (attr.width / 2), oy = offsetY - (attr.height / 2), nowData: any = {
         id,
         type,
         attr: {
@@ -62,8 +56,16 @@ const setSegData = (e: DragEvent) => {
             id,
             icon,
             text: name,
-            x: offsetX - (attr.width / 2),
-            y: offsetY - (attr.height / 2),
+            // x: ox,
+            x: 0,
+            // y: oy,
+            y: 0,
+            transform: {
+                x: x || ox,
+                y: y || oy,
+                scale: 1,
+                rotate: 0,
+            }
         },
         event,
         template,
@@ -89,7 +91,7 @@ const onCanvasMousedown = (e: MouseEvent) => {
 
     state.event = 1;
     if (1 === prop.nowTool.event) {
-        setSegData(e);
+        setSegData(e, state.x, state.y);
     };
 
     // 取消组件选中状态
@@ -131,17 +133,47 @@ const onMousemove = ({ clientX, clientY }: Event | any): void => {
 
 // 鼠标左键在画布中的组件上移动
 const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: number) => {
-    // console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
+    console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
     if (!state.event || !prop.nowAttr?.id) return false;
     const { left, top } = drop.value.getBoundingClientRect();
     const [x, y] = [clientX - left, clientY - top];
+    const [mx, my] = [(x - prop.nowAttr.attr.width / 2) - 4, (y - prop.nowAttr.attr.height / 2) - 4];
     switch (prop.nowAttr.event) {
         // draw
         case 1:
             if ('text' === prop.nowAttr.type) {
-                prop.nowAttr.attr.x = x;
-                prop.nowAttr.attr.y = y;
-            } else {
+                // prop.nowAttr.attr.x = x;
+                // prop.nowAttr.attr.y = y;
+                prop.nowAttr.attr.transform.x = x
+                prop.nowAttr.attr.transform.y = y
+            } else if ('line' === prop.nowAttr.type) {
+                if (prop.nowAttr.selected) {
+                    prop.nowAttr.attr.transform.x = x;
+                    prop.nowAttr.attr.transform.y = y;
+                } else {
+                    prop.nowAttr.attr.x2 = x - 5;
+                    prop.nowAttr.attr.y2 = y - 5;
+                }
+            }
+            else if ('rect' === prop.nowAttr.type) {
+                if (prop.nowAttr.selected) {
+                    prop.nowAttr.attr.transform.x = mx;
+                    prop.nowAttr.attr.transform.y = my;
+                } else {
+                    prop.nowAttr.attr.width = x - 4 - (state.x || 0);
+                    prop.nowAttr.attr.height = y - 5 - (state.y || 0);
+                }
+            }
+            else if ('ellipse' === prop.nowAttr.type) {
+                if (prop.nowAttr.selected) {
+                    prop.nowAttr.attr.transform.x = x - (prop.nowAttr.attr.x2 / 2) - 4;
+                    prop.nowAttr.attr.transform.y = y - (prop.nowAttr.attr.y2 / 2) - 4;
+                } else {
+                    prop.nowAttr.attr.x2 = x - 4 - (state.x || 0);
+                    prop.nowAttr.attr.y2 = y - 5 - (state.y || 0);
+                }
+            }
+            else {
                 prop.nowAttr.attr.x2 = x - (state.x || 0);
                 prop.nowAttr.attr.y2 = y - (state.y || 0);
             }
@@ -149,8 +181,10 @@ const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: 
         // drag
         case 2:
             if (!prop.nowAttr.selected) return;
-            prop.nowAttr.attr.x = (x - prop.nowAttr.attr.width / 2) - 4;
-            prop.nowAttr.attr.y = (y - prop.nowAttr.attr.height / 2) - 4;
+            // prop.nowAttr.attr.x = (x - prop.nowAttr.attr.width / 2) - 4;
+            // prop.nowAttr.attr.y = (y - prop.nowAttr.attr.height / 2) - 4;
+            prop.nowAttr.attr.transform.x = mx;
+            prop.nowAttr.attr.transform.y = my;
             break;
         default:
             break;
@@ -293,12 +327,11 @@ onUnmounted(() => {
             <div :class="[style.canvas, canvas.showDrag && style.dragstart]" ref="drop" @drop="onDrop($event)"
                 @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousedown="onCanvasMousedown"
                 @mousemove="mouseMoveEvent($event)" @mouseup="onCanvasMouseup($event)">
-
                 <svg :class="style.svg" :style="{ background: canvas.background }" id="svg" :xmlns="NS.SVG"
                     :width="canvas.width" :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
                         @mousedown="onSvgMousedown($event, o, i)"
-                        :transform="'translate(' + (o.posx) + ',' + (o.posy) + ')' + 'rotate(' + o.angle + ')' + 'scale(' + o.scale + ')'">
+                        :transform="`translate(${o.attr.transform.x},${o.attr.transform.y}) rotate(${o.attr.transform.rotate}) scale(${o.attr.transform.scale})`">
                         <Components :info="o"></Components>
                     </g>
                 </svg>

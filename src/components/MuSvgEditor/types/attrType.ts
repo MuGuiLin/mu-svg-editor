@@ -17,7 +17,12 @@ export interface IStyleParops extends IBaseParops {
     dominant_baseline?: TDominantBaselineType;
     opacity?: number;
 };
-
+export interface ITransformParops extends IBaseParops {
+    x?: number | string;
+    y?: number | string;
+    scale?: number | string;
+    rotate?: number | string;
+};
 export interface IAttrParops extends IBaseParops {
     id?: string | Array<string>;
     text?: string;
@@ -38,7 +43,7 @@ export interface IAttrParops extends IBaseParops {
     points?: string;
     class?: string | [];
     style?: IStyleParops;
-    transform?: string;
+    transform?: ITransformParops;
     is_show?: boolean;
     [key: string]: any;
 };

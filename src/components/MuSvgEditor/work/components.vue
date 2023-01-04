@@ -24,8 +24,8 @@ console.info(props);
         :y2="attr.y2" :stroke="attr.style.stroke" :stroke-width="attr.style.stroke_width">
         {{ attr.text }}
     </component>
-    <component :is="info.type" v-if="1 === info.event && 'rect' === info.type" :x="attr.x" :y="attr.y" :width="attr.x2"
-        :height="attr.y2" :fill="attr.style.fill" :stroke="attr.style.stroke" :stroke-width="attr.style.stroke_width">
+    <component :is="info.type" v-if="1 === info.event && 'rect' === info.type" :x="attr.x" :y="attr.y" :width="attr.width"
+        :height="attr.height" :fill="attr.style.fill" :stroke="attr.style.stroke" :stroke-width="attr.style.stroke_width">
         {{ attr.text }}
     </component>
     <component :is="info.type" v-if="1 === info.event && 'ellipse' === info.type" :cx="attr.x" :cy="attr.y"

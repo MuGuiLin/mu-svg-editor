@@ -13,7 +13,6 @@ export const attr: IAttrParops = {
     filter: '',
     points: '',
     class: '',
-    scale: 0,
     style: {
         fill: '#00FFFF',
         fill_opacity: 1,
@@ -22,7 +21,12 @@ export const attr: IAttrParops = {
         stroke_dasharray: '',
         stroke_opacity: 1,
     },
-    transform: '',
+    transform: {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotate: 0,
+    },
     hidden: true,
 };
 
