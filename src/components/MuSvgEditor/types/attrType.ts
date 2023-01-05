@@ -11,7 +11,7 @@ export interface IStyleParops extends IBaseParops {
     fill?: string;
     stroke?: TStrokeType;
     stroke_width?: number | string;
-    stroke_dasharray?: string;
+    stroke_dasharray?: number | string;
     font_size?: number | string;
     text_anchor?: TTextAnchorType;
     dominant_baseline?: TDominantBaselineType;

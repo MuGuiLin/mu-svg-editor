@@ -5,21 +5,19 @@ export const attr: IAttrParops = {
     id: '',
     text: '',
     status: 1,
-    type: '',
     width: 60,
     height: 60,
     icon: '',
-    path: '',
-    filter: '',
-    points: '',
     class: '',
     style: {
         fill: '#00FFFF',
         fill_opacity: 1,
         stroke: '#166FFF',
         stroke_width: 1,
-        stroke_dasharray: '',
+        stroke_dasharray: 0,
         stroke_opacity: 1,
+        text_anchor: 'middle',
+        dominant_baseline: 'auto'
     },
     transform: {
         x: 0,
@@ -53,6 +51,12 @@ export const draw: IToolProps = {
                 y1: 0,
                 x2: 0,
                 y2: 0,
+                width: 0,
+                height: 0,
+                style: {
+                    ...attr.style,
+                    stroke_width: 2
+                }
             },
             event: 1,
             template: ''
@@ -64,6 +68,8 @@ export const draw: IToolProps = {
             icon: 'stock-outlined',
             attr: {
                 ...attr,
+                width: 0,
+                height: 0,
             },
             event: 1,
             template: ''
@@ -94,6 +100,7 @@ export const draw: IToolProps = {
                 // r: 50
                 rx: 50,
                 ry: 50,
+
             },
             event: 1,
             template: ''
@@ -105,7 +112,9 @@ export const draw: IToolProps = {
             path: 'M11.5 1.9c0-.36.86 0 .86 0V14a1.3 1.3 0 10.88 0V1.9s.87-.36.87 0c0 6.81 5.22 11.68 5.22 11.68l-3.25 8.2h-6.55l-3.26-8.2s5.22-4.87 5.22-11.68zM7 24.5v-2h11.32v2z',
             attr: {
                 ...attr,
-                d: ''
+                d: '',
+                width: 0,
+                height: 0,
             },
             event: 1,
             template: ''
@@ -117,9 +126,13 @@ export const draw: IToolProps = {
             path: 'M 5 4 v 3 h 6 v 14 h 3 V 7 H 20 V 4 Z',
             attr: {
                 ...attr,
-                text_anchor: 'middle',
                 x: 0,
-                y: 0
+                y: 0,
+                style: {
+                    ...attr.style,
+                    fill: '#166FFF',
+                    stroke_width: 0
+                }
             },
             event: 1,
             // template: '<text x="0" y="0" :fill="attr.style.fill">{{attr.text}}</text>'

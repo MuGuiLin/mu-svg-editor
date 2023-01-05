@@ -85,19 +85,22 @@ const setSegData = (e: DragEvent, x: number = 0, y: number = 0) => {
 const onCanvasMousedown = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
     const { target, clientX, clientY } = e;
     const { left, top } = drop.value.getBoundingClientRect();
     [state.x, state.y] = [clientX - left, clientY - top];
-
-    state.event = 1;
-    if (1 === prop.nowTool.event) {
-        setSegData(e, state.x, state.y);
-    };
 
     // 取消组件选中状态
     if (prop.nowAttr.selected) {
         prop.nowAttr.selected = null;
     }
+
+    // 需要拖拽绘制的组件
+    if (1 === prop.nowTool.event) {
+        state.event = 1;
+        setSegData(e, state.x, state.y);
+    };
+
 };
 
 // 左侧组件在画布上拖动结束
@@ -110,6 +113,7 @@ const onDrop = (e: DragEvent) => {
         return false;
     };
 
+    // 直接渲染的组件
     setSegData(e);
 };
 
@@ -133,20 +137,16 @@ const onMousemove = ({ clientX, clientY }: Event | any): void => {
 
 // 鼠标左键在画布中的组件上移动
 const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: number) => {
-    console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
+
     if (!state.event || !prop.nowAttr?.id) return false;
+    console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
     const { left, top } = drop.value.getBoundingClientRect();
     const [x, y] = [clientX - left, clientY - top];
     const [mx, my] = [(x - prop.nowAttr.attr.width / 2) - 4, (y - prop.nowAttr.attr.height / 2) - 4];
     switch (prop.nowAttr.event) {
         // draw
         case 1:
-            if ('text' === prop.nowAttr.type) {
-                // prop.nowAttr.attr.x = x;
-                // prop.nowAttr.attr.y = y;
-                prop.nowAttr.attr.transform.x = x
-                prop.nowAttr.attr.transform.y = y
-            } else if ('line' === prop.nowAttr.type) {
+            if ('line' === prop.nowAttr.type) {
                 if (prop.nowAttr.selected) {
                     prop.nowAttr.attr.transform.x = x;
                     prop.nowAttr.attr.transform.y = y;
@@ -173,9 +173,20 @@ const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: 
                     prop.nowAttr.attr.y2 = y - 5 - (state.y || 0);
                 }
             }
+            else if ('path' === prop.nowAttr.type || 'polyline' === prop.nowAttr.type) {
+                if (prop.nowAttr.selected) {
+                    prop.nowAttr.attr.transform.x = x - (prop.nowAttr.attr.x2 / 2);
+                    prop.nowAttr.attr.transform.y = y - (prop.nowAttr.attr.y2 / 2);
+                } else {
+                    prop.nowAttr.attr.x2 = x - (state.x || 0);
+                    prop.nowAttr.attr.y2 = y - (state.y || 0);
+                }
+            }
             else {
-                prop.nowAttr.attr.x2 = x - (state.x || 0);
-                prop.nowAttr.attr.y2 = y - (state.y || 0);
+                // prop.nowAttr.attr.x2 = x - (state.x || 0);
+                // prop.nowAttr.attr.y2 = y - (state.y || 0);
+                prop.nowAttr.attr.transform.x = x;
+                prop.nowAttr.attr.transform.y = y;
             }
             break;
         // drag

@@ -3,7 +3,7 @@ import { defineComponent, ref, reactive, onMounted, watch, defineEmits, defineEx
 import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue';
 import { canvasBackground } from '../config';
 
-import style from './style.module.less';
+import styles from './style.module.less';
 
 // const props = defineProps({
 //     width: {
@@ -89,9 +89,8 @@ export default defineComponent({
     },
 
     render() {
-        const { prop: { nowAttr: { attr, event, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
-
-        return (<aside class={style.attr}>
+        const { prop: { nowAttr: { attr, attr: { style, transform }, type, event, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
+        return (<aside class={styles.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']} >
                     <a-form model={state} disabled={0 > selected}
@@ -121,39 +120,71 @@ export default defineComponent({
                             <a-input v-model:value={attr.text} prefix={<font-size-outlined />} placeholder="组件名称！" />
                         </a-form-item>
                         <a-form-item label="坐标X" name="x">
-                            <a-input-number v-model:value={attr.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={transform.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="坐标Y" name="y">
-                            <a-input-number v-model:value={attr.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={transform.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="宽度" name="width">
-                            <a-input-number v-model:value={attr.width} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.width} prefix={<ColumnWidthOutlined />} min={1} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="高度" name="height">
-                            <a-input-number v-model:value={attr.height} prefix={<ColumnHeightOutlined />} addon-after="px" />
-                        </a-form-item>
-                        <a-form-item label="缩放" name="scale">
-                            <a-input-number v-model:value={attr.scale} prefix={<expand-alt-outlined />} addon-after="px" />
+                            <a-input-number v-model:value={attr.height} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="旋转" name="rotate">
-                            <a-input-number v-model:value={attr.r} prefix={<sync-outlined />} addon-after="px" />
+                            <a-input-number v-model:value={transform.rotate} prefix={<sync-outlined />} addon-after="px" />
+                        </a-form-item>
+                        <a-form-item label="缩放" name="scale">
+                            <a-input-number v-model:value={transform.scale} prefix={<expand-alt-outlined />} min={1} step={0.01} addon-after="px" />
                         </a-form-item>
                         {
-                            1 === event ? <>
-                                <a-form-item label="边框" name="stroke_width">
-                                    <a-input-number v-model:value={attr.style.stroke_width} prefix={<ColumnWidthOutlined />} addon-after="px" />
-                                </a-form-item>
+                            1 === event && <>
                                 <a-form-item label="填充" name="fill">
-                                    <a-input type="color" v-model:value={attr.style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                                    <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
                                 </a-form-item>
                                 <a-form-item label="轮廓" name="stroke">
-                                    <a-input type="color" v-model:value={attr.style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                                    <a-input type="color" v-model:value={style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
                                 </a-form-item>
-                            </> : ''
+                                <a-form-item label="边框" name="stroke_width">
+                                    <a-input-number v-model:value={style.stroke_width} prefix={<border-outlined />} min={0} addon-after="px" />
+                                </a-form-item>
+                                {'text' === type ? <>
+                                    <a-form-item label="对齐" name="text_anchor">
+                                        <a-select v-model:value={style.text_anchor} prefix={<bg-colors-outlined />}>
+                                            <a-select-option value="start">start</a-select-option>
+                                            <a-select-option value="middle">middle</a-select-option>
+                                            <a-select-option value="end" >end</a-select-option>
+                                            <a-select-option value="inherit">inherit</a-select-option>
+                                        </a-select>
+                                    </a-form-item>
+                                    <a-form-item label="基线" name="dominant_baseline">
+                                        <a-select v-model:value={style.dominant_baseline} >
+                                            <a-select-option value="auto">auto</a-select-option>
+                                            <a-select-option value="text-top">text-top</a-select-option>
+                                            <a-select-option value="end" >end</a-select-option>
+                                            <a-select-option value="text-bottom">text-bottom</a-select-option>
+                                            <a-select-option value="alphabetic">alphabetic</a-select-option>
+                                            <a-select-option value="ideographic">ideographic</a-select-option>
+                                            <a-select-option value="middle">middle</a-select-option>
+                                            <a-select-option value="central">central</a-select-option>
+                                            <a-select-option value="mathematical">mathematical</a-select-option>
+                                            <a-select-option value="hanging">hanging</a-select-option>
+                                        </a-select>
+                                    </a-form-item>
+                                </> : <>
+                                    <a-form-item label="线条" name="stroke_dasharray">
+                                        <a-input-number v-model:value={style.stroke_dasharray} prefix={<dash-outlined />} min={0} addon-after="px" />
+                                    </a-form-item>
+                                    {('path' === type || 'polyline' === type) && <>
+                                        <a-form-item label="路径" name={'about'}>
+                                            <a-textarea v-model:value={attr.d} placeholder="path" />
+                                        </a-form-item>
+                                    </>
+                                    }
+                                </>}
+                            </>
                         }
-                        <a-form-item label="ICON" name={'about'}>
-                            <a-textarea v-model:value={state.icon} placeholder="ICON" />
-                        </a-form-item>
+
                     </a-form>
                 </a-tab-pane>
                 <a-tab-pane key="2" tab={[tabicon(2), '画布设置']}>

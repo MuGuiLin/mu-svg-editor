@@ -14,6 +14,7 @@ import { Code, Json } from './code';
 import { canvasBackground } from "./config";
 
 const state: IStateType = reactive({
+    // 画布属性
     canvas: {
         lineX: 730,
         lineY: 420,
@@ -24,17 +25,22 @@ const state: IStateType = reactive({
         showScale: true,
         background: [canvasBackground[0].value]
     },
-    tool,
+
+    // 组件数据
     svgData: [],
     svgCtrl: {
         showCode: false,
         showJson: false,
     },
+    // 左侧组件集合
+    tool,
+    // 当前组件
     nowTool: {},
+    // 当前组件属性
     nowAttr: {
         index: null,
+        attr: {},
         selected: null,
-        attr: {}
     },
 });
 
@@ -44,7 +50,7 @@ const state: IStateType = reactive({
     <section class="mu-svg-editor">
         <Menu :prop="state" />
         <Tool :prop="state" />
-        <Work v-bind:prop="state" :onMousemove="onMousemove" />
+        <Work v-bind:prop="state" />
         <Attr :prop="state" />
         <Info :prop="state" />
     </section>

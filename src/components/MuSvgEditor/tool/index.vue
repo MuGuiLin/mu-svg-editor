@@ -172,12 +172,12 @@ const onDragend = (e: DragEvent, m: any) => {
                 background: url(@/assets/icon/tool/plug.webp) no-repeat center center;
                 background-size: contain;
             }
-            
+
             &.battery {
                 background: url(@/assets/icon/tool/battery.webp) no-repeat center center;
                 background-size: contain;
             }
-            
+
             &.server {
                 background: url(@/assets/icon/tool/server.webp) no-repeat center center;
                 background-size: contain;
