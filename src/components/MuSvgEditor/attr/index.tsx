@@ -89,7 +89,7 @@ export default defineComponent({
     },
 
     render() {
-        const { prop: { nowAttr: { attr, attr: { style, transform }, type, event, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
+        const { prop: { nowAttr: { id, attr, attr: { style, transform }, type, event, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
         return (<aside class={styles.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']} >
@@ -114,7 +114,7 @@ export default defineComponent({
                             </a-col>
                         </a-row> */}
                         <a-form-item label="标识" name="id">
-                            <a-input v-model:value={attr.id} readonly prefix={<field-number-outlined />} placeholder="自动生成！" />
+                            <a-input v-model:value={id} readonly prefix={<field-number-outlined />} placeholder="自动生成！" />
                         </a-form-item>
                         <a-form-item label="文本" name="text">
                             <a-input v-model:value={attr.text} prefix={<font-size-outlined />} placeholder="组件名称！" />
@@ -125,23 +125,40 @@ export default defineComponent({
                         <a-form-item label="坐标Y" name="y">
                             <a-input-number v-model:value={transform.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
-                        <a-form-item label="宽度" name="width">
-                            <a-input-number v-model:value={attr.width} prefix={<ColumnWidthOutlined />} min={1} addon-after="px" />
-                        </a-form-item>
-                        <a-form-item label="高度" name="height">
-                            <a-input-number v-model:value={attr.height} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
-                        </a-form-item>
+
+                        {'ellipse' === type ? <>
+                            <a-form-item label="宽度" name="width">
+                                <a-input-number v-model:value={style.rx} prefix={<ColumnWidthOutlined />} min={1} addon-after="px" />
+                            </a-form-item>
+                            <a-form-item label="高度" name="height">
+                                <a-input-number v-model:value={style.ry} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
+                            </a-form-item>
+                        </> : <>{
+                            style.width && <>
+                                <a-form-item label="宽度" name="width">
+                                    <a-input-number v-model:value={style.width} prefix={<ColumnWidthOutlined />} min={1} addon-after="px" />
+                                </a-form-item>
+                                <a-form-item label="高度" name="height">
+                                    <a-input-number v-model:value={style.height} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
+                                </a-form-item>
+                            </>
+                        }</>}
+
                         <a-form-item label="旋转" name="rotate">
                             <a-input-number v-model:value={transform.rotate} prefix={<sync-outlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="缩放" name="scale">
-                            <a-input-number v-model:value={transform.scale} prefix={<expand-alt-outlined />} min={1} step={0.01} addon-after="px" />
+                            <a-input-number v-model:value={transform.scale} prefix={<expand-alt-outlined />} min={0} step={0.01} addon-after="px" />
                         </a-form-item>
                         {
                             1 === event && <>
-                                <a-form-item label="填充" name="fill">
-                                    <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
-                                </a-form-item>
+                                {
+                                    'line' != type && <>
+                                        <a-form-item label="填充" name="fill">
+                                            <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                                        </a-form-item>
+                                    </>
+                                }
                                 <a-form-item label="轮廓" name="stroke">
                                     <a-input type="color" v-model:value={style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
                                 </a-form-item>
@@ -175,9 +192,14 @@ export default defineComponent({
                                     <a-form-item label="线条" name="stroke_dasharray">
                                         <a-input-number v-model:value={style.stroke_dasharray} prefix={<dash-outlined />} min={0} addon-after="px" />
                                     </a-form-item>
-                                    {('path' === type || 'polyline' === type) && <>
-                                        <a-form-item label="路径" name={'about'}>
+                                    {'path' === type && <>
+                                        <a-form-item label="路径" name={'path'}>
                                             <a-textarea v-model:value={attr.d} placeholder="path" />
+                                        </a-form-item>
+                                    </>
+                                    }{'polyline' === type && <>
+                                        <a-form-item label="路径" name={'polyline'}>
+                                            <a-textarea v-model:value={attr.points} placeholder="path" />
                                         </a-form-item>
                                     </>
                                     }

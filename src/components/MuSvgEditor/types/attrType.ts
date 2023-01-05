@@ -8,14 +8,27 @@ export interface IBaseParops {
 };
 
 export interface IStyleParops extends IBaseParops {
+    x?: number;
+    y?: number;
+    r?: number;
+    x1?: number;
+    y1?: number;
+    x2?: number;
+    y2?: number;
+    cx?: number;
+    cy?: number;
+    width?: number;
+    height?: number;
+    opacity?: number;
     fill?: string;
+    fill_opacity?: number | string;
     stroke?: TStrokeType;
     stroke_width?: number | string;
     stroke_dasharray?: number | string;
+    stroke_opacity?: number | string;
     font_size?: number | string;
     text_anchor?: TTextAnchorType;
     dominant_baseline?: TDominantBaselineType;
-    opacity?: number;
 };
 export interface ITransformParops extends IBaseParops {
     x?: number | string;
@@ -26,25 +39,14 @@ export interface ITransformParops extends IBaseParops {
 export interface IAttrParops extends IBaseParops {
     id?: string | Array<string>;
     text?: string;
-    status?: TStatusType;
-    type?: string;
-    x?: number;
-    y?: number;
-    r?: number;
-    x2?: number;
-    y2?: number;
-    cx?: number;
-    cy?: number;
-    width?: number;
-    height?: number;
     icon?: string;
-    path?: string;
+    status?: TStatusType;
     filter?: string;
     points?: string;
     class?: string | [];
     style?: IStyleParops;
+    hidden?: boolean;
     transform?: ITransformParops;
-    is_show?: boolean;
     [key: string]: any;
 };
 

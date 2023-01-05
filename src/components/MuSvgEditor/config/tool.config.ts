@@ -2,11 +2,7 @@ import { IAttrParops } from '../types/attrType';
 import { IToolProps } from '../types/toolType';
 
 export const attr: IAttrParops = {
-    id: '',
     text: '',
-    status: 1,
-    width: 60,
-    height: 60,
     icon: '',
     class: '',
     style: {
@@ -16,8 +12,6 @@ export const attr: IAttrParops = {
         stroke_width: 1,
         stroke_dasharray: 0,
         stroke_opacity: 1,
-        text_anchor: 'middle',
-        dominant_baseline: 'auto'
     },
     transform: {
         x: 0,
@@ -47,16 +41,16 @@ export const draw: IToolProps = {
             icon: 'line-outlined',
             attr: {
                 ...attr,
-                x1: 0,
-                y1: 0,
-                x2: 0,
-                y2: 0,
-                width: 0,
-                height: 0,
                 style: {
                     ...attr.style,
+                    // x1: 0,
+                    // y1: 0,
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 0,
                     stroke_width: 2
-                }
+                },
             },
             event: 1,
             template: ''
@@ -68,8 +62,7 @@ export const draw: IToolProps = {
             icon: 'stock-outlined',
             attr: {
                 ...attr,
-                width: 0,
-                height: 0,
+                points: '',
             },
             event: 1,
             template: ''
@@ -81,8 +74,11 @@ export const draw: IToolProps = {
             path: 'M 3 4 L 3 21 L 22 21 L 22 4 L 0 4 Z',
             attr: {
                 ...attr,
-                x: 0,
-                y: 0,
+                style: {
+                    ...attr.style,
+                    x: 0,
+                    y: 0,
+                },
             },
             event: 1,
             template: ''
@@ -95,12 +91,14 @@ export const draw: IToolProps = {
             path: 'M 22.1, 2.5, m -10, 0 a 10, 10 0 1, 0 1, 0 Z',
             attr: {
                 ...attr,
-                cx: 0,
-                cy: 0,
-                // r: 50
-                rx: 50,
-                ry: 50,
-
+                style: {
+                    ...attr.style,
+                    cx: 0,
+                    cy: 0,
+                    // r: 50,
+                    rx: 50,
+                    ry: 50,
+                },
             },
             event: 1,
             template: ''
@@ -113,8 +111,6 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
                 d: '',
-                width: 0,
-                height: 0,
             },
             event: 1,
             template: ''
@@ -126,12 +122,14 @@ export const draw: IToolProps = {
             path: 'M 5 4 v 3 h 6 v 14 h 3 V 7 H 20 V 4 Z',
             attr: {
                 ...attr,
-                x: 0,
-                y: 0,
                 style: {
                     ...attr.style,
+                    x: 0,
+                    y: 0,
                     fill: '#166FFF',
-                    stroke_width: 0
+                    stroke_width: 0,
+                    text_anchor: 'middle',
+                    dominant_baseline: 'auto'
                 }
             },
             event: 1,
@@ -161,6 +159,12 @@ export const draw: IToolProps = {
     }
 };
 
+const topoStyle = {
+    style: {
+        width: 60,
+        height: 60,
+    }
+};
 export const topo: IToolProps = {
     title: '拓扑组件',
     child: [
@@ -171,6 +175,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: '<image href="icon/tool/internet.webp" width="50" height="50"></image>',
@@ -185,6 +190,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -196,6 +202,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -207,6 +214,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -218,6 +226,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -229,6 +238,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -240,6 +250,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -251,6 +262,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -262,6 +274,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -273,6 +286,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -284,6 +298,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -295,6 +310,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -306,6 +322,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -317,6 +334,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -328,6 +346,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -339,6 +358,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -350,6 +370,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -361,6 +382,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -372,6 +394,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -383,6 +406,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -394,6 +418,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -405,6 +430,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -416,6 +442,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''
@@ -427,6 +454,7 @@ export const topo: IToolProps = {
             path: '',
             attr: {
                 ...attr,
+                ...topoStyle,
             },
             event: 2,
             template: ''

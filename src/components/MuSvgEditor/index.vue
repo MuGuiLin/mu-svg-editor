@@ -38,9 +38,8 @@ const state: IStateType = reactive({
     nowTool: {},
     // 当前组件属性
     nowAttr: {
-        index: null,
         attr: {},
-        selected: null,
+        index: null,
     },
 });
 

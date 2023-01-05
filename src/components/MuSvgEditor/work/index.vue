@@ -22,8 +22,6 @@ const rstate = ref();
 const state = reactive({
     x: 0,
     y: 0,
-    x2: 0,
-    y2: 0,
     event: 0,
 });
 
@@ -47,19 +45,20 @@ const onDragover = (e: DragEvent) => {
 };
 
 const setSegData = (e: DragEvent, x: number = 0, y: number = 0) => {
+    console.log(777, prop.nowTool)
     // 在画布中创建组件
-    const { type, name, icon, attr, event, template } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, ox = offsetX - (attr.width / 2), oy = offsetY - (attr.height / 2), nowData: any = {
+    const { type, name, icon, attr, event, template } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, ox = offsetX - (attr.style.width / 2), oy = offsetY - (attr.style.height / 2), nowData: any = {
         id,
         type,
         attr: {
             ...JSON.parse(JSON.stringify(attr)),
-            id,
             icon,
             text: name,
-            // x: ox,
-            x: 0,
-            // y: oy,
-            y: 0,
+            style: {
+                ...attr.style,
+                x: 0,
+                y: 0,
+            },
             transform: {
                 x: x || ox,
                 y: y || oy,
@@ -142,7 +141,7 @@ const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: 
     console.info(state.event, prop.nowAttr?.id, !state.event || !prop.nowAttr?.id);
     const { left, top } = drop.value.getBoundingClientRect();
     const [x, y] = [clientX - left, clientY - top];
-    const [mx, my] = [(x - prop.nowAttr.attr.width / 2) - 4, (y - prop.nowAttr.attr.height / 2) - 4];
+    const [mx, my] = [(x - prop.nowAttr.attr.style.width / 2) - 4, (y - prop.nowAttr.attr.style.height / 2) - 4];
     switch (prop.nowAttr.event) {
         // draw
         case 1:
@@ -151,8 +150,8 @@ const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: 
                     prop.nowAttr.attr.transform.x = x;
                     prop.nowAttr.attr.transform.y = y;
                 } else {
-                    prop.nowAttr.attr.x2 = x - 5;
-                    prop.nowAttr.attr.y2 = y - 5;
+                    prop.nowAttr.attr.style.x2 = x - 5 - (state.x || 0);
+                    prop.nowAttr.attr.style.y2 = y - 5 - (state.y || 0);
                 }
             }
             else if ('rect' === prop.nowAttr.type) {
@@ -160,31 +159,28 @@ const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: 
                     prop.nowAttr.attr.transform.x = mx;
                     prop.nowAttr.attr.transform.y = my;
                 } else {
-                    prop.nowAttr.attr.width = x - 4 - (state.x || 0);
-                    prop.nowAttr.attr.height = y - 5 - (state.y || 0);
+                    prop.nowAttr.attr.style.width = x - 4 - (state.x || 0);
+                    prop.nowAttr.attr.style.height = y - 5 - (state.y || 0);
                 }
             }
             else if ('ellipse' === prop.nowAttr.type) {
                 if (prop.nowAttr.selected) {
-                    prop.nowAttr.attr.transform.x = x - (prop.nowAttr.attr.x2 / 2) - 4;
-                    prop.nowAttr.attr.transform.y = y - (prop.nowAttr.attr.y2 / 2) - 4;
+                    prop.nowAttr.attr.transform.x = x - (prop.nowAttr.attr.style.rx / 16);
+                    prop.nowAttr.attr.transform.y = y - (prop.nowAttr.attr.style.ry / 16);
                 } else {
-                    prop.nowAttr.attr.x2 = x - 4 - (state.x || 0);
-                    prop.nowAttr.attr.y2 = y - 5 - (state.y || 0);
+                    prop.nowAttr.attr.style.rx = x - (state.x || 0);
+                    prop.nowAttr.attr.style.ry = y - (state.y || 0);
                 }
             }
-            else if ('path' === prop.nowAttr.type || 'polyline' === prop.nowAttr.type) {
-                if (prop.nowAttr.selected) {
-                    prop.nowAttr.attr.transform.x = x - (prop.nowAttr.attr.x2 / 2);
-                    prop.nowAttr.attr.transform.y = y - (prop.nowAttr.attr.y2 / 2);
-                } else {
-                    prop.nowAttr.attr.x2 = x - (state.x || 0);
-                    prop.nowAttr.attr.y2 = y - (state.y || 0);
-                }
-            }
+            // else if ('path' === prop.nowAttr.type) {
+            //     prop.nowAttr.attr.transform.x = x;
+            //     prop.nowAttr.attr.transform.y = y;
+            // }
+            // else if ('polyline' === prop.nowAttr.type) {
+            //     prop.nowAttr.attr.transform.x = x;
+            //     prop.nowAttr.attr.transform.y = y;
+            // }
             else {
-                // prop.nowAttr.attr.x2 = x - (state.x || 0);
-                // prop.nowAttr.attr.y2 = y - (state.y || 0);
                 prop.nowAttr.attr.transform.x = x;
                 prop.nowAttr.attr.transform.y = y;
             }
@@ -192,8 +188,6 @@ const mouseMoveEvent = ({ target, clientX, clientY }: MouseEvent, o: Object, i: 
         // drag
         case 2:
             if (!prop.nowAttr.selected) return;
-            // prop.nowAttr.attr.x = (x - prop.nowAttr.attr.width / 2) - 4;
-            // prop.nowAttr.attr.y = (y - prop.nowAttr.attr.height / 2) - 4;
             prop.nowAttr.attr.transform.x = mx;
             prop.nowAttr.attr.transform.y = my;
             break;
