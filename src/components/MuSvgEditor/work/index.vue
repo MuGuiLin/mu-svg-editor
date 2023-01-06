@@ -15,8 +15,8 @@ const props: any = defineProps({
 });
 
 const { prop, prop: { canvas, svgData } } = props;
-const draw = <HTMLDivElement>ref(null);
-const drop = <HTMLDivElement>ref(null);
+const draw: any = <HTMLDivElement>ref(null);
+const drop: any = <HTMLDivElement>ref(null);
 
 const rstate = ref();
 const state = reactive({
@@ -157,12 +157,27 @@ const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
             return false;
         }
         const [mx = 0, my = 0] = getMousePos(drop.value, e), [x = 0, y = 0] = [mx - state.x, my - state.y];
+
+
+        const r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        const angle = Math.atan(y / x) * 180 / Math.PI;
+  
+        console.info('angle', angle);
+
         switch (prop.nowAttr.type) {
             case 'line':
                 if (state.ctrl) {
-                    // x1 = x0 + r * Math.cos(angle * Math.PI / 180);
-                    // y1 = y0 + r * Math.sin(angle * Math.PI / 180);
-                    prop.nowAttr.attr.style.x2 = x;
+                    let rx = 0, ry = 0;
+                    if (angle >= 22.5 && angle < 67.5) {
+                        rx = r * Math.cos(45 * (Math.PI / 180));
+                        ry = r * Math.sin(45 * (Math.PI / 180));
+                    } else if (angle >= 67.5 && angle < 112.5) {
+                        rx = r * Math.cos(90 * (Math.PI / 180));
+                        ry = r * Math.sin(90 * (Math.PI / 180));
+                    }
+                    prop.nowAttr.attr.style.x2 = rx;
+                    prop.nowAttr.attr.style.y2 = ry;
+
                 } else {
                     prop.nowAttr.attr.style.x2 = x;
                     prop.nowAttr.attr.style.y2 = y;
@@ -230,6 +245,7 @@ const onKeydown = (e: KeyboardEvent) => {
                 case 'Control':
                     e.preventDefault();
                     state.ctrl = true;
+                    mouseMoveEvent()
                     break;
                 default:
                     break;
