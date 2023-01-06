@@ -2,7 +2,7 @@
 import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
 import stateType from '../types/propsType';
 import scale from "../hook/scale";
-import { getMousePos, getQuadrant } from "../hook";
+import { getMousePos } from "../hook";
 import { hookOpenSvg, hookSeveSvg } from "../hook/operate";
 import { NS } from "../config";
 
@@ -39,6 +39,8 @@ watch(() => [canvas.width, canvas.height], (n1, n2) => {
 
 // 左侧组件拖动进入画布区域
 const onDragenter = (e: DragEvent) => {
+    console.log('进入放置区域');
+    // rightnav_open.value = false;
     e.preventDefault();
 };
 
@@ -142,7 +144,7 @@ const nowAttrMove = (x: number = 0, y: number = 0) => {
 };
 
 // 鼠标左键在画布中的组件上移动
-const mouseMoveEvent = (e: MouseEvent) => {
+const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
     if (!state.event || !prop.nowAttr?.id) return false;
     const { clientX, clientY } = e, move = { ...state };
     move.x += clientX - move.x2;
@@ -154,19 +156,52 @@ const mouseMoveEvent = (e: MouseEvent) => {
             nowAttrMove(move.x, move.y);
             return false;
         }
-        let [mx = 0, my = 0] = getMousePos(drop.value, e), [x = 0, y = 0] = [mx - state.x, my - state.y];
+        const [mx = 0, my = 0] = getMousePos(drop.value, e), [x = 0, y = 0] = [mx - state.x, my - state.y];
+
+
+        const r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        const angle = Math.atan(y / x) * 180 / Math.PI;
+  
+        console.info('angle', angle);
 
         switch (prop.nowAttr.type) {
             case 'line':
-                [prop.nowAttr.attr.style.x2, prop.nowAttr.attr.style.y2] = state.ctrl ? getQuadrant(x, y) : [x, y];
+                if (state.ctrl) {
+                    let rx = 0, ry = 0;
+                    if (angle >= 22.5 && angle < 67.5) {
+                        rx = r * Math.cos(45 * (Math.PI / 180));
+                        ry = r * Math.sin(45 * (Math.PI / 180));
+                    } else if (angle >= 67.5 && angle < 112.5) {
+                        rx = r * Math.cos(90 * (Math.PI / 180));
+                        ry = r * Math.sin(90 * (Math.PI / 180));
+                    }
+                    prop.nowAttr.attr.style.x2 = rx;
+                    prop.nowAttr.attr.style.y2 = ry;
+
+                } else {
+                    prop.nowAttr.attr.style.x2 = x;
+                    prop.nowAttr.attr.style.y2 = y;
+                }
                 break;
 
             case 'rect':
-                [prop.nowAttr.attr.style.width, prop.nowAttr.attr.style.height] = state.ctrl ? [x, x] : [x, y];
+                if (state.ctrl) {
+                    prop.nowAttr.attr.style.width = x;
+                    prop.nowAttr.attr.style.height = x;
+                } else {
+                    prop.nowAttr.attr.style.width = x;
+                    prop.nowAttr.attr.style.height = y;
+                }
                 break;
 
             case 'ellipse':
-                [prop.nowAttr.attr.style.rx, prop.nowAttr.attr.style.ry] = state.ctrl ? [x, x] : [x, y];
+                if (state.ctrl) {
+                    prop.nowAttr.attr.style.rx = x;
+                    prop.nowAttr.attr.style.ry = x;
+                } else {
+                    prop.nowAttr.attr.style.rx = x;
+                    prop.nowAttr.attr.style.ry = y;
+                }
                 break;
 
             default:
@@ -210,6 +245,7 @@ const onKeydown = (e: KeyboardEvent) => {
                 case 'Control':
                     e.preventDefault();
                     state.ctrl = true;
+                    mouseMoveEvent()
                     break;
                 default:
                     break;

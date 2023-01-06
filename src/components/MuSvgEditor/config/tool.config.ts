@@ -37,6 +37,7 @@ export const draw: IToolProps = {
         {
             type: 'line',
             name: '直线',
+            tips: '按住"Ctrl"键绘制水平或垂直线条！',
             path: 'M 2 10 L 23 10 L 23 15 L 2 15 Z',
             icon: 'line-outlined',
             attr: {
