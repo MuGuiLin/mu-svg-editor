@@ -1,6 +1,6 @@
 import { defineComponent, ref } from 'vue';
 import style from './style.module.less'
-import { hookOpenSvg, hookSeveSvg, hookImportImage, hookSvgCode, hookJsonData } from '../hook/operate'
+import { hookOpenSvg, hookSeveSvg, hookImportImage, hookExportImage, hookSvgCode, hookJsonData } from '../hook/operate'
 
 export default defineComponent({
     name: 'Menu',
@@ -27,7 +27,7 @@ export default defineComponent({
                         </a-menu-item-group>
                         <a-menu-item-group title="输出">
                             <a-menu-item key="file:3" icon={<save-outlined />} onClick={() => hookSeveSvg()}>保存SVG （Ctrl + S）</a-menu-item>
-                            <a-menu-item key="file:4" icon={<import-outlined />}>导出PNG （Ctrl + E）</a-menu-item>
+                            <a-menu-item key="file:4" icon={<import-outlined />} onClick={() => hookExportImage()}>导出PNG （Ctrl + E）</a-menu-item>
                         </a-menu-item-group>
                     </a-sub-menu>
                     <a-sub-menu key="edit" title="编辑（E）" icon={<form-outlined />} >

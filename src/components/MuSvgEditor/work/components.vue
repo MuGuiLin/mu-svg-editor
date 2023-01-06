@@ -22,7 +22,8 @@ console.info(props);
 <template>
     <template v-if="1 === info.event">
         <component :is="type" v-if="'line' === type" :x1="style.x" :y1="style.y" :x2="style.x2" :y2="style.y2"
-            :stroke="style.stroke" :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray">
+            :stroke="style.stroke" :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray"
+            :stroke-linecap="style.stroke_linecap">
         </component>
 
         <component :is="type" v-else-if="'rect' === type" :x="style.x" :y="style.y" :width="style.width"
@@ -34,17 +35,19 @@ console.info(props);
             :stroke-dasharray="style.stroke_dasharray"></component>
 
         <component :is="type" v-else-if="'path' === type" :d="attr.d" :fill="style.fill" :stroke="style.stroke"
-            :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray">
+            :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray"
+            :stroke-linecap="style.stroke_linecap">
         </component>
 
         <component :is="type" v-else-if="'polyline' === type" :points="attr.points" :fill="style.fill"
-            :stroke="style.stroke" :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray">
+            :stroke="style.stroke" :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray"
+            :stroke-linecap="style.stroke_linecap">
         </component>
 
         <component :is="type" v-else-if="'text' === type" :x="style.x" :y="style.y" :fill="style.fill"
             :stroke="style.stroke" :stroke-width="style.stroke_width" :text-anchor="style.text_anchor"
             :dominant-baseline="style.dominant_baseline">{{
-                attr.text
+            attr.text
             }}</component>
     </template>
 

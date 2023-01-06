@@ -54,7 +54,7 @@ const onDragend = (e: DragEvent, m: any) => {
     <aside class="tool">
         <a-collapse v-model:activeKey="state.activeKey">
             <a-collapse-panel v-for="(t, i) in prop.tool" :key="i" :header="t.title">
-                <div class="drag" v-for="(m, j) in t.child" :key="j" :title="m.name">
+                <div class="drag" v-for="(m, j) in t.child" :key="j" :title="m?.tips || m.name">
                     <template v-if="1 === m.event">
                         <svg @click="clickDraw($event, m, j)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
                             version="1.1">

@@ -3,21 +3,20 @@ import { IAttrParops, } from './attrType'
 export interface IChildProps {
     type: string;
     name: string;
+    tips?: string;
     icon?: string;
     path?: string;
     attr: IAttrParops;
-    ctrl?: string;
     event: number;
-    select?: boolean;
     template?: string;
     props?: [string];
     [index: number]: {
         type: string;
         name: string;
+        tips?: string;
         icon?: string;
         path?: string;
         attr: IAttrParops;
-        ctrl?: string;
         event: number;
         template?: string;
     }

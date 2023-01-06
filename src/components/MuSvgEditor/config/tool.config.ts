@@ -49,7 +49,8 @@ export const draw: IToolProps = {
                     y: 0,
                     x2: 0,
                     y2: 0,
-                    stroke_width: 2
+                    stroke_width: 2,
+                    stroke_linecap: 'butt',
                 },
             },
             event: 1,
@@ -63,6 +64,7 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
                 points: '',
+                stroke_linecap: 'butt',
             },
             event: 1,
             template: ''
@@ -70,6 +72,7 @@ export const draw: IToolProps = {
         {
             type: 'rect',
             name: '矩形',
+            tips: '按住"Ctrl"键绘制正方形！',
             icon: 'border-outlined',
             path: 'M 3 4 L 3 21 L 22 21 L 22 4 L 0 4 Z',
             attr: {
@@ -87,6 +90,7 @@ export const draw: IToolProps = {
             // type: 'circle', 
             type: 'ellipse',
             name: '圆形',
+            tips: '按住"Ctrl"键绘制正圆形！',
             icon: 'loading3-quarters-outlined',
             path: 'M 22.1, 2.5, m -10, 0 a 10, 10 0 1, 0 1, 0 Z',
             attr: {
@@ -111,6 +115,7 @@ export const draw: IToolProps = {
             attr: {
                 ...attr,
                 d: '',
+                stroke_linecap: 'butt',
             },
             event: 1,
             template: ''

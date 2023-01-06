@@ -2,7 +2,7 @@
 import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
 import stateType from '../types/propsType';
 import scale from "../hook/scale";
-import { getMousePos } from "../hook";
+import { isEmptyObj, getMousePos } from "../hook";
 import { hookOpenSvg, hookSeveSvg } from "../hook/operate";
 import { NS } from "../config";
 
@@ -22,8 +22,6 @@ const rstate = ref();
 const state = reactive({
     x: 0,
     y: 0,
-    x2: 0,
-    y2: 0,
     event: 0,
     alt: false,
     ctrl: false,
@@ -50,6 +48,7 @@ const onDragover = (e: DragEvent) => {
 };
 
 const setSegData = (e: DragEvent, x: number = 0, y: number = 0) => {
+    console.log(777, prop.nowTool)
     // 在画布中创建组件
     const { type, name, icon, attr, event, template } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, ox = offsetX - (attr.style.width / 2), oy = offsetY - (attr.style.height / 2), nowData: any = {
         id,
@@ -85,13 +84,11 @@ const setSegData = (e: DragEvent, x: number = 0, y: number = 0) => {
 };
 
 // 鼠标左键在画布上按下
-const onCanvasMousedown = (e: MouseEvent | any) => {
+const onCanvasMousedown = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    [state.x, state.y, state.x2, state.y2] = [
-        ...getMousePos(drop.value, e),
-        e.offsetX, e.offsetY
-    ];
+    [state.x, state.y] = getMousePos(drop.value, e);
+
     // 取消组件选中状态
     if (prop.nowAttr.selected) {
         prop.nowAttr.selected = null;
@@ -100,7 +97,7 @@ const onCanvasMousedown = (e: MouseEvent | any) => {
     // 需要拖拽绘制的组件
     if (1 === prop.nowTool.event) {
         state.event = 1;
-        setSegData(e, e.offsetX, e.offsetY);
+        setSegData(e, state.x, state.y);
     };
 };
 
@@ -122,10 +119,7 @@ const onDrop = (e: DragEvent) => {
 const onSvgMousedown = (e: MouseEvent, o: any, i: number) => {
     e.preventDefault();
     e.stopPropagation();
-    [state.x, state.y, state.x2, state.y2, state.event] = [
-        o.attr.transform.x, o.attr.transform.y,
-        e.clientX, e.clientY, 1
-    ];
+    state.event = 1;
     prop.nowAttr = o;
     prop.nowAttr.index = i;
     prop.nowAttr.selected = o.id;
@@ -138,66 +132,70 @@ const onMousemove = (e: Event | any): void => {
     [canvas.lineX, canvas.lineY] = getMousePos(draw.value, e);
 };
 
-const nowAttrMove = (x: number = 0, y: number = 0) => {
-    prop.nowAttr.attr.transform.x = x;
-    prop.nowAttr.attr.transform.y = y;
-};
-
 // 鼠标左键在画布中的组件上移动
 const mouseMoveEvent = (e: MouseEvent, o: Object, i: number) => {
     if (!state.event || !prop.nowAttr?.id) return false;
-    const { clientX, clientY } = e, move = { ...state };
-    move.x += clientX - move.x2;
-    move.y += clientY - move.y2;
-
-    // draw
-    if (1 === prop.nowAttr.event) {
-        if (prop.nowAttr.selected) {
-            nowAttrMove(move.x, move.y);
-            return false;
-        }
-        const [mx = 0, my = 0] = getMousePos(drop.value, e), [x = 0, y = 0] = [mx - state.x, my - state.y];
-        switch (prop.nowAttr.type) {
-            case 'line':
-                if (state.ctrl) {
-                    // x1 = x0 + r * Math.cos(angle * Math.PI / 180);
-                    // y1 = y0 + r * Math.sin(angle * Math.PI / 180);
-                    prop.nowAttr.attr.style.x2 = x;
+    const [x = 0, y = 0] = getMousePos(drop.value, e);;
+    const [sx = 0, sy = 0] = [state.x, state.y];
+    const [mx = 0, my = 0] = [(x - prop.nowAttr.attr.style.width / 2) - 4, (y - prop.nowAttr.attr.style.height / 2) - 4];
+    switch (prop.nowAttr.event) {
+        // draw
+        case 1:
+            if ('line' === prop.nowAttr.type) {
+                if (prop.nowAttr.selected) {
+                    prop.nowAttr.attr.transform.x = x;
+                    prop.nowAttr.attr.transform.y = y;
                 } else {
-                    prop.nowAttr.attr.style.x2 = x;
-                    prop.nowAttr.attr.style.y2 = y;
+                    if (state.ctrl) {
+                        // x1 = x0 + r * Math.cos(angle * Math.PI / 180);
+                        // y1 = y0 + r * Math.sin(angle * Math.PI / 180);
+                        prop.nowAttr.attr.style.x2 = x - 5 - sx;
+                    } else {
+                        prop.nowAttr.attr.style.x2 = x - 5 - sx;
+                        prop.nowAttr.attr.style.y2 = y - 5 - sy;
+                    }
                 }
-                break;
-
-            case 'rect':
-                if (state.ctrl) {
-                    prop.nowAttr.attr.style.width = x;
-                    prop.nowAttr.attr.style.height = x;
+            }
+            else if ('rect' === prop.nowAttr.type) {
+                if (prop.nowAttr.selected) {
+                    prop.nowAttr.attr.transform.x = mx;
+                    prop.nowAttr.attr.transform.y = my;
                 } else {
-                    prop.nowAttr.attr.style.width = x;
-                    prop.nowAttr.attr.style.height = y;
+                    prop.nowAttr.attr.style.width = x - 4 - sx;
+                    prop.nowAttr.attr.style.height = y - 5 - sy;
                 }
-                break;
-
-            case 'ellipse':
-                if (state.ctrl) {
-                    prop.nowAttr.attr.style.rx = x;
-                    prop.nowAttr.attr.style.ry = x;
+            }
+            else if ('ellipse' === prop.nowAttr.type) {
+                if (prop.nowAttr.selected) {
+                    prop.nowAttr.attr.transform.x = x - (prop.nowAttr.attr.style.rx / 16);
+                    prop.nowAttr.attr.transform.y = y - (prop.nowAttr.attr.style.ry / 16);
                 } else {
-                    prop.nowAttr.attr.style.rx = x;
-                    prop.nowAttr.attr.style.ry = y;
+                    prop.nowAttr.attr.style.rx = x - sx;
+                    prop.nowAttr.attr.style.ry = y - sy;
                 }
-                break;
-
-            default:
-                break;
-        };
+            }
+            // else if ('path' === prop.nowAttr.type) {
+            //     prop.nowAttr.attr.transform.x = x;
+            //     prop.nowAttr.attr.transform.y = y;
+            // }
+            // else if ('polyline' === prop.nowAttr.type) {
+            //     prop.nowAttr.attr.transform.x = x;
+            //     prop.nowAttr.attr.transform.y = y;
+            // }
+            else {
+                prop.nowAttr.attr.transform.x = x;
+                prop.nowAttr.attr.transform.y = y;
+            }
+            break;
         // drag
-    } else if (2 === prop.nowAttr.event) {
-        if (!prop.nowAttr.selected) return;
-        nowAttrMove(move.x, move.y);
-    };
-
+        case 2:
+            if (!prop.nowAttr.selected) return;
+            prop.nowAttr.attr.transform.x = mx;
+            prop.nowAttr.attr.transform.y = my;
+            break;
+        default:
+            break;
+    }
     return false;
 };
 

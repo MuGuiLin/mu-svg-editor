@@ -119,12 +119,22 @@ export default defineComponent({
                         <a-form-item label="文本" name="text">
                             <a-input v-model:value={attr.text} prefix={<font-size-outlined />} placeholder="组件名称！" />
                         </a-form-item>
-                        <a-form-item label="坐标X" name="x">
+                        <a-form-item label="X坐标" name="x">
                             <a-input-number v-model:value={transform.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
-                        <a-form-item label="坐标Y" name="y">
+                        <a-form-item label="Y坐标" name="y">
                             <a-input-number v-model:value={transform.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
+
+                        {//Reflect.has(style, 'x2') && <>
+                            style?.x2 && <>
+                                <a-form-item label="X终点" name="x2">
+                                    <a-input-number v-model:value={style.x2} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                                </a-form-item>
+                                <a-form-item label="Y终点" name="y2">
+                                    <a-input-number v-model:value={style.y2} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                                </a-form-item>
+                            </>}
 
                         {'ellipse' === type ? <>
                             <a-form-item label="宽度" name="width">
@@ -133,80 +143,85 @@ export default defineComponent({
                             <a-form-item label="高度" name="height">
                                 <a-input-number v-model:value={style.ry} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
                             </a-form-item>
-                        </> : <>{
-                            style.width && <>
-                                <a-form-item label="宽度" name="width">
-                                    <a-input-number v-model:value={style.width} prefix={<ColumnWidthOutlined />} min={1} addon-after="px" />
-                                </a-form-item>
-                                <a-form-item label="高度" name="height">
-                                    <a-input-number v-model:value={style.height} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
-                                </a-form-item>
-                            </>
-                        }</>}
+                        </> : <>{style?.width && <>
+                            <a-form-item label="宽度" name="width">
+                                <a-input-number v-model:value={style.width} prefix={<ColumnWidthOutlined />} min={1} addon-after="px" />
+                            </a-form-item>
+                            <a-form-item label="高度" name="height">
+                                <a-input-number v-model:value={style.height} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
+                            </a-form-item>
+                        </>}</>}
 
                         <a-form-item label="旋转" name="rotate">
-                            <a-input-number v-model:value={transform.rotate} prefix={<sync-outlined />} addon-after="px" />
+                            <a-input-number v-model:value={transform.rotate} prefix={<reload-outlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="缩放" name="scale">
                             <a-input-number v-model:value={transform.scale} prefix={<expand-alt-outlined />} min={0} step={0.01} addon-after="px" />
                         </a-form-item>
-                        {
-                            1 === event && <>
-                                {
-                                    'line' != type && <>
-                                        <a-form-item label="填充" name="fill">
-                                            <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
-                                        </a-form-item>
-                                    </>
-                                }
-                                <a-form-item label="轮廓" name="stroke">
-                                    <a-input type="color" v-model:value={style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                        {1 === event && <>
+                            {
+                                'line' != type && <>
+                                    <a-form-item label="填充" name="fill">
+                                        <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                                    </a-form-item>
+                                </>
+                            }
+                            <a-form-item label="轮廓" name="stroke">
+                                <a-input type="color" v-model:value={style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                            </a-form-item>
+                            <a-form-item label="边框" name="stroke_width">
+                                <a-input-number v-model:value={style.stroke_width} prefix={<border-outlined />} min={0} addon-after="px" />
+                            </a-form-item>
+                            {'text' === type ? <>
+                                <a-form-item label="对齐" name="text_anchor">
+                                    <a-select v-model:value={style.text_anchor} prefix={<bg-colors-outlined />}>
+                                        <a-select-option value="start">start</a-select-option>
+                                        <a-select-option value="middle">middle</a-select-option>
+                                        <a-select-option value="end" >end</a-select-option>
+                                        <a-select-option value="inherit">inherit</a-select-option>
+                                    </a-select>
                                 </a-form-item>
-                                <a-form-item label="边框" name="stroke_width">
-                                    <a-input-number v-model:value={style.stroke_width} prefix={<border-outlined />} min={0} addon-after="px" />
+                                <a-form-item label="基线" name="dominant_baseline">
+                                    <a-select v-model:value={style.dominant_baseline} >
+                                        <a-select-option value="auto">auto</a-select-option>
+                                        <a-select-option value="text-top">text-top</a-select-option>
+                                        <a-select-option value="end" >end</a-select-option>
+                                        <a-select-option value="text-bottom">text-bottom</a-select-option>
+                                        <a-select-option value="alphabetic">alphabetic</a-select-option>
+                                        <a-select-option value="ideographic">ideographic</a-select-option>
+                                        <a-select-option value="middle">middle</a-select-option>
+                                        <a-select-option value="central">central</a-select-option>
+                                        <a-select-option value="mathematical">mathematical</a-select-option>
+                                        <a-select-option value="hanging">hanging</a-select-option>
+                                    </a-select>
                                 </a-form-item>
-                                {'text' === type ? <>
-                                    <a-form-item label="对齐" name="text_anchor">
-                                        <a-select v-model:value={style.text_anchor} prefix={<bg-colors-outlined />}>
-                                            <a-select-option value="start">start</a-select-option>
-                                            <a-select-option value="middle">middle</a-select-option>
-                                            <a-select-option value="end" >end</a-select-option>
+                            </> : <>
+                                <a-form-item label="线形" name="stroke_dasharray">
+                                    <a-input-number v-model:value={style.stroke_dasharray} placeholder="多个可用‘,’逗号隔开！" prefix={<dash-outlined />} min={0} addon-after="px" />
+                                </a-form-item>
+                                {style?.stroke_linecap && <>
+                                    <a-form-item label="端点" name="stroke_linecap">
+                                        <a-select v-model:value={style.stroke_linecap} >
+                                            <a-select-option value="butt">butt</a-select-option>
+                                            <a-select-option value="round">round</a-select-option>
+                                            <a-select-option value="square" >square</a-select-option>
                                             <a-select-option value="inherit">inherit</a-select-option>
                                         </a-select>
                                     </a-form-item>
-                                    <a-form-item label="基线" name="dominant_baseline">
-                                        <a-select v-model:value={style.dominant_baseline} >
-                                            <a-select-option value="auto">auto</a-select-option>
-                                            <a-select-option value="text-top">text-top</a-select-option>
-                                            <a-select-option value="end" >end</a-select-option>
-                                            <a-select-option value="text-bottom">text-bottom</a-select-option>
-                                            <a-select-option value="alphabetic">alphabetic</a-select-option>
-                                            <a-select-option value="ideographic">ideographic</a-select-option>
-                                            <a-select-option value="middle">middle</a-select-option>
-                                            <a-select-option value="central">central</a-select-option>
-                                            <a-select-option value="mathematical">mathematical</a-select-option>
-                                            <a-select-option value="hanging">hanging</a-select-option>
-                                        </a-select>
-                                    </a-form-item>
-                                </> : <>
-                                    <a-form-item label="线条" name="stroke_dasharray">
-                                        <a-input-number v-model:value={style.stroke_dasharray} prefix={<dash-outlined />} min={0} addon-after="px" />
-                                    </a-form-item>
-                                    {'path' === type && <>
-                                        <a-form-item label="路径" name={'path'}>
-                                            <a-textarea v-model:value={attr.d} placeholder="path" />
-                                        </a-form-item>
-                                    </>
-                                    }{'polyline' === type && <>
-                                        <a-form-item label="路径" name={'polyline'}>
-                                            <a-textarea v-model:value={attr.points} placeholder="path" />
-                                        </a-form-item>
-                                    </>
-                                    }
                                 </>}
-                            </>
+                                {'path' === type && <>
+                                    <a-form-item label="路径" name={'path'}>
+                                        <a-textarea v-model:value={attr.d} placeholder="path" />
+                                    </a-form-item>
+                                </>}
+                                {'polyline' === type && <>
+                                    <a-form-item label="路径" name={'polyline'}>
+                                        <a-textarea v-model:value={attr.points} placeholder="path" />
+                                    </a-form-item>
+                                </>}
+                            </>}
+                        </>
                         }
-
                     </a-form>
                 </a-tab-pane>
                 <a-tab-pane key="2" tab={[tabicon(2), '画布设置']}>

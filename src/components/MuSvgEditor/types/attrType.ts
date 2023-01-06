@@ -1,12 +1,11 @@
 export type TStatusType = 0 | 1 | 2 | 3;
 export type TStrokeType = '#00FFFF' | '#FFCD2A' | '#ED5E44' | any;
 export type TTextAnchorType = 'start' | 'middle' | 'end' | 'inherit';
+export type TStrokeLinecapType = 'butt' | 'round' | 'square' | 'inherit';
 export type TDominantBaselineType = 'auto' | 'text-top' | 'text-bottom' | 'alphabetic' | 'ideographic' | 'middle' | 'central' | 'mathematical' | 'hanging';
-
 export interface IBaseParops {
     [key: string]: any;
 };
-
 export interface IStyleParops extends IBaseParops {
     x?: number;
     y?: number;
@@ -25,6 +24,7 @@ export interface IStyleParops extends IBaseParops {
     stroke?: TStrokeType;
     stroke_width?: number | string;
     stroke_dasharray?: number | string;
+    stroke_linecap?: TStrokeLinecapType;
     stroke_opacity?: number | string;
     font_size?: number | string;
     text_anchor?: TTextAnchorType;
@@ -42,6 +42,7 @@ export interface IAttrParops extends IBaseParops {
     icon?: string;
     status?: TStatusType;
     filter?: string;
+    d?: string;
     points?: string;
     class?: string | [];
     style?: IStyleParops;
