@@ -67,7 +67,7 @@ const onDragend = (e: DragEvent, m: any) => {
                                     <div class="drag" v-for="(d, k) in m.child" :key="k" :title="d?.tips || d.name"
                                         :draggable="true" @dragstart="onDragstart($event, d)"
                                         @dragend="onDragend($event, d)">
-                                        <icon :path="d.path" />
+                                        <icon :path="d.path" fill="#0092FF" />
                                         <b>{{ d.name }}</b>
                                     </div>
                                 </template>
@@ -107,7 +107,7 @@ const onDragend = (e: DragEvent, m: any) => {
         display: inline-block;
         margin: 10px;
         width: 50px;
-        height: 60px;
+        height: 50px;
 
         svg {
             display: inline-block;
@@ -267,9 +267,9 @@ const onDragend = (e: DragEvent, m: any) => {
 
         .drag {
             display: inline-block;
-            margin: 10px;
+            margin: 10px 5px;
             width: 60px;
-            height: 60px;
+            height: 50px;
             text-align: center;
 
             svg {
@@ -277,7 +277,7 @@ const onDragend = (e: DragEvent, m: any) => {
                 width: 50px;
                 height: 50px;
                 border: 1px solid gray;
-                fill: #fff;
+                fill: #0092FF!important;
                 cursor: move;
 
             }
