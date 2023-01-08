@@ -49,12 +49,13 @@ const onDragover = (e: DragEvent) => {
 
 const setSegData = (e: DragEvent, x: number = 0, y: number = 0) => {
     // 在画布中创建组件
-    const { type, name, icon, attr, event, template } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, ox = offsetX - (attr.style.width / 2), oy = offsetY - (attr.style.height / 2), nowData: any = {
+    const { type, name, icon, attr, path, event, } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, ox = offsetX - (attr.style.width / 2), oy = offsetY - (attr.style.height / 2), d = path ?? {}, nowData: any = {
         id,
         type,
         attr: {
             ...JSON.parse(JSON.stringify(attr)),
             icon,
+            d: path,
             text: name,
             style: {
                 ...attr.style,
@@ -69,7 +70,7 @@ const setSegData = (e: DragEvent, x: number = 0, y: number = 0) => {
             }
         },
         event,
-        template,
+
     };
     svgData.push(nowData);
     try {

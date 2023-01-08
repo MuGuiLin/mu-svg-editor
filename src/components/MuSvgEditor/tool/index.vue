@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import { message } from 'ant-design-vue';
+import Icon from './icon.vue';
 import { isEmptyObj } from '../hook'
 
 const { prop }: any = defineProps({
@@ -8,7 +9,7 @@ const { prop }: any = defineProps({
 });
 
 const state = reactive({
-    activeKey: ['1'],
+    activeKey: ['0', '1', '2'],
     clickDraw: 0,
     clickFill: '#0092FF',
 });
@@ -54,20 +55,33 @@ const onDragend = (e: DragEvent, m: any) => {
     <aside class="tool">
         <a-collapse v-model:activeKey="state.activeKey">
             <a-collapse-panel v-for="(t, i) in prop.tool" :key="i" :header="t.title">
-                <div class="drag" v-for="(m, j) in t.child" :key="j" :title="m?.tips || m.name">
+                <div class="draw" v-for="(m, j) in t.child" :key="j" :title="m?.tips || m.name">
                     <template v-if="1 === m.event">
-                        <svg @click="clickDraw($event, m, j)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
-                            version="1.1">
-                            <path :fill="j === state.clickDraw ? state.clickFill : '#FFF'" :d="m.path"></path>
-                        </svg>
+                        <icon :path="m.path" :state="state" :index="j" @click="clickDraw($event, m, j)" />
                         <b>{{ m.name }}</b>
                     </template>
                     <template v-else>
-                        <i :class="m.icon" :draggable="true" @dragstart="onDragstart($event, m)"
-                            @dragend="onDragend($event, m)"></i>
-                        <b>{{ m.name }}</b>
-                    </template>
+                        <template v-if="m.child">
+                            <a-popover :title="m.name" placement="right">
+                                <template #content>
+                                    <div class="drag" v-for="(d, k) in m.child" :key="k" :title="d?.tips || d.name"
+                                        :draggable="true" @dragstart="onDragstart($event, d)"
+                                        @dragend="onDragend($event, d)">
+                                        <icon :path="d.path" />
+                                        <b>{{ d.name }}</b>
+                                    </div>
+                                </template>
+                                <icon :path="m.path" />
+                                <b>{{ m.name }}</b>
+                            </a-popover>
+                        </template>
+                        <template v-else>
+                            <i :class="m.icon" :draggable="true" @dragstart="onDragstart($event, m)"
+                                @dragend="onDragend($event, m)"></i>
+                            <b>{{ m.name }}</b>
+                        </template>
 
+                    </template>
                 </div>
             </a-collapse-panel>
         </a-collapse>
@@ -89,7 +103,7 @@ const onDragend = (e: DragEvent, m: any) => {
         padding: 16px 0;
     }
 
-    .drag {
+    .draw {
         display: inline-block;
         margin: 10px;
         width: 50px;
@@ -103,11 +117,6 @@ const onDragend = (e: DragEvent, m: any) => {
             fill: #fff;
             // background-color: #0092FF;
             cursor: pointer;
-
-            g {
-                width: 30px;
-                height: 30px;
-            }
         }
 
         i {
@@ -246,6 +255,32 @@ const onDragend = (e: DragEvent, m: any) => {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
+        }
+    }
+}
+
+.ant-popover {
+    user-select: none;
+
+    .ant-popover-inner-content {
+        user-select: none;
+
+        .drag {
+            display: inline-block;
+            margin: 10px;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+
+            svg {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                border: 1px solid gray;
+                fill: #fff;
+                cursor: move;
+
+            }
         }
     }
 }

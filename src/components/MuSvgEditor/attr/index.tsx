@@ -158,7 +158,7 @@ export default defineComponent({
                         <a-form-item label="缩放" name="scale">
                             <a-input-number v-model:value={transform.scale} prefix={<expand-alt-outlined />} min={0} step={0.01} addon-after="px" />
                         </a-form-item>
-                        {1 === event && <>
+                        {'image' != type && <>
                             {
                                 'line' != type && <>
                                     <a-form-item label="填充" name="fill">
@@ -211,12 +211,12 @@ export default defineComponent({
                                 </>}
                                 {'path' === type && <>
                                     <a-form-item label="路径" name={'path'}>
-                                        <a-textarea v-model:value={attr.d} placeholder="path" />
+                                        <a-textarea v-model:value={attr.d} rows={4} placeholder="path" />
                                     </a-form-item>
                                 </>}
                                 {'polyline' === type && <>
                                     <a-form-item label="路径" name={'polyline'}>
-                                        <a-textarea v-model:value={attr.points} placeholder="path" />
+                                        <a-textarea v-model:value={attr.points} rows={4} placeholder="path" />
                                     </a-form-item>
                                 </>}
                             </>}
