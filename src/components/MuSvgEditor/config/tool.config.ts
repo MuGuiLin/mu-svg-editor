@@ -9,7 +9,7 @@ export const attr: IAttrParops = {
         fill: '#FFFFFF',
         fill_opacity: 1,
         stroke: '#166FFF',
-        stroke_width: 1,
+        stroke_width: 2,
         stroke_dasharray: 0,
         stroke_opacity: 1,
     },
@@ -45,7 +45,7 @@ export const draw: IToolProps = {
         {
             type: 'line',
             name: '直线',
-            tips: '按住"Ctrl"键绘制水平或垂直线条！',
+            tips: '按住 "Shift"键 绘制水平 或 垂直线条！',
             path: 'M4 20 L46 20 L46 30 L4 30 Z',
             icon: 'line-outlined',
             attr: {
@@ -79,7 +79,7 @@ export const draw: IToolProps = {
         {
             type: 'rect',
             name: '矩形',
-            tips: '按住"Ctrl"键绘制正方形！',
+            tips: '按住 "Shift"键 绘制正方形！',
             icon: 'border-outlined',
             path: 'M6 8 L44 8 L44 42 L6 42 Z',
             attr: {
@@ -98,7 +98,7 @@ export const draw: IToolProps = {
             // type: 'circle', 
             type: 'ellipse',
             name: '圆形',
-            tips: '按住"Ctrl"键绘制正圆形！',
+            tips: '按住 "Shift"键 绘制正圆形！',
             icon: 'loading3-quarters-outlined',
             path: 'M5 5 m20 0 a 20 20 0 1 0 1 0 Z',
             attr: {

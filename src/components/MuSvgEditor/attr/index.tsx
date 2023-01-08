@@ -1,7 +1,10 @@
 import { ConfigProvider } from 'ant-design-vue';
 import { defineComponent, ref, reactive, onMounted, watch, defineEmits, defineExpose } from 'vue';
 import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue';
+import { message } from 'ant-design-vue';
+import Color from './color.vue'
 import { canvasBackground } from '../config';
+import { getBase64 } from '../hook'
 
 import styles from './style.module.less';
 
@@ -22,8 +25,13 @@ import styles from './style.module.less';
 interface IState {
     activeKey: string,
     remember: boolean;
-    color: string;
+    theme: string;
     about: string;
+    update_loading?: boolean;
+    background?: Array<any>;
+    background_color?: string;
+    background_image?: string;
+
 }
 
 export default defineComponent({
@@ -37,9 +45,13 @@ export default defineComponent({
     setup(props: { prop: any }) {
         const state = reactive<IState>({
             activeKey: Object.keys(props.prop.nowAttr.attr).length ? '1' : '2',
-            color: '#1890FF',
+            theme: '#1890FF',
             remember: true,
             about: 'Mu-SVG-Editor',
+            update_loading: false,
+            background: [],
+            background_color: '',
+            background_image: '',
         });
 
         watch(() => props.prop?.nowAttr?.attr, (prop) => {
@@ -47,6 +59,73 @@ export default defineComponent({
             // }, { deep: true, immediate: true });
         });
 
+        // 选项卡icon
+        const tabicon = (tab = 1) => {
+            return 1 === tab ? <control-outlined /> : <setting-outlined />;
+        };
+        // 主题色
+        const input = ({ target }: Event | any) => {
+            state.theme = target.value;
+            console.log(ConfigProvider);
+            // 注：只有在main.ts中使用了antd.variable.min.css这里才生效哦！！
+            ConfigProvider.config({
+                // prefixCls: 'mu-',
+                theme: {
+                    primaryColor: state.theme, // 全局主色
+                    successColor: `#52c41a`, // 成功色
+                    warningColor: `#faad14`, // 警告色
+                    errorColor: `#f5222d`, // 错误色
+                    infoColor: `#1890ff`,
+                    processingColor: `#1890ff`,
+                },
+            });
+        };
+        const changeFill = (color: string) => {
+            props.prop.nowAttr.attr.style.fill = color;
+        };
+        const changeStroke = (color: string) => {
+            props.prop.nowAttr.attr.style.stroke = color;
+        };
+        const changeBackground = (color: string) => {
+            console.log(color)
+            props.prop.canvas.background = color;
+        };
+        const changeTheme = (color: string) => {
+            state.theme = color;
+        };
+        // 画布背景图上传前检测
+        const beforeUpload = (file: [any][number]) => {
+            const type = file.type === 'image/jpeg' || file.type === 'image/png';
+            if (!type) {
+                message.error('对不起：图片类型只能是.jpg、.png、.webp格式！');
+            }
+            const size = file.size / 1024 / 1024 < 2;
+            if (!size) {
+                message.error('对不起：图片大小不能超过2MB！');
+            }
+            return type && size;
+        };
+        // 画布背景图上传中检测
+        const changeUpload = ({ file }: any) => {
+            setTimeout(() => {
+                if (file.status === 'uploading') {
+                    state.update_loading = true;
+                    return;
+                }
+                if (file.status === 'done') {
+                    getBase64(file.originFileObj, (base64Url: string = file.thumbUrl) => {
+                        state.background_image = base64Url || file.thumbUrl;
+                        props.prop.canvas.background = `url(${base64Url || file.thumbUrl})`;
+                        state.update_loading = false;
+                    });
+                }
+                if (file.status === 'error') {
+                    props.prop.canvas.background = `url(${file.thumbUrl})`;
+                    state.update_loading = false;
+                    // message.error('upload error');
+                }
+            }, 1000);
+        };
         const onFinish = (values: any) => {
             console.log('Success:', values);
         };
@@ -59,29 +138,16 @@ export default defineComponent({
             console.log('onValuesChange:', values);
         };
 
-        const tabicon = (tab = 1) => {
-            return 1 === tab ? <control-outlined /> : <setting-outlined />;
-        };
-        const input = ({ target }: Event | any) => {
-            state.color = target.value;
-            console.log(ConfigProvider);
-            // 注：只有在main.ts中使用了antd.variable.min.css这里才生效哦！！
-            ConfigProvider.config({
-                // prefixCls: 'mu-',
-                theme: {
-                    primaryColor: state.color, // 全局主色
-                    successColor: `#52c41a`, // 成功色
-                    warningColor: `#faad14`, // 警告色
-                    errorColor: `#f5222d`, // 错误色
-                    infoColor: `#1890ff`,
-                    processingColor: `#1890ff`,
-                },
-            });
-        }
         return {
             state,
             tabicon,
             input,
+            changeFill,
+            changeStroke,
+            changeTheme,
+            changeBackground,
+            changeUpload,
+            beforeUpload,
             onFinish,
             onFinishFailed,
             onValuesChange
@@ -89,7 +155,7 @@ export default defineComponent({
     },
 
     render() {
-        const { prop: { nowAttr: { id, attr, attr: { style, transform }, type, event, selected }, canvas }, state, tabicon, input, onFinish, onFinishFailed, onValuesChange }: any = this;
+        const { prop: { nowAttr: { id, attr, attr: { style = { fill: '#FFFFFF' }, transform = { x: 0, y: 0, rotate: 0, scale: 1 } }, type, event, selected }, canvas }, state, tabicon, input, changeFill, changeStroke, changeBackground, changeTheme, changeUpload, beforeUpload, onFinish, onFinishFailed, onValuesChange }: any = this;
         return (<aside class={styles.attr}>
             <a-tabs v-model:activeKey={state.activeKey} centered>
                 <a-tab-pane key="1" tab={[tabicon(1), '控件属性']} >
@@ -126,15 +192,14 @@ export default defineComponent({
                             <a-input-number v-model:value={transform.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
 
-                        {//Reflect.has(style, 'x2') && <>
-                            style?.x2 && <>
-                                <a-form-item label="X终点" name="x2">
-                                    <a-input-number v-model:value={style.x2} prefix={<ColumnWidthOutlined />} addon-after="px" />
-                                </a-form-item>
-                                <a-form-item label="Y终点" name="y2">
-                                    <a-input-number v-model:value={style.y2} prefix={<ColumnHeightOutlined />} addon-after="px" />
-                                </a-form-item>
-                            </>}
+                        {Reflect.has(style, 'x2') && <>
+                            <a-form-item label="X终点" name="x2">
+                                <a-input-number v-model:value={style.x2} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            </a-form-item>
+                            <a-form-item label="Y终点" name="y2">
+                                <a-input-number v-model:value={style.y2} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                            </a-form-item>
+                        </>}
 
                         {'ellipse' === type ? <>
                             <a-form-item label="宽度" name="width">
@@ -158,19 +223,19 @@ export default defineComponent({
                         <a-form-item label="缩放" name="scale">
                             <a-input-number v-model:value={transform.scale} prefix={<expand-alt-outlined />} min={0} step={0.01} addon-after="px" />
                         </a-form-item>
-                        {'image' != type && <>
-                            {
-                                'line' != type && <>
-                                    <a-form-item label="填充" name="fill">
-                                        <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
-                                    </a-form-item>
-                                </>
-                            }
+                        {'image' != type && <>{
+                            'line' != type && <>
+                                <a-form-item label="填充" name="fill">
+                                    {/* <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear /> */}
+                                    <Color v-model:pureColor={style.fill} change={changeFill} suffix="rgba" />
+                                </a-form-item>
+                            </>}
                             <a-form-item label="轮廓" name="stroke">
-                                <a-input type="color" v-model:value={style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                                {/* <a-input type="color" v-model:value={style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear /> */}
+                                <Color v-model:pureColor={style.stroke} change={changeStroke} suffix="rgba" />
                             </a-form-item>
                             <a-form-item label="边框" name="stroke_width">
-                                <a-input-number v-model:value={style.stroke_width} prefix={<border-outlined />} min={0} addon-after="px" />
+                                <a-input-number v-model:value={style.stroke_width} placeholder="图形边框(轮廓)粗细！" prefix={<border-outlined />} min={0} addon-after="px" />
                             </a-form-item>
                             {'text' === type ? <>
                                 <a-form-item label="对齐" name="text_anchor">
@@ -233,27 +298,46 @@ export default defineComponent({
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                     >
+                        <a-divider style="margin: 0" >画布大小</a-divider>
                         <a-form-item label="画布宽度" name="width" rules={[{ required: false, message: '请输入画布宽度！' }]}>
                             <a-input-number v-model:value={canvas.width} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="画布高度" name="height" rules={[{ required: false, message: '请输入画布高度！' }]}>
                             <a-input-number v-model:value={canvas.height} prefix={<ColumnHeightOutlined />} addon-after="px" />
                         </a-form-item>
-                        <a-form-item label="画布背景" name="height" rules={[{ required: false, message: '请输选择画布背景！' }]}>
+                        <a-divider orientation="center" style="margin: 0">背景设置</a-divider>
+                        <a-form-item label="预设背景" name="background" rules={[{ required: false, message: '请输选择画布背景！' }]}>
                             <a-select v-model:value={canvas.background} prefix={<ColumnHeightOutlined />} options={canvasBackground}></a-select>
                         </a-form-item>
-                        <a-form-item label="主题颜色" name="color" rules={[{ required: false, message: '请输入主题颜色！' }]}>
-                            <a-input type="color" v-model:value={state.color} onInput={input} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear />
+                        <a-form-item label="画布背景色" name="background_color" rules={[{ required: false, message: '请选择画布背景颜色！' }]}>
+                            <Color pureColor={canvas.background} change={changeBackground} suffix="rgba" />
+                        </a-form-item>
+                        <a-form-item label="画布背景图" name="background_image" rules={[{ required: false, message: '请上传画布背景图片！' }]}>
+                            <a-upload v-model:file-list={state.background} max-count={1} name="background_image"
+                                list-type="picture-card" class="avatar-uploader" show-upload-list="false"
+                                action="http://localhost"
+                                before-upload={beforeUpload}
+                                onChange={changeUpload}>{
+                                    state.background_image ? <img src={state.background_image} alt="avatar" /> : <div>
+                                        {state.update_loading ? <loading-outlined /> : <picture-outlined />}
+                                        <div class="ant-upload-text">选择背景图片</div>
+                                    </div>}
+                            </a-upload>
+                            <p class="ant-upload-text">画布背景大小(1008px * 567px)！</p>
+                        </a-form-item>
+                        <a-form-item label="主题颜色" name="theme" rules={[{ required: false, message: '请选择主题颜色！' }]}>
+                            <Color pureColor={state.theme} change={changeTheme} suffix="rgba" />
+                            {/* <a-input type="color" v-model:value={state.theme} onInput={input} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear /> */}
                         </a-form-item>
                         <a-form-item label="关于编辑器" name={'about'}>
                             <a-textarea v-model:value={state.about} placeholder="mu-sve-editor" />
                         </a-form-item>
-                        <a-form-item name="remember" wrapper-col={{ offset: 8, span: 16 }}>
+                        {/* <a-form-item name="remember" wrapper-col={{ offset: 8, span: 16 }}>
                             <a-checkbox v-model:checked={state.remember}>Remember me</a-checkbox>
-                        </a-form-item>
-                        <a-form-item wrapper-col={{ offset: 8, span: 16 }}>
+                        </a-form-item> */}
+                        {/* <a-form-item wrapper-col={{ offset: 8, span: 16 }}>
                             <a-button type="primary" html-type="submit">确 定</a-button>
-                        </a-form-item>
+                        </a-form-item> */}
                     </a-form>
                 </a-tab-pane>
             </a-tabs>

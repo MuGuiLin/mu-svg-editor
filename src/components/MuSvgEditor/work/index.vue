@@ -121,14 +121,17 @@ const onDrop = (e: DragEvent) => {
 const onSvgMousedown = (e: MouseEvent, o: any, i: number) => {
     e.preventDefault();
     e.stopPropagation();
-    [state.x, state.y, state.x2, state.y2, state.event] = [
-        o.attr.transform.x, o.attr.transform.y,
-        e.clientX, e.clientY, 1
-    ];
-    prop.nowAttr = o;
-    prop.nowAttr.index = i;
-    prop.nowAttr.selected = o.id;
-    console.info(o, i, svgData);
+    console.info(state.event, prop.nowTool.event)
+    if (!prop.nowTool.event) {
+        [state.x, state.y, state.x2, state.y2, state.event] = [
+            o.attr.transform.x, o.attr.transform.y,
+            e.clientX, e.clientY, 1
+        ];
+        prop.nowAttr = o;
+        prop.nowAttr.index = i;
+        prop.nowAttr.selected = o.id;
+        console.info(o, i, svgData);
+    }
 };
 
 // 鼠标坐标
@@ -159,15 +162,15 @@ const mouseMoveEvent = (e: MouseEvent) => {
 
         switch (prop.nowAttr.type) {
             case 'line':
-                [prop.nowAttr.attr.style.x2, prop.nowAttr.attr.style.y2] = state.ctrl ? getQuadrant(x, y) : [x, y];
+                [prop.nowAttr.attr.style.x2, prop.nowAttr.attr.style.y2] = state.shift ? getQuadrant(x, y) : [x, y];
                 break;
 
             case 'rect':
-                [prop.nowAttr.attr.style.width, prop.nowAttr.attr.style.height] = state.ctrl ? [x, x] : [x, y];
+                [prop.nowAttr.attr.style.width, prop.nowAttr.attr.style.height] = state.shift ? [x, x] : [x, y];
                 break;
 
             case 'ellipse':
-                [prop.nowAttr.attr.style.rx, prop.nowAttr.attr.style.ry] = state.ctrl ? [x, x] : [x, y];
+                [prop.nowAttr.attr.style.rx, prop.nowAttr.attr.style.ry] = state.shift ? [x, x] : [x, y];
                 break;
 
             default:

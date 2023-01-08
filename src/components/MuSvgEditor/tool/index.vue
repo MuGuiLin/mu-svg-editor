@@ -11,7 +11,7 @@ const { prop }: any = defineProps({
 const state = reactive({
     activeKey: ['0', '1', '2'],
     clickDraw: 0,
-    clickFill: '#0092FF',
+    clickFill: '#F900FF', // #0092FF
 });
 
 watch(() => state.activeKey, val => {
