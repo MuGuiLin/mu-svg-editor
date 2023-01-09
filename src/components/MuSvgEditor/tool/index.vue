@@ -9,7 +9,7 @@ const { prop }: any = defineProps({
 });
 
 const state = reactive({
-    activeKey: ['0', '1', '2'],
+    activeKey: ['0', '2'],
     clickDraw: 0,
     clickFill: '#F900FF', // #0092FF
 });
@@ -277,7 +277,7 @@ const onDragend = (e: DragEvent, m: any) => {
                 width: 50px;
                 height: 50px;
                 border: 1px solid gray;
-                fill: #0092FF!important;
+                fill: #0092FF !important;
                 cursor: move;
 
             }
