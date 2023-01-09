@@ -28,6 +28,25 @@ export const canvasBackground = <SelectProps['options']>[
     // }
 ];
 
+export const canvasBackSetup = <SelectProps['options']>[
+    {
+        label: '显示为-【填充】方式',
+        value: 'auto',
+    },
+    {
+        label: '显示为-【居中】方式',
+        value: 'center',
+    },
+    {
+        label: '显示为-【拉伸】方式',
+        value: 'cover',
+    },
+    {
+        label: '显示为-【适应】方式',
+        value: 'contain',
+    },
+];
+
 const editor = {};
 
 export default editor;

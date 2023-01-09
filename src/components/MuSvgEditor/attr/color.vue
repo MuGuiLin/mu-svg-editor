@@ -14,18 +14,27 @@ const props: any = defineProps({
     format: {
         type: String,
         default: 'prgb',
+        required: false, //是否必传
+        validator: (value) => {
+            return ["rgb", "prgb", "hex", "hex6", "hex3", "hex4", "hex8", "name", "hsl", "hsv"].includes(value);
+        }
     },
     suffix: {
         type: String,
-        default: 'rgba',
+        default: 'rgba',    // 后缀名
     },
     allow_clear: {
         type: Boolean,
-        default: true,
+        default: true,  // 是否清除按扭？
     },
     change: {
         type: Function,
         default: () => { },
+    },
+    isWidget: {
+        type: Boolean,
+        default: false, // 是否为弹出式图层组件？
+        required: false,
     }
 });
 

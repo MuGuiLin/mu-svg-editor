@@ -3,7 +3,7 @@ import { defineComponent, ref, reactive, onMounted, watch, defineEmits, defineEx
 import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import Color from './color.vue'
-import { canvasBackground } from '../config';
+import { canvasBackground, canvasBackSetup } from '../config';
 import { getBase64 } from '../hook'
 
 import styles from './style.module.less';
@@ -307,12 +307,12 @@ export default defineComponent({
                         </a-form-item>
                         <a-divider orientation="center" style="margin: 0">背景设置</a-divider>
                         <a-form-item label="预设背景" name="background" rules={[{ required: false, message: '请输选择画布背景！' }]}>
-                            <a-select v-model:value={canvas.background} prefix={<ColumnHeightOutlined />} options={canvasBackground}></a-select>
+                            <a-select v-model:value={canvas.background} options={canvasBackground}></a-select>
                         </a-form-item>
                         <a-form-item label="画布背景色" name="background_color" rules={[{ required: false, message: '请选择画布背景颜色！' }]}>
                             <Color pureColor={canvas.background} change={changeBackground} suffix="rgba" />
                         </a-form-item>
-                        <a-form-item label="画布背景图" name="background_image" rules={[{ required: false, message: '请上传画布背景图片！' }]}>
+                        <a-form-item-rest label="画布背景图" name="background_image" rules={[{ required: false, message: '请上传画布背景图片！' }]}>
                             <a-upload v-model:file-list={state.background} max-count={1} name="background_image"
                                 list-type="picture-card" class="avatar-uploader" show-upload-list="false"
                                 action="http://localhost"
@@ -323,8 +323,8 @@ export default defineComponent({
                                         <div class="ant-upload-text">选择背景图片</div>
                                     </div>}
                             </a-upload>
-                            <p class="ant-upload-text">画布背景大小(1008px * 567px)！</p>
-                        </a-form-item>
+                            <a-select style="margin:5px 0 20px;width:100%;" v-model:value={canvas.backsetup} options={canvasBackSetup}></a-select>
+                        </a-form-item-rest>
                         <a-form-item label="主题颜色" name="theme" rules={[{ required: false, message: '请选择主题颜色！' }]}>
                             <Color pureColor={state.theme} change={changeTheme} suffix="rgba" />
                             {/* <a-input type="color" v-model:value={state.theme} onInput={input} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear /> */}

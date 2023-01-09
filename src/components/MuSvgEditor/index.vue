@@ -23,7 +23,8 @@ const state: IStateType = reactive({
         showLine: true,
         showDrag: false,
         showScale: true,
-        background: [canvasBackground[0].value]
+        backsetup: 'auto',
+        background: [canvasBackground[0].value],
     },
 
     // 组件数据

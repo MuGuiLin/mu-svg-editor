@@ -1,5 +1,5 @@
 <script setup lang="ts" >
-import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
+import { ref, reactive, watch, computed, onMounted, onUnmounted } from 'vue';
 import stateType from '../types/propsType';
 import scale from "../hook/scale";
 import { getMousePos, getQuadrant } from "../hook";
@@ -13,12 +13,11 @@ import style from './style.module.less';
 const props: any = defineProps({
     prop: Object,
 });
-
 const { prop, prop: { canvas, svgData } } = props;
+
 const draw: any = <HTMLDivElement>ref(null);
 const drop: any = <HTMLDivElement>ref(null);
 
-const rstate = ref();
 const state = reactive({
     x: 0,
     y: 0,
@@ -28,7 +27,32 @@ const state = reactive({
     alt: false,
     ctrl: false,
     shift: false,
+    backsetup: computed(() => {
+        switch (canvas.backsetup) {
+            case 'center':
+                return {
+                    'background-repeat': 'no-repeat',
+                    'background-position': 'center',
+                }
+            case 'cover':
+                return {
+                    'background-size': '100% 100%'
+                }
+            case 'contain':
+                return {
+                    'background-size': 'contain',
+                    'background-repeat': 'no-repeat',
+                    'background-position': 'center',
+                }
+            default:
+                return {
+                    'background-size': 'auto'
+                }
+                break;
+        }
+    })
 });
+const rstate = ref();
 
 // 画布宽高改变，更新标尺刻度
 watch(() => [canvas.width, canvas.height], (n1, n2) => {
@@ -354,8 +378,9 @@ onUnmounted(() => {
             <div :class="[style.canvas, canvas.showDrag && style.dragstart]" ref="drop" @drop="onDrop($event)"
                 @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousedown="onCanvasMousedown"
                 @mousemove="mouseMoveEvent($event)" @mouseup="onCanvasMouseup($event)">
-                <svg :class="style.svg" :style="{ background: canvas.background }" id="svg" :xmlns="NS.SVG"
-                    :width="canvas.width" :height="canvas.height" :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
+                <svg :class="style.svg" :style="{ background: canvas.background, ...state.backsetup }" id="svg"
+                    :xmlns="NS.SVG" :width="canvas.width" :height="canvas.height"
+                    :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
                         @mousedown="onSvgMousedown($event, o, i)"
                         :transform="`translate(${o.attr.transform.x},${o.attr.transform.y}) rotate(${o.attr.transform.rotate}) scale(${o.attr.transform.scale})`">
