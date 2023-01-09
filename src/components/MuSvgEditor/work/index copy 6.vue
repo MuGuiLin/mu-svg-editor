@@ -10,7 +10,7 @@ import style from './style.module.less';
 const props: any = defineProps({
     prop: Object,
 });
-const { prop, prop: { canvas, svgData } } = props;
+const { prop, prop: { canvas, svgData, nowTool } } = props;
 
 const draw: any = <HTMLDivElement><unknown>ref(null);
 const drop: any = <HTMLDivElement><unknown>ref(null);
@@ -112,15 +112,11 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
                 icon,
                 d: path,
                 text: name,
-                /*
                 style: {
                     ...attr.style,
-                    // x: -attr.style.width / 2 || 0,
-                    // y: -attr.style.height / 2 || 0,
-                    x: 0,
-                    y: 0,
+                    x: -attr.style.width / 2 || 0,
+                    y: -attr.style.height / 2 || 0,
                 },
-                */
                 transform: {
                     x: x || ox,
                     y: y || oy,
@@ -169,9 +165,15 @@ const setNowCoordinate = (x: number = 0, y: number = 0) => {
     prop.nowAttr.attr.transform.x = x;
     prop.nowAttr.attr.transform.y = y;
 
-    // const { width, height, x2, y2, rx, ry } = prop.nowAttr.attr.style;
-    // prop.nowAttr.attr.style.x = -(width || x2 || rx) / 2 || 0;
-    // prop.nowAttr.attr.style.y = -(height || y2 || ry) / 2 || 0;
+    prop.nowAttr.attr.style.x = -(
+        prop.nowAttr.attr.style.width ||
+        prop.nowAttr.attr.style.x2 ||
+        prop.nowAttr.attr.style.rx) / 2 || 0;
+
+    prop.nowAttr.attr.style.y = -(
+        prop.nowAttr.attr.style.height ||
+        prop.nowAttr.attr.style.y2 ||
+        prop.nowAttr.attr.style.ry) / 2 || 0;
 };
 
 /**

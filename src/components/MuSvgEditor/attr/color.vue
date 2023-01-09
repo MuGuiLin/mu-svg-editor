@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { ColorPicker } from 'vue3-colorpicker';
 import "vue3-colorpicker/style.css";
+
 const props: any = defineProps({
     pureColor: {
         type: String,

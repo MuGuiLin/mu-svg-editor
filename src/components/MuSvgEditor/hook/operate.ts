@@ -71,3 +71,11 @@ export function hookExportImage(callBack?: Function) {
         callBack?.();
     };
 };
+
+export default {
+    hookDelete,
+    hookOpenSvg,
+    hookImportImage,
+    hookSeveSvg,
+    hookExportImage
+};

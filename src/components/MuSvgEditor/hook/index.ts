@@ -1,3 +1,6 @@
+export { default as operate } from './operate';
+export { default as scale } from './scale';
+
 /**
  * 检测对象是否为空
  * @param obj 

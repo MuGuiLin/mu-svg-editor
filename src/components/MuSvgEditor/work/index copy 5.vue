@@ -1,8 +1,11 @@
 <script setup lang="ts" >
 import { ref, reactive, watch, computed, onMounted, onUnmounted } from 'vue';
+import stateType from '../types/propsType';
+import scale from "../hook/scale";
+import { getMousePos, getQuadrant } from "../hook";
+import { hookOpenSvg, hookSeveSvg } from "../hook/operate";
 import { NS } from "../config";
 
-import { getMousePos, getQuadrant, operate, scale } from "../hook";
 import Components from './components.vue';
 
 import style from './style.module.less';
@@ -12,27 +15,18 @@ const props: any = defineProps({
 });
 const { prop, prop: { canvas, svgData } } = props;
 
-const draw: any = <HTMLDivElement><unknown>ref(null);
-const drop: any = <HTMLDivElement><unknown>ref(null);
+const draw: any = <HTMLDivElement>ref(null);
+const drop: any = <HTMLDivElement>ref(null);
 
 const state = reactive({
-    // 基于画布初始坐标x
     x: 0,
-    // 基于画布初始坐标y
     y: 0,
-    // 基于组件移动后的offsetX坐标
     x2: 0,
-    // 基于组件移动后的offsetY坐标
     y2: 0,
-    // 绘制状态
-    status: 0,
-    // 是否按下Alt键
+    event: 0,
     alt: false,
-    // 是否按下Ctrl键
     ctrl: false,
-    // 是否按下Shift键
     shift: false,
-    // 画布背景显示设置
     backsetup: computed(() => {
         switch (canvas.backsetup) {
             case 'center':
@@ -58,11 +52,11 @@ const state = reactive({
         }
     })
 });
-
-/**
- * 重置画布标尺刻度
- */
 const rstate = ref();
+
+const canvasEvent = ref();
+
+// 画布宽高改变，更新标尺刻度
 watch(() => [canvas.width, canvas.height], (n1, n2) => {
     setTimeout(() => {
         rstate.value?.reset?.();
@@ -70,131 +64,96 @@ watch(() => [canvas.width, canvas.height], (n1, n2) => {
 }, { immediate: true });
 
 
-/**
- * 显示基于世界坐标系中鼠标坐标的X和Y
- * @param{Object} e MouseEvent对象
- */
-const onDrawMousemove = (e: MouseEvent): void => {
-    if (!canvas.showLine) return;
-    [canvas.lineX, canvas.lineY] = getMousePos(draw.value, e);
-};
 
 /**
  * 鼠标左键在画布/组件上抬起
  */
-const onMouseup = (): Boolean => {
-    state.status = 0;
-    // 清除左侧工具状态
+const onMouseup = () => {
+    state.event = 0;
     if (prop.nowTool.event) {
         prop.nowTool = {};
     }
     return false;
 };
 
+// 
 /**
- * 在画布/组件上创建图形、生成SvgData数据
- * @param{object} e Event对象(MouseEvent | DragEvent)
- * @param{number} x offsetX
- * @param{number} y offsetY
- * @param{number} c 是否清除绘制状态
+ * 左侧组件拖动进入画布区域
+ * @param e 
  */
-const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, c: number = 0): void => {
-    const { type, name, icon, attr, path, event, } = prop.nowTool,
-        id = `${Date.now()}`,
-        { offsetX, offsetY } = e,
-        ox = offsetX - (attr?.style.width / 2),
-        oy = offsetY - (attr?.style.height / 2),
-        nowData: any = {
-            id,
-            type,
-            attr: {
-                ...JSON.parse(JSON.stringify(attr)),
-                icon,
-                d: path,
-                text: name,
-                /*
-                style: {
-                    ...attr.style,
-                    // x: -attr.style.width / 2 || 0,
-                    // y: -attr.style.height / 2 || 0,
-                    x: 0,
-                    y: 0,
-                },
-                */
-                transform: {
-                    x: x || ox,
-                    y: y || oy,
-                    scale: 1,
-                    rotate: 0,
-                }
-            },
-            event,
+const onDragenter = (e: DragEvent) => {
+    e.preventDefault();
+};
 
-        };
-    // SvgData数据
+// 左侧组件在画布区域拖动中
+const onDragover = (e: DragEvent) => {
+    e.preventDefault();
+};
+
+const setSegData = (e: DragEvent, x: number = 0, y: number = 0, c = 0) => {
+    // 在画布中创建组件
+    const { type, name, icon, attr, path, event, } = prop.nowTool, id = `${Date.now()}`, { offsetX, offsetY } = e, ox = offsetX - (attr?.style.width / 2), oy = offsetY - (attr?.style.height / 2), d = path ?? {}, nowData: any = {
+        id,
+        type,
+        attr: {
+            ...JSON.parse(JSON.stringify(attr)),
+            icon,
+            d: path,
+            text: name,
+            style: {
+                ...attr.style,
+                x: -attr.style.width / 2 || 0,
+                y: -attr.style.height / 2 || 0,
+            },
+            transform: {
+                x: x || ox,
+                y: y || oy,
+                scale: 1,
+                rotate: 0,
+            }
+        },
+        event,
+
+    };
     svgData.push(nowData);
     try {
-        // 当前编辑状态中的组件(图形)
         prop.nowAttr = svgData.at(-1);
     } catch (error) {
         prop.nowAttr = svgData[svgData.length - 1];
     } finally {
-        // 当前编辑状态中的组件(图形)索引
         prop.nowAttr.index = svgData.length;
-        // 清除编辑状态
-        c && onMouseup();
+    }
+    if(c) {
+        onMouseup();
     }
     console.info('svgData', svgData)
 };
 
-/**
- * 删除Svg组件
- * @param{number} i 组件索引
- */
-const removeSvgData = (i?: number): void => {
-    svgData.splice(prop.nowAttr.index, 1);
-    prop.nowAttr = {
-        index: null,
-        selected: null,
-        attr: {}
+
+
+// 鼠标左键在画布上按下
+const onCanvasMousedown = (e: MouseEvent | any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    canvasEvent.value = e;
+    [state.x, state.y, state.x2, state.y2] = [
+        ...getMousePos(drop.value, e),
+        e.offsetX, e.offsetY
+    ];
+    // 取消组件选中状态
+    if (prop.nowAttr.selected) {
+        prop.nowAttr.selected = null;
+    }
+
+    // 需要拖拽绘制的组件
+    if (1 === prop.nowTool.event) {
+        state.event = 1;
+        setSegData(e, e.offsetX, e.offsetY);
     };
 };
 
-/**
- * 设置当前组件坐标
- * @param{number} x 组件x坐标 
- * @param{number} y 组件x坐标 
- */
-const setNowCoordinate = (x: number = 0, y: number = 0) => {
-    prop.nowAttr.attr.transform.x = x;
-    prop.nowAttr.attr.transform.y = y;
-
-    // const { width, height, x2, y2, rx, ry } = prop.nowAttr.attr.style;
-    // prop.nowAttr.attr.style.x = -(width || x2 || rx) / 2 || 0;
-    // prop.nowAttr.attr.style.y = -(height || y2 || ry) / 2 || 0;
-};
-
-/**
- * 左侧组件拖拽进入画布区域
- * @param{object} e DragEvent对象
- */
-const onDragenter = (e: DragEvent): void => {
-    e.preventDefault();
-};
-
-/**
- * 左侧组件在画布区域中拖拽
- * @param{object} e DragEvent对象
- */
-const onDragover = (e: DragEvent): void => {
-    e.preventDefault();
-};
-
-/**
- * 左侧组件在画布上拖拽结束
- * @param{object} e DragEvent对象
- */
-const onDrop = (e: DragEvent): void | Boolean => {
+// 左侧组件在画布上拖动结束
+const onDrop = (e: DragEvent) => {
     // 清空左侧工具选中
     canvas.showDrag = false;
 
@@ -203,94 +162,67 @@ const onDrop = (e: DragEvent): void | Boolean => {
         return false;
     };
 
-    // 渲染拖拽组件（无需拖拽绘制的组件）
-    createSvgData(e, 0, 0, 1);
+  
+    // 直接渲染的组件
+    setSegData(e, 0, 0, 1);
 };
 
-/**
- * 鼠标左键在Canvas画布上按下时
- * @param{object} e MouseEvent对象
- */
-const onCanvasMousedown = (e: MouseEvent): void => {
-    e.preventDefault();
-    e.stopPropagation();
-    // 记录初始坐标信息
-    [state.x, state.y, state.x2, state.y2] = [
-        ...getMousePos(drop.value, e),
-        e.offsetX, e.offsetY
-    ];
-
-    // 取消组件选中状态
-    if (prop.nowAttr.selected) {
-        prop.nowAttr.selected = null;
-    }
-
-    // 渲染组件（需要拖拽绘制的组件）
-    if (1 === prop.nowTool.event) {
-        state.status = 1;
-        createSvgData(e, e.offsetX, e.offsetY);
-    };
-};
-
-/**
- * 鼠标左键在Svg组件上按下时
- * @param{object} e MouseEvent对象
- * @param{object} o 当前组件项
- * @param{number} i 当前组件索引
- */
-const onSvgMousedown = (e: MouseEvent, o: any, i: number): void | Boolean => {
+// 鼠标左键在组件上按下
+const onSvgMousedown = (e: MouseEvent, o: any, i: number) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // 如果是在组件上拖拽绘制组件时
+    // 在组件上拖拽绘制
     if (prop.nowTool.event) {
-        // 记录初始坐标信息
         [state.x, state.y, state.x2, state.y2] = [
             ...getMousePos(drop.value, e),
             e.offsetX, e.offsetY
         ];
-
         // 取消组件选中状态
         if (prop.nowAttr.selected) {
             prop.nowAttr.selected = null;
         }
-
-        // 渲染组件（需要拖拽绘制的组件）
-        state.status = 1;
-        createSvgData(e, e.offsetX, e.offsetY);
-        return false;
+        state.event = 1;
+        setSegData(e, e.offsetX, e.offsetY);
+        return;
     };
 
-    // 否则就记录初始坐标信息
-    [state.x, state.y, state.x2, state.y2, state.status] = [
+    [state.x, state.y, state.x2, state.y2, state.event] = [
         o.attr.transform.x, o.attr.transform.y,
         e.clientX, e.clientY, 1
     ];
-
-    // 并激活当前被点击的组件
     prop.nowAttr = o;
     prop.nowAttr.index = i;
-    // 将当前组件设为选中状态
     prop.nowAttr.selected = o.id;
+    console.info(o, i, svgData);
+
 };
 
-/**
- * 鼠标左键在按下之后，在画布上移动时
- * @param{object} e MouseEvent对象
- */
-const onCanvasMousemove = (e: MouseEvent) => {
-    if (!state.status || !prop.nowAttr?.id) return false;
-    // 获取当前鼠标移动的坐标信息，获取之前记录的初始坐标信息
-    const { clientX, clientY } = e, move = { ...state };
+// 鼠标坐标
+const onMousemove = (e: Event | any): void => {
+    if (!canvas.showLine) return;
+    [canvas.lineX, canvas.lineY] = getMousePos(draw.value, e);
+};
 
-    //计算当前组件在画布上移动的坐标信息
+const nowAttrMove = (x: number = 0, y: number = 0) => {
+    prop.nowAttr.attr.transform.x = x;
+    prop.nowAttr.attr.transform.y = y;
+
+    prop.nowAttr.attr.style.x = -(prop.nowAttr.attr.style.width || prop.nowAttr.attr.style.x2 || prop.nowAttr.attr.style.rx) / 2 || 0;
+    prop.nowAttr.attr.style.y = -(prop.nowAttr.attr.style.height || prop.nowAttr.attr.style.y2 || prop.nowAttr.attr.style.ry) / 2 || 0;
+};
+
+// 鼠标左键在画布中的组件上移动
+const mouseMoveEvent = (e: MouseEvent) => {
+    if (!state.event || !prop.nowAttr?.id) return false;
+    const { clientX, clientY } = e, move = { ...state };
     move.x += clientX - move.x2;
     move.y += clientY - move.y2;
 
-    // draw（需要拖拽绘制的组件）
+    // draw
     if (1 === prop.nowAttr.event) {
         if (prop.nowAttr.selected) {
-            setNowCoordinate(move.x, move.y);
+            nowAttrMove(move.x, move.y);
             return false;
         }
         let [mx = 0, my = 0] = getMousePos(drop.value, e), [x = 0, y = 0] = [mx - state.x, my - state.y];
@@ -311,23 +243,23 @@ const onCanvasMousemove = (e: MouseEvent) => {
             default:
                 break;
         };
-        // drag（无需拖拽绘制的组件）
+        // drag
     } else if (2 === prop.nowAttr.event) {
         if (!prop.nowAttr.selected) return;
-        setNowCoordinate(move.x, move.y);
+        nowAttrMove(move.x, move.y);
     };
 
     return false;
 };
 
-/**
- * 当按下键盘上的按键时，收集按键信息
- * @param{object} e KeyboardEvent对象
- */
+
+
+// 键盘按下事件
 const onKeydown = (e: KeyboardEvent) => {
     if (!prop.nowAttr.selected || !prop.nowAttr.id) {
         try {
-            switch (e.key) {
+            const { key, ctrlKey } = e;
+            switch (key) {
                 // 按下Alt键
                 case 'Alt':
                     e.preventDefault();
@@ -352,17 +284,18 @@ const onKeydown = (e: KeyboardEvent) => {
             return false;
         };
     };
-
-    /**
-     * 相关操作的快捷键设置
-     */
     try {
         const { key, ctrlKey } = e;
         switch (key) {
             // 删除组件
             case 'Delete':
                 e.preventDefault();
-                removeSvgData();
+                svgData.splice(prop.nowAttr.index, 1);
+                prop.nowAttr = {
+                    index: null,
+                    selected: null,
+                    attr: {}
+                };
                 break;
             // 组件向上移动
             case !ctrlKey && 'ArrowUp':
@@ -407,12 +340,12 @@ const onKeydown = (e: KeyboardEvent) => {
             // 打开SVG文件
             case ctrlKey && 'o':
                 e.preventDefault();
-                operate.hookOpenSvg();
+                hookOpenSvg();
                 break;
             // 保存为SVG文件
             case ctrlKey && 's':
                 e.preventDefault();
-                operate.hookSeveSvg();
+                hookSeveSvg();
                 break;
             // 剪切组件
             case ctrlKey && 'x':
@@ -438,10 +371,7 @@ const onKeydown = (e: KeyboardEvent) => {
     };
 };
 
-/**
- * 当从键盘的按键上抬起时，清除之前收集的按键信息
- * @param{object} e KeyboardEvent对象
- */
+// 键盘抬起事件
 const onKeyup = (e: KeyboardEvent) => {
     e.preventDefault();
     state.alt = false;
@@ -449,7 +379,6 @@ const onKeyup = (e: KeyboardEvent) => {
     state.shift = false;
     return false;
 };
-
 onMounted(() => {
     rstate.value = new scale({
         draw: `.${style.draw}`,
@@ -471,7 +400,7 @@ onUnmounted(() => {
 
 <template>
     <main :class="style.work">
-        <div :class="style.draw" ref="draw" @mousemove="onDrawMousemove">
+        <div :class="style.draw" ref="draw" @mousemove="onMousemove">
 
             <div :class="style.scale" v-show="canvas.showScale">
                 <div :class="style.scale_x">
@@ -482,9 +411,9 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <div ref="drop" :class="[style.canvas, canvas.showDrag && style.dragstart]" @dragenter="onDragenter"
-                @dragover="onDragover" @drop="onDrop" @mousedown="onCanvasMousedown" @mousemove="onCanvasMousemove"
-                @mouseup="onMouseup">
+            <div :class="[style.canvas, canvas.showDrag && style.dragstart]" ref="drop" @drop="onDrop($event)"
+                @dragenter="onDragenter($event)" @dragover="onDragover($event)" @mousedown="onCanvasMousedown"
+                @mousemove="mouseMoveEvent($event)" @mouseup="onMouseup">
                 <svg :class="style.svg" :style="{ background: canvas.background, ...state.backsetup }" id="svg"
                     :xmlns="NS.SVG" :width="canvas.width" :height="canvas.height"
                     :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
@@ -495,7 +424,6 @@ onUnmounted(() => {
                     </g>
                 </svg>
             </div>
-
             <div :class="style.subline" v-show="canvas.showLine">
                 <div :class="style.subline_x" :style="[{ top: canvas.lineY + 'px' }]"></div>
                 <div :class="style.subline_y" :style="[{ left: canvas.lineX + 'px' }]"></div>
