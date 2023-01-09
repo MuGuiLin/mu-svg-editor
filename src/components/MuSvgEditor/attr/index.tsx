@@ -3,10 +3,11 @@ import { defineComponent, ref, reactive, onMounted, watch, defineEmits, defineEx
 import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import Color from './color.vue'
-import { canvasBackground, canvasBackSetup } from '../config';
+import { canvasBackground, canvasBackSetup, strokeAnimations } from '../config';
 import { getBase64 } from '../hook'
 
 import styles from './style.module.less';
+import './style.less';
 
 // const props = defineProps({
 //     width: {
@@ -224,12 +225,11 @@ export default defineComponent({
                             <a-input-number v-model:value={transform.scale} prefix={<expand-alt-outlined />} min={0} step={0.01} addon-after="px" />
                         </a-form-item>
                         {'image' != type && <>{
-                            'line' != type && <>
-                                <a-form-item label="填充" name="fill">
-                                    {/* <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear /> */}
-                                    <Color v-model:pureColor={style.fill} change={changeFill} suffix="rgba" />
-                                </a-form-item>
-                            </>}
+                            'line' != type && <a-form-item label="填充" name="fill">
+                                {/* <a-input type="color" v-model:value={style.fill} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear /> */}
+                                <Color v-model:pureColor={style.fill} change={changeFill} suffix="rgba" />
+                            </a-form-item>
+                        }
                             <a-form-item label="轮廓" name="stroke">
                                 {/* <a-input type="color" v-model:value={style.stroke} prefix={<bg-colors-outlined />} suffix="rgb" allow-clear /> */}
                                 <Color v-model:pureColor={style.stroke} change={changeStroke} suffix="rgba" />
@@ -238,6 +238,20 @@ export default defineComponent({
                                 <a-input-number v-model:value={style.stroke_width} placeholder="图形边框(轮廓)粗细！" prefix={<border-outlined />} min={0} addon-after="px" />
                             </a-form-item>
                             {'text' === type ? <>
+                                <a-form-item label="字号" name="font_family">
+                                    <a-select v-model:value={style.font_family} prefix={<bg-colors-outlined />}>
+                                        <a-select-option value="黑体">黑体</a-select-option>
+                                        <a-select-option value="宋体">宋体</a-select-option>
+                                        <a-select-option value="楷体">楷体</a-select-option>
+                                        <a-select-option value="NSimSun">新宋体</a-select-option>
+                                        <a-select-option value="Segoe UI">微软雅黑</a-select-option>
+                                        <a-select-option value="News706 BT">News706 BT</a-select-option>
+                                        <a-select-option value="Times New Roman">Times New Roman</a-select-option>
+                                    </a-select>
+                                </a-form-item>
+                                <a-form-item label="字号" name="font_size">
+                                    <a-input-number v-model:value={style.font_size} placeholder="文字字号大小！" prefix={<font-size-outlined />} min={8} addon-after="px" />
+                                </a-form-item>
                                 <a-form-item label="对齐" name="text_anchor">
                                     <a-select v-model:value={style.text_anchor} prefix={<bg-colors-outlined />}>
                                         <a-select-option value="start">start</a-select-option>
@@ -261,29 +275,35 @@ export default defineComponent({
                                     </a-select>
                                 </a-form-item>
                             </> : <>
-                                <a-form-item label="线形" name="stroke_dasharray">
+                                {!style.stroke_animation && <a-form-item label="线形" name="stroke_dasharray">
                                     <a-input-number v-model:value={style.stroke_dasharray} placeholder="多个可用‘,’逗号隔开！" prefix={<dash-outlined />} min={0} addon-after="px" />
                                 </a-form-item>
-                                {style?.stroke_linecap && <>
-                                    <a-form-item label="端点" name="stroke_linecap">
-                                        <a-select v-model:value={style.stroke_linecap} >
-                                            <a-select-option value="butt">butt</a-select-option>
-                                            <a-select-option value="round">round</a-select-option>
-                                            <a-select-option value="square" >square</a-select-option>
-                                            <a-select-option value="inherit">inherit</a-select-option>
-                                        </a-select>
-                                    </a-form-item>
-                                </>}
-                                {'path' === type && <>
-                                    <a-form-item label="路径" name={'path'}>
-                                        <a-textarea v-model:value={attr.d} rows={4} placeholder="path" />
-                                    </a-form-item>
-                                </>}
-                                {'polyline' === type && <>
-                                    <a-form-item label="路径" name={'polyline'}>
-                                        <a-textarea v-model:value={attr.points} rows={4} placeholder="path" />
-                                    </a-form-item>
-                                </>}
+                                }
+
+                                {style?.stroke_linecap && <a-form-item label="端点" name="stroke_linecap">
+                                    <a-select v-model:value={style.stroke_linecap} >
+                                        <a-select-option value="butt">butt</a-select-option>
+                                        <a-select-option value="round">round</a-select-option>
+                                        <a-select-option value="square" >square</a-select-option>
+                                        <a-select-option value="inherit">inherit</a-select-option>
+                                    </a-select>
+                                </a-form-item>
+                                }
+                                <a-form-item label="动效" name="stroke_animation">
+                                    <a-select v-model:value={style.stroke_animation} >
+                                        {
+                                            strokeAnimations.options.length && strokeAnimations.options.map((o) => <a-select-option value={o.value}>{o.label}</a-select-option>)
+                                        }
+                                    </a-select>
+                                </a-form-item>
+                                {'path' === type && <a-form-item label="路径" name={'path'}>
+                                    <a-textarea v-model:value={attr.d} rows={6} placeholder="path" />
+                                </a-form-item>
+                                }
+                                {'polyline' === type && <a-form-item label="路径" name={'polyline'}>
+                                    <a-textarea v-model:value={attr.points} rows={6} placeholder="path" />
+                                </a-form-item>
+                                }
                             </>}
                         </>
                         }

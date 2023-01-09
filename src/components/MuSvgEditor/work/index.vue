@@ -1,6 +1,6 @@
 <script setup lang="ts" >
 import { ref, reactive, watch, computed, onMounted, onUnmounted } from 'vue';
-import { NS } from "../config";
+import { NS, strokeAnimations } from "../config";
 
 import { getMousePos, getQuadrant, operate, scale } from "../hook";
 import Components from './components.vue';
@@ -488,7 +488,10 @@ onUnmounted(() => {
                 <svg :class="style.svg" :style="{ background: canvas.background, ...state.backsetup }" id="svg"
                     :xmlns="NS.SVG" :width="canvas.width" :height="canvas.height"
                     :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
-                    <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : ''"
+                    <defs>
+                        <g class="style" v-html="strokeAnimations.style"></g>
+                    </defs>
+                    <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : 'node'"
                         @mousedown="onSvgMousedown($event, o, i)" @mouseup="onMouseup"
                         :transform="`translate(${o.attr.transform.x},${o.attr.transform.y}) rotate(${o.attr.transform.rotate}) scale(${o.attr.transform.scale})`">
                         <Components :info="o"></Components>

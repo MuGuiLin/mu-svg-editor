@@ -47,6 +47,27 @@ export const canvasBackSetup = <SelectProps['options']>[
     },
 ];
 
+export const strokeAnimations = {
+    style: `
+<style type="text/css">
+.stroke-forward-flow,.stroke-reverse-flow{stroke-dashoffset:1920;animation:forward-flow-key 10s linear infinite}@keyframes forward-flow-key{0%{stroke-dasharray:6,4}to{stroke-dasharray:8,4}}.stroke-reverse-flow{animation:reverse-flow-key 10s linear infinite}@keyframes reverse-flow-key{0%{stroke-dasharray:8,4}to{stroke-dasharray:6,4}}
+</style>`,
+    options: [
+        {
+            label: '无',
+            value: ''
+        },
+        {
+            label: '正向流动',
+            value: 'stroke-forward-flow'
+        },
+        {
+            label: '反向流动',
+            value: 'stroke-reverse-flow'
+        }
+    ],
+};
+
 const editor = {};
 
 export default editor;

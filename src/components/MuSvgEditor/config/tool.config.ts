@@ -12,6 +12,7 @@ export const attr: IAttrParops = {
         stroke_width: 2,
         stroke_dasharray: 0,
         stroke_opacity: 1,
+        stroke_animation: '',
     },
     transform: {
         x: 0,
@@ -138,6 +139,8 @@ export const draw: IToolProps = {
                     x: 0,
                     y: 0,
                     fill: '#166FFF',
+                    font_size: 12,
+                    font_family: 'Microsoft YaHei',
                     stroke_width: 0,
                     text_anchor: 'middle',
                     dominant_baseline: 'auto'
