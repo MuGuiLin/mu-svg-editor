@@ -110,7 +110,7 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
             attr: {
                 ...JSON.parse(JSON.stringify(attr)),
                 icon,
-                d: path,
+                d: 'pencil' === type ? `M${x} ${y}` : path,
                 text: name,
                 /*
                 style: {
@@ -143,6 +143,7 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
         prop.nowAttr.index = svgData.length;
         // 清除编辑状态
         c && onMouseup();
+        console.info(prop.nowAttr)
     }
     console.info('svgData', svgData)
 };
@@ -156,7 +157,10 @@ const removeSvgData = (i?: number): void => {
     prop.nowAttr = {
         index: null,
         selected: null,
-        attr: {}
+        attr: {
+            style: {},
+            transform: {},
+        }
     };
 };
 
@@ -300,6 +304,10 @@ const onCanvasMousemove = (e: MouseEvent) => {
                 [prop.nowAttr.attr.style.x2, prop.nowAttr.attr.style.y2] = state.shift ? getQuadrant(x, y) : [x, y];
                 break;
 
+            case 'pencil':
+                prop.nowAttr.attr.d = prop.nowAttr.attr.d + ` L${x} ${y}`;
+                console.log(prop.nowAttr.attr.d)
+                break;
             case 'rect':
                 [prop.nowAttr.attr.style.width, prop.nowAttr.attr.style.height] = state.shift ? [x, x] : [x, y];
                 break;
@@ -361,6 +369,7 @@ const onKeydown = (e: KeyboardEvent) => {
         switch (key) {
             // 删除组件
             case 'Delete':
+            case 'Backspace':
                 e.preventDefault();
                 removeSvgData();
                 break;
@@ -491,7 +500,8 @@ onUnmounted(() => {
                     <defs>
                         <g class="style" v-html="strokeAnimations.style"></g>
                     </defs>
-                    <g v-for="(o, i) in svgData" :key="i" :class="o.id === prop.nowAttr.selected ? style.selected : 'node'"
+                    <g v-for="(o, i) in svgData" :key="i"
+                        :class="o.id === prop.nowAttr.selected ? style.selected : 'node'"
                         @mousedown="onSvgMousedown($event, o, i)" @mouseup="onMouseup"
                         :transform="`translate(${o.attr.transform.x},${o.attr.transform.y}) rotate(${o.attr.transform.rotate}) scale(${o.attr.transform.scale})`">
                         <Components :info="o"></Components>

@@ -34,9 +34,9 @@ const { info, info: { attr, attr: { style }, type } } = props;
             :rx="style.rx" :ry="style.ry" :fill="style.fill" :stroke="style.stroke" :stroke-width="style.stroke_width"
             :stroke-dasharray="style.stroke_dasharray"></ellipse>
 
-        <path v-else-if="'path' === type" :class="[style.stroke_animation]" :d="attr.d" :fill="style.fill"
-            :stroke="style.stroke" :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray"
-            :stroke-linecap="style.stroke_linecap">
+        <path v-else-if="'path' === type || 'pencil' === type" :class="[style.stroke_animation]" :d="attr.d"
+            :fill="style.fill" :stroke="style.stroke" :stroke-width="style.stroke_width"
+            :stroke-dasharray="style.stroke_dasharray" :stroke-linecap="style.stroke_linecap">
         </path>
 
         <polyline v-else-if="'polyline' === type" :class="[style.stroke_animation]" :points="attr.points"
