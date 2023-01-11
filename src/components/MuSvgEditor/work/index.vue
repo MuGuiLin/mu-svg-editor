@@ -307,7 +307,6 @@ const onCanvasMousemove = (e: MouseEvent) => {
 
             case 'pencil':
                 prop.nowAttr.attr.d = prop.nowAttr.attr.d + ` L${x} ${y}`;
-                console.log(prop.nowAttr.attr.d)
                 break;
             case 'rect':
                 [prop.nowAttr.attr.style.width, prop.nowAttr.attr.style.height] = state.shift ? [x, x] : [x, y];
