@@ -1,5 +1,6 @@
 <script setup lang="ts" >
 import { ref, reactive, watch, computed, onMounted, onUnmounted } from 'vue';
+import { useEventListener } from '@vueuse/core'
 import { NS, strokeAnimations } from "../config";
 
 import { getMousePos, getQuadrant, operate, scale } from "../hook";
@@ -369,7 +370,7 @@ const onKeydown = (e: KeyboardEvent) => {
         switch (key) {
             // 删除组件
             case 'Delete':
-            case 'Backspace':
+                // case 'Backspace':
                 e.preventDefault();
                 removeSvgData();
                 break;
@@ -466,14 +467,14 @@ onMounted(() => {
         scale_x: `.${style.scale_x}`,
         scale_y: `.${style.scale_y}`
     });
-    document.addEventListener('keydown', onKeydown, false);
-    document.addEventListener('keyup', onKeyup, false);
+    // document.addEventListener('keydown', onKeydown, false);
+    useEventListener(document, 'keydown', onKeydown);
+    useEventListener(document, 'keyup', onKeyup, false);
 });
 
 onUnmounted(() => {
     window.onresize = null;
-    document.removeEventListener('keydown', onKeydown);
-    document.removeEventListener('keyup', onKeyup);
+    // document.removeEventListener('keydown', onKeydown);
 });
 
 </script>

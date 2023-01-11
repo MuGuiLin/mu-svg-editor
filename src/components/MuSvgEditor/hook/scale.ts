@@ -159,7 +159,7 @@ export default class scale {
         // this.scaleXW = oScaleX.width = oCanvas.offsetWidth > oDraw.offsetWidth ? oCanvas.offsetWidth : oDraw.offsetWidth;
         // this.scaleYH = oScaleY.height = oCanvas.offsetHeight > oDraw.offsetHeight ? oCanvas.offsetHeight : oDraw.offsetHeight;
 
-        if (oCanvas.offsetWidth > oDraw.offsetWidth) {
+        if (oCanvas.offsetWidth / 2 > oDraw.offsetWidth) {
             this.scaleXW = oCanvas.offsetWidth;
             this.scaleXZ = oScaleY.width;
             this.oCanvas.style.left = `${this.scaleXZ}px`;

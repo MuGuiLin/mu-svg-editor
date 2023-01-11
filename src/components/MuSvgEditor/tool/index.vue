@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch } from 'vue';
+import { useEyeDropper } from '@vueuse/core';
 import { message } from 'ant-design-vue';
 import Icon from './icon.vue';
 import { isEmptyObj } from '../hook'
@@ -13,6 +14,8 @@ const state = reactive({
     clickDraw: 0,
     clickFill: '#F900FF', // #0092FF
 });
+
+const { open, sRGBHex } = useEyeDropper();
 
 watch(() => state.activeKey, val => {
     console.log(val);
@@ -29,6 +32,19 @@ const clickDraw = (e: Event, m: any, i: number) => {
     // prop.tool[0].child.map((o: any) => o.select = false);
     // prop.tool[0].child[i].select = true;
     state.clickDraw = i;
+    if ('straw' === m.type) {
+        if (!prop.nowAttr.selected) {
+            message.warning('请先选中要填充颜色的组件！').then((e) => {
+                state.clickDraw = 0;
+            });
+        } else {
+            open().then(e => {
+                prop.nowAttr.attr.style.fill = sRGBHex.value;
+                state.clickDraw = 0;
+            });
+        }
+        return false;
+    }
     prop.nowTool = i ? m : {};
 };
 

@@ -26,8 +26,8 @@ const { info, info: { attr, attr: { style }, type } } = props;
             :stroke-dasharray="style.stroke_dasharray" :stroke-linecap="style.stroke_linecap">
         </line>
 
-        <rect v-else-if="'rect' === type" :class="[style.stroke_animation]" :x="style.x" :y="style.y"
-            :width="style.width" :height="style.height" :fill="style.fill" :stroke="style.stroke"
+        <rect v-else-if="'rect' === type" :class="[style.stroke_animation]" :x="style.x" :y="style.y" :rx="style.rx"
+            :ry="style.rx" :width="style.width" :height="style.height" :fill="style.fill" :stroke="style.stroke"
             :stroke-width="style.stroke_width" :stroke-dasharray="style.stroke_dasharray"></rect>
 
         <ellipse v-else-if="'ellipse' === type" :class="[style.stroke_animation]" :cx="style.x" :cy="style.y"

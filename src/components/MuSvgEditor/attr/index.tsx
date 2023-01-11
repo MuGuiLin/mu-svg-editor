@@ -202,6 +202,10 @@ export default defineComponent({
                             </a-form-item>
                         </>}
 
+                        {'rect' === type && <a-form-item label="圆角" name="rx">
+                            <a-input-number v-model:value={style.rx} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                        </a-form-item>}
+
                         {'ellipse' === type ? <>
                             <a-form-item label="宽度" name="width">
                                 <a-input-number v-model:value={style.rx} prefix={<ColumnWidthOutlined />} min={1} addon-after="px" />
