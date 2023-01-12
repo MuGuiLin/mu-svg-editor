@@ -16,7 +16,7 @@ const { prop, prop: { canvas, svgData } } = props;
 const draw: any = <HTMLDivElement><unknown>ref(null);
 const drop: any = <HTMLDivElement><unknown>ref(null);
 
-const state = reactive({
+const state: any = {
     // 基于画布初始坐标x
     x: 0,
     // 基于画布初始坐标y
@@ -33,6 +33,15 @@ const state = reactive({
     ctrl: false,
     // 是否按下Shift键
     shift: false,
+    // 钢笔工个中间points变量
+    points: {
+        x: 0,
+        y: 0,
+        path: '',
+    }
+};
+
+const setup = reactive({
     // 画布背景显示设置
     backsetup: computed(() => {
         switch (canvas.backsetup) {
@@ -84,6 +93,7 @@ const clearNowTool = () => {
     state.status = false;
     // 清除左侧工具状态
     if (prop.nowTool.event) {
+        state.points = {};
         prop.nowTool = {};
     }
 };
@@ -120,7 +130,7 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
         ox = offsetX - (attr?.style.width / 2),
         oy = offsetY - (attr?.style.height / 2),
         d = 1 !== event ? { d: path } : {},
-        points = 'polyline' === type ? { points: ` ${0}, ${0}` } : {},
+        points = 'polyline' === type ? { points: '0,0 ' } : {},
         nowData: any = {
             id,
             type,
@@ -202,10 +212,15 @@ const setInitCoordinate = (e: MouseEvent) => {
     if (0 == e.button && 1 === prop.nowTool.event) {
 
         // 钢笔工具
+        state.points.path = '0,0 ';
         if (state.status && 'polyline' === prop.nowAttr.type && prop.nowAttr.attr.points) {
             const [mx = 0, my = 0] = getMousePos(drop.value, e),
-                [x = 0, y = 0] = [mx - prop.nowAttr.attr.transform.x, my - prop.nowAttr.attr.transform.y];
-            prop.nowAttr.attr.points = `${prop.nowAttr.attr.points} ${x - 5}, ${y - 5} `;
+                [tx = 0, ty = 0] = [mx - prop.nowAttr.attr.transform.x, my - prop.nowAttr.attr.transform.y];
+
+            prop.nowAttr.attr.points = `${prop.nowAttr.attr.points} ${tx - 5},${ty - 5} `;
+            state.points.x = tx - 5;
+            state.points.y = ty - 5;
+            state.points.path = prop.nowAttr.attr.points;
             return;
         }
 
@@ -322,7 +337,8 @@ const onCanvasMousemove = (e: MouseEvent) => {
             setNowCoordinate(move.x, move.y);
             return false;
         }
-        let [mx = 0, my = 0] = getMousePos(drop.value, e), [x = 0, y = 0] = [mx - state.x, my - state.y];
+        let [mx = 0, my = 0] = getMousePos(drop.value, e), [x = 0, y = 0] = [mx - state.x, my - state.y],
+            [tx = 0, ty = 0] = [mx - prop.nowAttr.attr.transform.x, my - prop.nowAttr.attr.transform.y];
 
         switch (prop.nowAttr.type) {
             case 'line':
@@ -330,11 +346,12 @@ const onCanvasMousemove = (e: MouseEvent) => {
                 break;
 
             case 'pencil':
-                prop.nowAttr.attr.points = `${prop.nowAttr.attr.points}${x}, ${y} `;
+                prop.nowAttr.attr.points = `${prop.nowAttr.attr.points}${x},${y} `;
                 break;
 
             case 'polyline':
-                // prop.nowAttr.attr.points = `${prop.nowAttr.attr.points} ` + state.shift ? `${getQuadrant(x, y)}` : `${[x, y]}`;
+                const [rx, ry] = getQuadrant((mx - state.points.x), (my - state.points.y));
+                prop.nowAttr.attr.points = state.shift ? `${state.points.path} ${rx - 5},${ry - 5} ` : `${state.points.path}${tx - 5},${ty - 5} `;
                 break;
             case 'rect':
                 [prop.nowAttr.attr.style.width, prop.nowAttr.attr.style.height] = state.shift ? [x, x] : [x, y];
@@ -522,7 +539,7 @@ onUnmounted(() => {
             <div ref="drop" :class="[style.canvas, canvas.showDrag && style.dragstart]" @dragenter="onDragenter"
                 @dragover="onDragover" @drop="onDrop" @mousedown="onCanvasMousedown" @mousemove="onCanvasMousemove"
                 @mouseup="onMouseup" @contextmenu.stop="onContextmenu">
-                <svg :class="style.svg" :style="{ background: canvas.background, ...state.backsetup }" id="svg"
+                <svg :class="style.svg" :style="{ background: canvas.background, ...setup.backsetup }" id="svg"
                     :xmlns="NS.SVG" :width="canvas.width" :height="canvas.height"
                     :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <defs>
