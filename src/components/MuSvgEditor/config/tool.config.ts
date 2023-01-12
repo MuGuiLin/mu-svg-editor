@@ -185,7 +185,7 @@ export const draw: IToolProps = {
 };
 
 export const shape = {
-    title: '预设形状',
+    title: '预设图形',
     child: [
         {
             type: 'path',
