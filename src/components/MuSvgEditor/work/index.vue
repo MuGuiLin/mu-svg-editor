@@ -26,7 +26,7 @@ const state = reactive({
     // 基于组件移动后的offsetY坐标
     y2: 0,
     // 绘制状态
-    status: 0,
+    status: false,
     // 是否按下Alt键
     alt: false,
     // 是否按下Ctrl键
@@ -80,15 +80,29 @@ const onDrawMousemove = (e: MouseEvent): void => {
     [canvas.lineX, canvas.lineY] = getMousePos(draw.value, e);
 };
 
-/**
- * 鼠标左键在画布/组件上抬起
- */
-const onMouseup = (): Boolean => {
-    state.status = 0;
+const clearNowTool = () => {
+    state.status = false;
     // 清除左侧工具状态
     if (prop.nowTool.event) {
         prop.nowTool = {};
     }
+};
+
+/**
+ * 鼠标左键在画布/组件上抬起
+ */
+const onMouseup = (): Boolean => {
+    if (state.status && 'polyline' === prop.nowTool.type) return false;
+    clearNowTool();
+    return false;
+};
+
+/**
+ * 鼠标点击右键时
+ */
+const onContextmenu = (e: MouseEvent): Boolean => {
+    e.preventDefault();
+    clearNowTool();
     return false;
 };
 
@@ -105,14 +119,17 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
         { offsetX, offsetY } = e,
         ox = offsetX - (attr?.style.width / 2),
         oy = offsetY - (attr?.style.height / 2),
+        d = 1 !== event ? { d: path } : {},
+        points = 'polyline' === type ? { points: ` ${0}, ${0}` } : {},
         nowData: any = {
             id,
             type,
             attr: {
                 ...JSON.parse(JSON.stringify(attr)),
                 icon,
-                d: 'pencil' === type ? `M${x} ${y}` : path,
                 text: name,
+                ...d,
+                ...points,
                 /*
                 style: {
                     ...attr.style,
@@ -130,7 +147,6 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
                 }
             },
             event,
-
         };
     // SvgData数据
     svgData.push(nowData);
@@ -166,7 +182,42 @@ const removeSvgData = (i?: number): void => {
 };
 
 /**
- * 设置当前组件坐标
+ * 设置组件初始坐标信息
+ * @param{number} x 组件x坐标 
+ * @param{number} y 组件x坐标 
+ */
+const setInitCoordinate = (e: MouseEvent) => {
+    // 记录初始坐标信息
+    [state.x, state.y, state.x2, state.y2] = [
+        ...getMousePos(drop.value, e),
+        e.offsetX, e.offsetY
+    ];
+
+    // 取消组件选中状态
+    if (prop.nowAttr.selected) {
+        prop.nowAttr.selected = null;
+    }
+
+    // 如果是鼠标左键在组件上拖拽绘制组件时
+    if (0 == e.button && 1 === prop.nowTool.event) {
+
+        // 钢笔工具
+        if (state.status && 'polyline' === prop.nowAttr.type && prop.nowAttr.attr.points) {
+            const [mx = 0, my = 0] = getMousePos(drop.value, e),
+                [x = 0, y = 0] = [mx - prop.nowAttr.attr.transform.x, my - prop.nowAttr.attr.transform.y];
+            prop.nowAttr.attr.points = `${prop.nowAttr.attr.points} ${x - 5}, ${y - 5} `;
+            return;
+        }
+
+        // 渲染组件（需要拖拽绘制的组件）
+        state.status = true;
+        createSvgData(e, e.offsetX, e.offsetY);
+    }
+
+};
+
+/**
+ * 设置当前组件移动坐标信息
  * @param{number} x 组件x坐标 
  * @param{number} y 组件x坐标 
  */
@@ -219,22 +270,8 @@ const onDrop = (e: DragEvent): void | Boolean => {
 const onCanvasMousedown = (e: MouseEvent): void => {
     e.preventDefault();
     e.stopPropagation();
-    // 记录初始坐标信息
-    [state.x, state.y, state.x2, state.y2] = [
-        ...getMousePos(drop.value, e),
-        e.offsetX, e.offsetY
-    ];
-
-    // 取消组件选中状态
-    if (prop.nowAttr.selected) {
-        prop.nowAttr.selected = null;
-    }
-
-    // 渲染组件（需要拖拽绘制的组件）
-    if (1 === prop.nowTool.event) {
-        state.status = 1;
-        createSvgData(e, e.offsetX, e.offsetY);
-    };
+    // 如果是在组件上拖拽绘制组件时
+    setInitCoordinate(e);
 };
 
 /**
@@ -248,28 +285,15 @@ const onSvgMousedown = (e: MouseEvent, o: any, i: number): void | Boolean => {
     e.stopPropagation();
 
     // 如果是在组件上拖拽绘制组件时
-    if (prop.nowTool.event) {
-        // 记录初始坐标信息
-        [state.x, state.y, state.x2, state.y2] = [
-            ...getMousePos(drop.value, e),
-            e.offsetX, e.offsetY
-        ];
-
-        // 取消组件选中状态
-        if (prop.nowAttr.selected) {
-            prop.nowAttr.selected = null;
-        }
-
-        // 渲染组件（需要拖拽绘制的组件）
-        state.status = 1;
-        createSvgData(e, e.offsetX, e.offsetY);
+    if (1 === prop.nowTool.event) {
+        setInitCoordinate(e);
         return false;
     };
 
     // 否则就记录初始坐标信息
     [state.x, state.y, state.x2, state.y2, state.status] = [
         o.attr.transform.x, o.attr.transform.y,
-        e.clientX, e.clientY, 1
+        e.clientX, e.clientY, true
     ];
 
     // 并激活当前被点击的组件
@@ -306,7 +330,11 @@ const onCanvasMousemove = (e: MouseEvent) => {
                 break;
 
             case 'pencil':
-                prop.nowAttr.attr.d = prop.nowAttr.attr.d + ` L${x} ${y}`;
+                prop.nowAttr.attr.points = `${prop.nowAttr.attr.points}${x}, ${y} `;
+                break;
+
+            case 'polyline':
+                // prop.nowAttr.attr.points = `${prop.nowAttr.attr.points} ` + state.shift ? `${getQuadrant(x, y)}` : `${[x, y]}`;
                 break;
             case 'rect':
                 [prop.nowAttr.attr.style.width, prop.nowAttr.attr.style.height] = state.shift ? [x, x] : [x, y];
@@ -461,10 +489,10 @@ const onKeyup = (e: KeyboardEvent) => {
 
 onMounted(() => {
     rstate.value = new scale({
-        draw: `.${style.draw}`,
-        canvas: `.${style.canvas}`,
-        scale_x: `.${style.scale_x}`,
-        scale_y: `.${style.scale_y}`
+        draw: `.${style.draw} `,
+        canvas: `.${style.canvas} `,
+        scale_x: `.${style.scale_x} `,
+        scale_y: `.${style.scale_y} `
     });
     // document.addEventListener('keydown', onKeydown, false);
     useEventListener(document, 'keydown', onKeydown);
@@ -493,7 +521,7 @@ onUnmounted(() => {
 
             <div ref="drop" :class="[style.canvas, canvas.showDrag && style.dragstart]" @dragenter="onDragenter"
                 @dragover="onDragover" @drop="onDrop" @mousedown="onCanvasMousedown" @mousemove="onCanvasMousemove"
-                @mouseup="onMouseup">
+                @mouseup="onMouseup" @contextmenu.stop="onContextmenu">
                 <svg :class="style.svg" :style="{ background: canvas.background, ...state.backsetup }" id="svg"
                     :xmlns="NS.SVG" :width="canvas.width" :height="canvas.height"
                     :viewBox="`0 0 ${canvas.width} ${canvas.height}`">

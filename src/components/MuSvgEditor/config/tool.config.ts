@@ -72,8 +72,12 @@ export const draw: IToolProps = {
             icon: 'stock-outlined',
             attr: {
                 ...attr,
+                style: {
+                    ...attr.style,
+                    fill: 'rgba(0%, 0%, 0%, 0)',
+                    stroke_linecap: 'butt',
+                },
                 points: '',
-                stroke_linecap: 'butt',
             },
             event: 1,
         },
@@ -100,12 +104,17 @@ export const draw: IToolProps = {
         {
             type: 'polyline',
             name: '钢笔',
+            tips: '点击鼠标键开始绘制，点击右键结束绘制！',
             icon: 'node-index-outlined',
             path: 'M21.78,3.33 c0,-0.69 1.87,0 1.87,0 V26.77 a2.83,2.51 0 1 0 1.91,0 V3.33 s1.89,-0.69 1.89,0 c0,13.19 11.38,22.62 11.38,22.62 l-7.08,15.88 h-14.28 l-7.11,-15.88 s11.38,-9.43 11.38,-22.62 zM11.97,47.12 v-3.87 h24.68 v3.87 z',
             attr: {
                 ...attr,
-                d: '',
-                stroke_linecap: 'butt',
+                style: {
+                    ...attr.style,
+                    fill: 'rgba(0%, 0%, 0%, 0)',
+                    stroke_linecap: 'butt',
+                },
+                points: '',
             },
             event: 1,
         },
