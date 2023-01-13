@@ -233,8 +233,8 @@ const setInitCoordinate = (e: MouseEvent) => {
 
 /**
  * 设置当前组件移动坐标信息
- * @param{number} x 组件x坐标 
- * @param{number} y 组件x坐标 
+ * @param{number} x 当前组件x坐标 
+ * @param{number} y 当前组件y坐标 
  */
 const setNowCoordinate = (x: number = 0, y: number = 0) => {
     prop.nowAttr.attr.transform.x = x;
