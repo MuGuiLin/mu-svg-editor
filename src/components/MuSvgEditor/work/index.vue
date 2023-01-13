@@ -41,8 +41,8 @@ const state: any = {
     }
 };
 
+// 画布背景显示设置
 const setup = reactive({
-    // 画布背景显示设置
     backsetup: computed(() => {
         switch (canvas.backsetup) {
             case 'center':
