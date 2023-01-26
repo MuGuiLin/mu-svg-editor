@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive } from "vue";
 import type IStateType from "./types/propsType";
+import { reactive } from "vue";
 import tool from "./config/tool.config";
 
 import Menu from "./menu";
@@ -33,10 +33,13 @@ const state: IStateType = reactive({
         showCode: false,
         showJson: false,
     },
+
     // 左侧组件集合
     tool,
+
     // 当前组件
     nowTool: {},
+
     // 当前组件属性
     nowAttr: {
         attr: {},
