@@ -545,7 +545,7 @@ onUnmounted(() => {
                     <defs>
                         <g class="style" v-html="strokeAnimations.style"></g>
                     </defs>
-                    <g v-for="(o, i) in svgData" :key="i"
+                    <g v-for="(o, i) in svgData" :key="i" v-show="o.attr.show"
                         :class="o.id === prop.nowAttr.selected ? style.selected : 'node'"
                         @mousedown="onSvgMousedown($event, o, i)" @mouseup="onMouseup"
                         :transform="`translate(${o.attr.transform.x},${o.attr.transform.y}) rotate(${o.attr.transform.rotate}) scale(${o.attr.transform.scale})`">

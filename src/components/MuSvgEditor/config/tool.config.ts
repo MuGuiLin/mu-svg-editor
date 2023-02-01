@@ -4,6 +4,7 @@ import { IToolProps } from '../types/toolType';
 export const attr: IAttrParops = {
     text: '',
     icon: '',
+    show: true,
     class: '',
     style: {
         fill: '#FFFFFF',
@@ -20,7 +21,6 @@ export const attr: IAttrParops = {
         scale: 1,
         rotate: 0,
     },
-    hidden: true,
 };
 
 const dragAttr = {

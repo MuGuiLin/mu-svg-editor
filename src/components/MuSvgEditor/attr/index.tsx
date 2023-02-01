@@ -186,6 +186,9 @@ export default defineComponent({
                         <a-form-item label="文本" name="text">
                             <a-input v-model:value={attr.text} prefix={<font-size-outlined />} placeholder="组件名称！" />
                         </a-form-item>
+                        <a-form-item label="可见性" name="show">
+                            <a-switch v-model:checked={attr.show} checked-children="在画布中显示" un-checked-children="在画布中隐藏" />
+                        </a-form-item>
                         <a-form-item label="X坐标" name="x">
                             <a-input-number v-model:value={transform.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
                         </a-form-item>
@@ -221,7 +224,6 @@ export default defineComponent({
                                 <a-input-number v-model:value={style.height} prefix={<ColumnHeightOutlined />} min={1} addon-after="px" />
                             </a-form-item>
                         </>}</>}
-
                         <a-form-item label="旋转" name="rotate">
                             <a-input-number v-model:value={transform.rotate} prefix={<reload-outlined />} addon-after="px" />
                         </a-form-item>
