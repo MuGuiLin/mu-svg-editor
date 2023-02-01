@@ -1,4 +1,4 @@
-import { useFileDialog } from '@vueuse/core';
+import { useFileDialog, useFileSystemAccess, useEyeDropper } from '@vueuse/core';
 
 /**
  * 删除组件（图层）
@@ -11,33 +11,63 @@ export function hookDelete(arr: Array<any>, index: number) {
 
 /**
  * 打开SVG文件
- * @param callBack 回调方法
  */
-export async function hookOpenSvg(callBack?: Function) {
-    const { files, open, reset } = useFileDialog();
-    await open({ accept: 'image/svg+xml' });
-    console.info(files);
-    callBack?.(files);
+export async function hookOpenSvg(callBack?: Function): Promise<any> {
+    // const { files, open, reset } = useFileDialog();
+    // await open({ accept: 'image/svg+xml' });
+    // console.info(files);
+    // callBack?.(files);
+
+    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, create, open, save, saveAs, updateData } = useFileSystemAccess({
+        // const res = useFileSystemAccess({
+        dataType: 'Text',
+        types: [{
+            description: 'svg',
+            accept: {
+                'image/svg+xml': ['.svg', '.svgz'],
+            },
+        }],
+        excludeAcceptAllOption: true,
+        // multiple: false,
+    });
+    return new Promise((resolve, reject) => {
+        open().then(() => {
+            resolve({ isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified });
+        }).catch((err: Error) => {
+            reject(err);
+        });
+    });
 };
 
 /**
- * 打开图片文件
- * @param callBack 回调方法
+ * 打开图像文件
  */
-export async function hookImportImage(callBack?: Function) {
-    const { files, open, reset } = useFileDialog({ accept: 'image/*' });
-    await open();
-    setTimeout(() => {
-        console.info(files);
-        callBack?.(files);
-    }, 3000);
+export async function hookImportImage(): Promise<any> {
+    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, create, open, save, saveAs, updateData } = useFileSystemAccess({
+        // multiple: true,
+        dataType: 'ArrayBuffer', // Text | ArrayBuffer | Blob
+        types: [{
+            description: 'image',
+            accept: {
+                'image/img': ['.jpeg', '.jpg', '.png', '.tif', '.tiff', '.webp'],
+            },
+        }],
+        excludeAcceptAllOption: true,
+    });
+    return new Promise((resolve, reject) => {
+        open().then(() => {
+            resolve({ isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified });
+        }).catch((err: Error) => {
+            reject(err);
+        });
+    });
 };
 
 /**
  * 保存SVG文件
  * @param callBack 回调方法
  */
-export function hookSeveSvg(callBack?: Function) {
+export function hookSeveSvg(callBack?: Function): void {
     const svg: HTMLOrSVGElement | any = document.querySelector('#svg');
     const href = 'data:text/html;charset=utf-8,' + encodeURIComponent(svg.outerHTML);
     const a = document.createElement('a');
@@ -52,7 +82,7 @@ export function hookSeveSvg(callBack?: Function) {
  * 保存PNG图片
  * @param callBack 回调方法
  */
-export function hookExportImage(callBack?: Function) {
+export function hookExportImage(callBack?: Function): void {
     const svg: HTMLOrSVGElement | any = document.querySelector('#svg');
     const canvas: HTMLCanvasElement = document.createElement('canvas');
     const a = document.createElement('a');
@@ -72,10 +102,25 @@ export function hookExportImage(callBack?: Function) {
     };
 };
 
+/**
+ * 颜色拾取器
+ */
+export async function hookEyeDropper(): Promise<any> {
+    const { open, sRGBHex } = useEyeDropper();
+    return new Promise((resolve, reject) => {
+        open().then(() => {
+            resolve(sRGBHex)
+        }).catch((err: Error) => {
+            reject(err);
+        });
+    });
+};
+
 export default {
     hookDelete,
     hookOpenSvg,
     hookImportImage,
     hookSeveSvg,
-    hookExportImage
+    hookExportImage,
+    hookEyeDropper
 };

@@ -10,20 +10,33 @@ export default defineComponent({
     setup(props, ctx) {
         let current = ref<string[]>(['file']);
 
+        const openSvg = () => {
+            hookOpenSvg().then((res: any) => {
+                console.info(res, res.data.value);
+            });
+        };
+        const importImg = () => {
+            hookImportImage().then((res: any) => {
+                console.info(res, res.data.value);
+            });
+        };
+
         return {
             current,
+            openSvg,
+            importImg,
         };
     },
     render() {
-        const { prop: { canvas, svgCtrl } }: any = this;
+        const { prop: { canvas, svgCtrl }, openSvg, importImg }: any = this;
         return (
             <header class={style.menu}>
 
                 <a-menu class={style.nav} v-model:selectedKeys={this.current} mode="horizontal">
                     <a-sub-menu key="file" title="文件（F）" icon={<folder-open-outlined />}>
                         <a-menu-item-group title="打开">
-                            <a-menu-item key="file:1" icon={<folder-open-outlined />} onClick={() => hookOpenSvg()}>打开SVG  （Ctrl + O）</a-menu-item>
-                            <a-menu-item key="file:2" icon={<export-outlined />} onClick={() => hookImportImage()}>导入图片 （Ctrl + I）</a-menu-item>
+                            <a-menu-item key="file:1" icon={<folder-open-outlined />} onClick={() => openSvg()}>打开SVG  （Ctrl + O）</a-menu-item>
+                            <a-menu-item key="file:2" icon={<export-outlined />} onClick={() => importImg()}>导入图片 （Ctrl + I）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="输出">
                             <a-menu-item key="file:3" icon={<save-outlined />} onClick={() => hookSeveSvg()}>保存SVG （Ctrl + S）</a-menu-item>

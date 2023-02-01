@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue';
-import { useEyeDropper } from '@vueuse/core';
 import { message } from 'ant-design-vue';
-import Icon from './icon.vue';
-import { isEmptyObj } from '../hook'
+import icon from './icon.vue'
+import { isEmptyObj, operate } from '../hook'
 
 const { prop }: any = defineProps({
     prop: Object
@@ -14,8 +13,6 @@ const state = reactive({
     clickDraw: 0,
     clickFill: '#F900FF', // #0092FF
 });
-
-const { open, sRGBHex } = useEyeDropper();
 
 watch(() => state.activeKey, val => {
     console.log(val);
@@ -38,8 +35,8 @@ const clickDraw = (e: Event, m: any, i: number) => {
                 state.clickDraw = 0;
             });
         } else {
-            open().then(e => {
-                prop.nowAttr.attr.style.fill = sRGBHex.value;
+            operate.hookEyeDropper().then((res: any) => {
+                prop.nowAttr.attr.style.fill = res.value;
                 state.clickDraw = 0;
             });
         }

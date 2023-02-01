@@ -19,7 +19,7 @@
     "@codemirror/lang-html": "^6.4.0",
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/theme-one-dark": "^6.1.0",
-    "@vueuse/core": "^9.9.0",
+    "@vueuse/core": "^9.12.0",
     "ant-design-vue": "^3.2.13",
     "codemirror": "^6.0.1",
     "vue": "^3.2.37",
