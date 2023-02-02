@@ -414,7 +414,7 @@ const onKeydown = (e: KeyboardEvent) => {
             // 保存为SVG文件
             case ctrlKey && 's':
                 e.preventDefault();
-                operate.hookSeveSvg();
+                operate.hookExportSvg();
                 break;
             // 剪切组件
             case ctrlKey && 'x':

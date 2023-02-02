@@ -6,7 +6,7 @@ import { Codemirror } from 'vue-codemirror';
 import { html } from '@codemirror/lang-html';
 import { oneDark } from '@codemirror/theme-one-dark';
 
-import { hookSeveSvg } from '../hook/operate';
+import { hookExportSvg } from '../hook/operate';
 
 const props: any = defineProps({
     prop: Object,
@@ -60,7 +60,7 @@ const ready = (payload: any) => {
 };
 
 const ok = () => {
-    hookSeveSvg();
+    hookExportSvg();
 };
 
 </script>

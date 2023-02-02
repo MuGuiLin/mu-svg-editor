@@ -19,7 +19,7 @@ export async function hookOpenSvg(callBack?: Function): Promise<any> {
     // console.info(files);
     // callBack?.(files);
 
-    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, create, open, save, saveAs, updateData } = useFileSystemAccess({
+    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, open } = useFileSystemAccess({
         // const res = useFileSystemAccess({
         dataType: 'Text',
         types: [{
@@ -44,7 +44,7 @@ export async function hookOpenSvg(callBack?: Function): Promise<any> {
  * 打开图像文件
  */
 export async function hookImportImage(dataType: string | any = 'Text', isBase64: boolean = false): Promise<any> {
-    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, create, open, save, saveAs, updateData }: any = useFileSystemAccess({
+    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, open }: any = useFileSystemAccess({
         // multiple: true,
         dataType, // Text | ArrayBuffer | Blob
         types: [{
@@ -75,10 +75,44 @@ export async function hookImportImage(dataType: string | any = 'Text', isBase64:
 };
 
 /**
- * 保存SVG文件
+ * 保存/另存为
+ */
+
+export async function hookSave(data: any, as: boolean = false): Promise<any> {
+    const res: any = useFileSystemAccess({
+        // multiple: true,
+        dataType: 'Text', // Text | ArrayBuffer | Blob
+        types: [{
+            description: 'text',
+            accept: {
+                'text/plain': ['.txt', '.json'],
+            },
+        }],
+        excludeAcceptAllOption: true,
+        data: 'asdf'
+    });
+    console.log(data)
+    console.dir(res);
+    res.data = JSON.stringify(data);
+    await res.updateData('JSON.stringify(data)');
+
+    if (as) {
+        res.saveAs(data);
+        return;
+    }
+    res.create().then(async () => {
+        await res.save(data);
+    }).catch((err: Error) => {
+        console.error(err);
+    });
+
+};
+
+/**
+ * 导出为SVG文件
  * @param callBack 回调方法
  */
-export function hookSeveSvg(callBack?: Function): void {
+export function hookExportSvg(callBack?: Function): void {
     const svg: HTMLOrSVGElement | any = document.querySelector('#svg');
     const href = 'data:text/html;charset=utf-8,' + encodeURIComponent(svg.outerHTML);
     const a = document.createElement('a');
@@ -90,7 +124,7 @@ export function hookSeveSvg(callBack?: Function): void {
 };
 
 /**
- * 保存PNG图片
+ * 导出为PNG文件
  * @param callBack 回调方法
  */
 export function hookExportImage(callBack?: Function): void {
@@ -130,8 +164,13 @@ export async function hookEyeDropper(): Promise<any> {
 export default {
     hookDelete,
     hookOpenSvg,
+
+    hookSave,
+
     hookImportImage,
-    hookSeveSvg,
+
+    hookExportSvg,
     hookExportImage,
+
     hookEyeDropper
 };
