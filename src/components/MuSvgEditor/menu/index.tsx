@@ -1,34 +1,24 @@
 import { defineComponent, ref } from 'vue';
-import style from './style.module.less'
-import { hookOpenSvg, hookSeveSvg, hookImportImage, hookExportImage, hookSvgCode, hookJsonData } from '../hook/operate'
+
+import { hookSeveSvg, hookExportImage, } from '../hook/operate';
+
+import style from './style.module.less';
 
 export default defineComponent({
     name: 'Menu',
     props: {
-        prop: {}
+        prop: {},
+        menu: {}
     },
     setup(props, ctx) {
         let current = ref<string[]>(['file']);
 
-        const openSvg = () => {
-            hookOpenSvg().then((res: any) => {
-                console.info(res, res.data.value);
-            });
-        };
-        const importImg = () => {
-            hookImportImage().then((res: any) => {
-                console.info(res, res.data.value);
-            });
-        };
-
         return {
             current,
-            openSvg,
-            importImg,
         };
     },
     render() {
-        const { prop: { canvas, svgCtrl }, openSvg, importImg }: any = this;
+        const { prop: { canvas, svgCtrl }, menu: { openSvg, addImage } }: any = this;
         return (
             <header class={style.menu}>
 
@@ -36,11 +26,15 @@ export default defineComponent({
                     <a-sub-menu key="file" title="文件（F）" icon={<folder-open-outlined />}>
                         <a-menu-item-group title="打开">
                             <a-menu-item key="file:1" icon={<folder-open-outlined />} onClick={() => openSvg()}>打开SVG  （Ctrl + O）</a-menu-item>
-                            <a-menu-item key="file:2" icon={<export-outlined />} onClick={() => importImg()}>导入图片 （Ctrl + I）</a-menu-item>
+                            <a-menu-item key="file:2" icon={<export-outlined />} onClick={() => addImage()}>添加图片 （Ctrl + I）</a-menu-item>
+                        </a-menu-item-group>
+                        <a-menu-item-group title="存储">
+                            <a-menu-item key="file:3" icon={<folder-open-outlined />} onClick={() => openSvg()}>保存 （Ctrl + S）</a-menu-item>
+                            <a-menu-item key="file:4" icon={<export-outlined />} onClick={() => addImage()}>另存为 （Ctrl + Shift + S）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="输出">
-                            <a-menu-item key="file:3" icon={<save-outlined />} onClick={() => hookSeveSvg()}>保存SVG （Ctrl + S）</a-menu-item>
-                            <a-menu-item key="file:4" icon={<import-outlined />} onClick={() => hookExportImage()}>导出PNG （Ctrl + E）</a-menu-item>
+                            <a-menu-item key="file:5" icon={<save-outlined />} onClick={() => hookSeveSvg()}>导出SVG （Ctrl + L）</a-menu-item>
+                            <a-menu-item key="file:6" icon={<import-outlined />} onClick={() => hookExportImage()}>导出PNG （Ctrl + E）</a-menu-item>
                         </a-menu-item-group>
                     </a-sub-menu>
                     <a-sub-menu key="edit" title="编辑（E）" icon={<form-outlined />} >

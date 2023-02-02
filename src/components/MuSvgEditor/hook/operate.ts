@@ -1,3 +1,4 @@
+import { getImageBase64 } from '.';
 import { useFileDialog, useFileSystemAccess, useEyeDropper } from '@vueuse/core';
 
 /**
@@ -42,10 +43,10 @@ export async function hookOpenSvg(callBack?: Function): Promise<any> {
 /**
  * 打开图像文件
  */
-export async function hookImportImage(): Promise<any> {
-    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, create, open, save, saveAs, updateData } = useFileSystemAccess({
+export async function hookImportImage(dataType: string | any = 'Text', isBase64: boolean = false): Promise<any> {
+    const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, create, open, save, saveAs, updateData }: any = useFileSystemAccess({
         // multiple: true,
-        dataType: 'ArrayBuffer', // Text | ArrayBuffer | Blob
+        dataType, // Text | ArrayBuffer | Blob
         types: [{
             description: 'image',
             accept: {
@@ -56,7 +57,17 @@ export async function hookImportImage(): Promise<any> {
     });
     return new Promise((resolve, reject) => {
         open().then(() => {
-            resolve({ isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified });
+            if (isBase64) {
+                getImageBase64(file?.value, (base64) => {
+                    const image = new Image();
+                    image.src = base64;
+                    image.onload = () => {
+                        resolve({ isSupported, data, file, base64, fileName, width: image.width || image.naturalWidth, height: image.height || image.naturalHeight, fileMIME, fileSize, fileLastModified });
+                    };
+                });
+            } else {
+                resolve({ isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified });
+            }
         }).catch((err: Error) => {
             reject(err);
         });

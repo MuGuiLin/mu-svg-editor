@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type IStateType from "./types/propsType";
 import { reactive } from "vue";
-import tool from "./config/tool.config";
+import { canvasBackground, tool, attr } from "./config";
 
 import Menu from "./menu";
 import Tool from "./tool";
@@ -10,8 +10,9 @@ import Attr from "./attr";
 import Info from "./info";
 
 import { Code, Json } from './code';
+import { operate } from './hook';
 
-import { canvasBackground } from "./config";
+
 
 const state: IStateType = reactive({
     // 画布属性
@@ -34,6 +35,8 @@ const state: IStateType = reactive({
         showJson: false,
     },
 
+    addImage: {},
+
     // 左侧组件集合
     tool,
 
@@ -47,11 +50,38 @@ const state: IStateType = reactive({
     },
 });
 
+const menu = {
+    openSvg() {
+        operate.hookOpenSvg().then((res: any) => {
+            console.info(res, res.data.value);
+        });
+    },
+
+    addImage() {
+        operate.hookImportImage('Blob', true).then(({ base64, fileName, width, height }: any) => {
+            state.addImage = {
+                type: 'image',
+                href: base64,
+                name: fileName,
+                attr: {
+                    ...attr,
+                    style: {
+                        ...attr.style,
+                        width: width >= state.canvas.width ? state.canvas.width : width,
+                        height: height >= state.canvas.height ? state.canvas.height : height,
+                    }
+                },
+                event: 2,
+            };
+        });
+    }
+};
+
 </script>
 
 <template>
     <section class="mu-svg-editor">
-        <Menu :prop="state" />
+        <Menu :prop="state" :menu="menu" />
         <Tool :prop="state" />
         <Work v-bind:prop="state" />
         <Attr :prop="state" />

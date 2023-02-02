@@ -38,7 +38,7 @@ export function getMousePos(target: Element, event: MouseEvent) {
  * @param img 
  * @param callback 
  */
-export function getBase64(img: Blob, callback: (base64Url: string) => void) {
+export function getImageBase64(img: Blob, callback: (base64Url: string) => void) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);

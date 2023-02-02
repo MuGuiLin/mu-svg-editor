@@ -3,7 +3,7 @@ import { ref, reactive, watch, computed, onMounted, onUnmounted } from 'vue';
 import { useEventListener } from '@vueuse/core'
 import { NS, strokeAnimations } from "../config";
 
-import { getMousePos, getQuadrant, operate, scale } from "../hook";
+import { isEmptyObj, getMousePos, getQuadrant, operate, scale } from "../hook";
 import Components from './components.vue';
 
 import style from './style.module.less';
@@ -79,7 +79,6 @@ watch(() => [canvas.width, canvas.height], (n1, n2) => {
     }, 100);
 }, { immediate: true });
 
-
 /**
  * 显示基于世界坐标系中鼠标坐标的X和Y
  * @param{Object} e MouseEvent对象
@@ -123,13 +122,14 @@ const onContextmenu = (e: MouseEvent): Boolean => {
  * @param{number} y offsetY
  * @param{number} c 是否清除绘制状态
  */
-const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, c: number = 0): void => {
+const createSvgData = (e: MouseEvent | DragEvent | any, x: number = 0, y: number = 0, c: number = 0): void => {
     const { type, name, icon, attr, path, event, } = prop.nowTool,
         id = `${Date.now()}`,
-        { offsetX, offsetY } = e,
+        { offsetX = canvas.width / 2, offsetY = canvas.height / 2 } = e,
         ox = offsetX - (attr?.style.width / 2),
         oy = offsetY - (attr?.style.height / 2),
         d = 1 !== event ? { d: path } : {},
+        href = prop.nowTool.href || "",
         points = 'polyline' === type ? { points: '0,0 ' } : {},
         nowData: any = {
             id,
@@ -138,6 +138,7 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
                 ...JSON.parse(JSON.stringify(attr)),
                 icon,
                 text: name,
+                href,
                 ...d,
                 ...points,
                 /*
@@ -174,6 +175,17 @@ const createSvgData = (e: MouseEvent | DragEvent, x: number = 0, y: number = 0, 
     }
     console.info('svgData', svgData)
 };
+
+/**
+ * 手动添加图片
+ */
+watch(() => prop.addImage, (val) => {
+    if (!isEmptyObj(val)) {
+        prop.nowTool = val;
+        createSvgData(Event, 0, 0, 1);
+    }
+    return;
+});
 
 /**
  * 删除Svg组件

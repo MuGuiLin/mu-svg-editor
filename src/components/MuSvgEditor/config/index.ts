@@ -1,4 +1,8 @@
 import type { SelectProps } from 'ant-design-vue';
+
+export { default as tool } from './tool.config';
+export { attr, dragAttr } from './tool.config';
+
 export enum NS {
     HTML = 'http://www.w3.org/1999/xhtml',
     MATH = 'http://www.w3.org/1998/Math/MathML',

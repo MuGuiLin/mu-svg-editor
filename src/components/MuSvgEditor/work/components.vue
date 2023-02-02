@@ -65,6 +65,6 @@ const { info, info: { attr, attr: { style }, type } } = props;
         </path>
 
         <component v-else :is="type" :class="[style.stroke_animation]" :x="style.x" :y="style.y" :width="style.width"
-            :height="style.height" :href="getLocalFile(`icon/tool/${attr.icon}.webp`)"></component>
+            :height="style.height" :href="attr.href || getLocalFile(`icon/tool/${attr.icon}.webp`)"></component>
     </template>
 </template>

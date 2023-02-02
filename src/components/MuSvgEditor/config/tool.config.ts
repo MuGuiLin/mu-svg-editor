@@ -23,7 +23,7 @@ export const attr: IAttrParops = {
     },
 };
 
-const dragAttr = {
+export const dragAttr = {
     ...attr,
     style: {
         ...attr.style,

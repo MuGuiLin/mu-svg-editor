@@ -4,7 +4,7 @@ import { ColumnWidthOutlined, ColumnHeightOutlined } from '@ant-design/icons-vue
 import { message } from 'ant-design-vue';
 import Color from './color.vue'
 import { canvasBackground, canvasBackSetup, strokeAnimations } from '../config';
-import { getBase64 } from '../hook'
+import { getImageBase64 } from '../hook'
 
 import styles from './style.module.less';
 import './style.less';
@@ -114,7 +114,7 @@ export default defineComponent({
                     return;
                 }
                 if (file.status === 'done') {
-                    getBase64(file.originFileObj, (base64Url: string = file.thumbUrl) => {
+                    getImageBase64(file.originFileObj, (base64Url: string = file.thumbUrl) => {
                         state.background_image = base64Url || file.thumbUrl;
                         props.prop.canvas.background = `url(${base64Url || file.thumbUrl})`;
                         state.update_loading = false;
