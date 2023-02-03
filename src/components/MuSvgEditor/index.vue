@@ -12,7 +12,6 @@ import Info from "./info";
 import { Code, Json } from './code';
 import { operate } from './hook';
 
-
 const state: IStateType = reactive({
     // 画布属性
     canvas: {
