@@ -81,29 +81,33 @@ export async function hookImportImage(dataType: string | any = 'Text', isBase64:
 export async function hookSave(data: any, as: boolean = false): Promise<any> {
     const res: any = useFileSystemAccess({
         // multiple: true,
+        // dataType: 'ArrayBuffer', // Text | ArrayBuffer | Blob
         dataType: 'Text', // Text | ArrayBuffer | Blob
         types: [{
+            // description: 'json',
             description: 'text',
             accept: {
-                'text/plain': ['.txt', '.json'],
+                // 'application/json': ['.json'],
+                'text/plain': ['.txt'],
             },
         }],
         excludeAcceptAllOption: true,
-        data: 'asdf'
     });
     console.log(data)
     console.dir(res);
     res.data = JSON.stringify(data);
+    res.file = JSON.stringify(data);
     await res.updateData('JSON.stringify(data)');
 
     if (as) {
         res.saveAs(data);
         return;
     }
-    res.create().then(async () => {
-        await res.save(data);
+    res.create(JSON.stringify(data)).then(async () => {
+        console.log(await res.save(data))
+
     }).catch((err: Error) => {
-        console.error(err);
+        console.error('操作已取消！', err);
     });
 
 };
