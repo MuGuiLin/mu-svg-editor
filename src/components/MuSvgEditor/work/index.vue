@@ -3,7 +3,7 @@ import { ref, reactive, watch, computed, onMounted, onUnmounted } from 'vue';
 import { useEventListener } from '@vueuse/core'
 import { NS, strokeAnimations } from "../config";
 
-import { isEmptyObj, getMousePos, getQuadrant, operate, scale } from "../hook";
+import { uuid, isEmptyObj, getMousePos, getQuadrant, operate, scale } from "../hook";
 import Components from './components.vue';
 
 import style from './style.module.less';
@@ -124,7 +124,7 @@ const onContextmenu = (e: MouseEvent): Boolean => {
  */
 const createSvgData = (e: MouseEvent | DragEvent | any, x: number = 0, y: number = 0, c: number = 0): void => {
     const { type, name, icon, attr, path, event, } = prop.nowTool,
-        id = `${Date.now()}`,
+        id = uuid() || `${Date.now()}`,
         { offsetX = canvas.width / 2, offsetY = canvas.height / 2 } = e,
         ox = offsetX - (attr?.style.width / 2),
         oy = offsetY - (attr?.style.height / 2),

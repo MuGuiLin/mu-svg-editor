@@ -13,7 +13,6 @@ import { Code, Json } from './code';
 import { operate } from './hook';
 
 
-
 const state: IStateType = reactive({
     // 画布属性
     canvas: {
@@ -77,6 +76,13 @@ const menu = {
     }
 };
 
+const check = {
+    json(code: Array<any>) {
+        console.log(code)
+        state.svgData = code;
+    }
+};
+
 </script>
 
 <template>
@@ -88,7 +94,7 @@ const menu = {
         <Info :prop="state" />
     </section>
     <Code :prop="state" />
-    <Json :prop="state" />
+    <Json :prop="state" :check="check" />
 </template>
 
 <style scoped lang="less">

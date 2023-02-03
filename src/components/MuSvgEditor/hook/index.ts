@@ -1,12 +1,36 @@
 export { default as operate } from './operate';
 export { default as scale } from './scale';
 
+
+/**
+ * 生成uuid
+ */
+const hexList: string[] = [];
+for (let i = 0; i <= 15; i++) {
+    hexList[i] = i.toString(16);
+};
+export function uuid(): string {
+    let uuid = '';
+    for (let i = 1; i <= 18; i++) {
+        if (i === 9 || i === 14 || i === 19 || i === 24) {
+            uuid += '-';
+        } else if (i === 15) {
+            uuid += 4;
+        } else if (i === 20) {
+            uuid += hexList[(Math.random() * 4) | 8];
+        } else {
+            uuid += hexList[(Math.random() * 16) | 0];
+        }
+    }
+    return uuid.replace(/-/g, '');
+};
+
 /**
  * 检测对象是否为空
  * @param obj 
  * @returns 
  */
-export function isEmptyObj(obj: {}) {
+export function isEmptyObj(obj: {}): boolean {
     try {
         return JSON.stringify(obj) === '{}';
     } catch (error) {
@@ -20,7 +44,7 @@ export function isEmptyObj(obj: {}) {
  * @param event 
  * @returns 
  */
-export function getMousePos(target: Element, event: MouseEvent) {
+export function getMousePos(target: Element, event: MouseEvent): Array<number> {
     const { clientX, clientY } = event;
 
     // 获取DOM元素的边界 // 核心方法：getBoundingClientRect()  https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect
@@ -49,7 +73,7 @@ export function getImageBase64(img: Blob, callback: (base64Url: string) => void)
  * @param x 
  * @param y 
  */
-export function getQuadrant(x: number, y: number) {
+export function getQuadrant(x: number, y: number): Array<number> {
     const [r, angle] = [Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)), Math.atan(y / x) * 180 / Math.PI];
     let rx = 0, ry = 0;
     if (x > 0 && y > 0 && angle >= 22.5 && angle < 67.5) {
@@ -86,3 +110,4 @@ export function getQuadrant(x: number, y: number) {
     }
     return [rx, ry];
 };
+
