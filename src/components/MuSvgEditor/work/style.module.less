@@ -16,55 +16,51 @@
             z-index       : 1;
             pointer-events: none;
 
-            &::after {
-                content   : "";
-                position  : absolute;
-                top       : 0;
-                left      : 0;
-                display   : block;
-                width     : 18px;
-                height    : 18px;
-                background: rgb(70, 70, 70);
-                box-shadow: 2px 6px 12px 4px rgba(30, 30, 30, .6);
-            }
-
-            .scale_x {
-                position  : sticky;
-                top       : 0;
-                left      : 0;
-                height    : 18px;
-                background: rgb(80, 80, 80);
+            &>div {
+                position: sticky;
 
                 &>canvas {
-                    height    : 18px;
                     background: rgb(80, 80, 80);
-                    box-shadow: 0px 2px 6px 0px rgba(50, 50, 50, .6);
                 }
             }
 
-            .scale_y {
-                position  : sticky;
+            .scale_z {
+                position: fixed;
+                z-index : 2;
+
+                &::after {
+                    content   : "";
+                    display   : block;
+                    width     : 18px;
+                    height    : 18px;
+                    box-shadow: 2px 6px 12px 4px rgba(30, 30, 30, .6);
+                }
+            }
+
+            .scale_x {
                 top       : 0;
+                height    : 18px;
+                box-shadow: 0px 2px 6px 0px rgba(50, 50, 50, .6);
+            }
+
+            .scale_y {
                 left      : 0;
                 width     : 18px;
-                background: rgb(80, 80, 80);
+                box-shadow: 2px 0px 6px 0px rgba(30, 30, 30, .6);
 
                 &>canvas {
-                    position  : relative;
-                    top       : -17px;
-                    width     : 18px;
-                    background: rgb(80, 80, 80);
-                    box-shadow: 2px 0px 6px 0px rgba(30, 30, 30, .6);
+                    position: relative;
+                    top     : -18px;
                 }
             }
         }
 
         .canvas {
-            box-sizing: border-box;
-            position  : absolute;
-            margin    : 0;
-            padding   : 0;
-            border    : 5px dashed transparent;
+            box-sizing   : border-box;
+            position     : absolute;
+            margin       : 0;
+            padding      : 0;
+            // border    : 5px dashed transparent;
 
             .svg {
                 box-sizing            : border-box;

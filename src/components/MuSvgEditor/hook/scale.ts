@@ -13,7 +13,7 @@ export default class scale {
     private readonly oScaleX: HTMLCanvasElement | any;
     private readonly oScaleY: HTMLCanvasElement | any;
     public scaleXW: number = 0;
-    public scaleXH: number = 19;
+    public scaleXH: number = 18;
     public scaleYH: number = 0;
     public scaleYW: number = 18;
     public scaleXZ: number = 0;
@@ -51,95 +51,102 @@ export default class scale {
             scaleXZ,
             scaleYZ,
         } = this;
+
         if (!cScaleX || !cScaleY) return;
+        const gap = 50;
         cScaleX.clearRect(0, 0, scaleXW, scaleXH);
         cScaleY.clearRect(0, 0, scaleYW, scaleYH);
-        const scale = 50;
-        const loop = (scaleXW / scale) < 25 ? 25 : (scaleXW / scale);
-        for (let i = 0; i < 100; i++) {
-            cScaleX.beginPath();
-            cScaleY.beginPath();
-            cScaleY.lineWidth = cScaleX.lineWidth = 0.5;
-            if (0 === i) {
-                cScaleX.fillStyle = cScaleX.strokeStyle = '#00FFFF';
-                cScaleY.fillStyle = cScaleY.strokeStyle = '#00FFFF';
+        cScaleY.lineWidth = cScaleX.lineWidth = 0.5;
+        cScaleY.font = cScaleX.font = '9px Microsoft YaHei';
+
+        for (let i = 0; i < 1000; i++) {
+            cScaleX.beginPath(); cScaleY.beginPath();
+            if (0 == i) {
+                cScaleX.fillStyle = cScaleX.strokeStyle = cScaleY.fillStyle = cScaleY.strokeStyle = '#00FFFF';
             } else {
-                cScaleX.fillStyle = cScaleX.strokeStyle = '#D8D8D8';
-                cScaleY.fillStyle = cScaleY.strokeStyle = '#D8D8D8';
+                cScaleX.fillStyle = cScaleX.strokeStyle = cScaleY.fillStyle = cScaleY.strokeStyle = '#D8D8D8';
             }
+            // X水平50间负大刻度
+            cScaleX.moveTo(scaleXZ - i * gap - 0.5, 0);
+            cScaleX.lineTo(scaleXZ - i * gap - 0.5, scaleXH);
 
-            cScaleX.moveTo(scaleXZ + i * scale - 0.5, 0);
-            cScaleX.lineTo(scaleXZ + i * scale - 0.5, scaleXH);
+            // X水平50间的4个负刻度
+            cScaleX.moveTo(scaleXZ - i * gap - 0.5 - 10, scaleXH * 0.8);
+            cScaleX.lineTo(scaleXZ - i * gap - 0.5 - 10, scaleXH);
 
-            cScaleY.moveTo(0, scaleYZ + i * scale - 0.5);
-            cScaleY.lineTo(scaleYW, scaleYZ + i * scale - 0.5);
+            cScaleX.moveTo(scaleXZ - i * gap - 0.5 - 20, scaleXH * 0.65);
+            cScaleX.lineTo(scaleXZ - i * gap - 0.5 - 20, scaleXH);
 
-            cScaleY.moveTo(scaleYW * 0.8, scaleYZ + i * scale + 10 - 0, 5);
-            cScaleY.lineTo(scaleYW, scaleYZ + i * scale + 10 - 0.5);
+            cScaleX.moveTo(scaleXZ - i * gap - 0.5 - 30, scaleXH * 0.8);
+            cScaleX.lineTo(scaleXZ - i * gap - 0.5 - 30, scaleXH);
 
-            cScaleY.moveTo(scaleYW * 0.65, scaleYZ + i * scale + 20 - 0, 5);
-            cScaleY.lineTo(scaleYW, scaleYZ + i * scale + 20 - 0.5);
+            cScaleX.moveTo(scaleXZ - i * gap - 0.5 - 40, scaleXH * 0.65);
+            cScaleX.lineTo(scaleXZ - i * gap - 0.5 - 40, scaleXH);
 
-            cScaleY.moveTo(scaleYW * 0.8, scaleYZ + i * scale + 30) - 0, 5;
-            cScaleY.lineTo(scaleYW, scaleYZ + i * scale + 30 - 0.5);
+            // X水平50间正大刻度
+            cScaleX.moveTo(scaleXZ + i * gap - 0.5, 0);
+            cScaleX.lineTo(scaleXZ + i * gap - 0.5, scaleXH);
 
-            cScaleY.moveTo(scaleYW * 0.65, scaleYZ + i * scale + 40 - 0, 5);
-            cScaleY.lineTo(scaleYW, scaleYZ + i * scale + 40 - 0.5);
+            // X水平50间的4个正刻度
+            cScaleX.moveTo(scaleXZ + i * gap - 0.5 + 10, scaleXH * 0.8);
+            cScaleX.lineTo(scaleXZ + i * gap - 0.5 + 10, scaleXH);
 
-            cScaleX.moveTo(scaleXZ + i * scale - 0.5 + 10, scaleXH * 0.8);
-            cScaleX.lineTo(scaleXZ + i * scale - 0.5 + 10, scaleXH);
+            cScaleX.moveTo(scaleXZ + i * gap - 0.5 + 20, scaleXH * 0.65);
+            cScaleX.lineTo(scaleXZ + i * gap - 0.5 + 20, scaleXH);
 
-            cScaleX.moveTo(scaleXZ + i * scale - 0.5 + 20, scaleXH * 0.65);
-            cScaleX.lineTo(scaleXZ + i * scale - 0.5 + 20, scaleXH);
+            cScaleX.moveTo(scaleXZ + i * gap - 0.5 + 30, scaleXH * 0.8);
+            cScaleX.lineTo(scaleXZ + i * gap - 0.5 + 30, scaleXH);
 
-            cScaleX.moveTo(scaleXZ + i * scale - 0.5 + 30, scaleXH * 0.8);
-            cScaleX.lineTo(scaleXZ + i * scale - 0.5 + 30, scaleXH);
+            cScaleX.moveTo(scaleXZ + i * gap - 0.5 + 40, scaleXH * 0.65);
+            cScaleX.lineTo(scaleXZ + i * gap - 0.5 + 40, scaleXH);
 
-            cScaleX.moveTo(scaleXZ + i * scale - 0.5 + 40, scaleXH * 0.65);
-            cScaleX.lineTo(scaleXZ + i * scale - 0.5 + 40, scaleXH);
-
-            cScaleY.font = cScaleX.font = '9px Microsoft YaHei';
-            cScaleX.fillText(i * scale, scaleXZ + i * scale + 2, 10);
-
-            (String(i * scale).split('') || []).forEach((item, index) => {
-                cScaleY.fillText(item, 3, scaleYZ + i * scale + 9 * (index + 1));
-            });
-
-            cScaleX.moveTo(scaleXZ - i * scale - 0.5, 0);
-            cScaleX.lineTo(scaleXZ - i * scale - 0.5, scaleXH);
-
-            cScaleY.moveTo(scaleYW * 0.8, scaleYZ - i * scale - 10 - 0.5);
-            cScaleY.lineTo(scaleYW, scaleYZ - i * scale - 10 - 0.5);
-
-            cScaleY.moveTo(scaleYW * 0.65, scaleYZ - i * scale - 20 - 0.5);
-            cScaleY.lineTo(scaleYW, scaleYZ - i * scale - 20 - 0.5);
-
-            cScaleY.moveTo(scaleYW * 0.8, scaleYZ - i * scale - 30) - 0.5;
-            cScaleY.lineTo(scaleYW, scaleYZ - i * scale - 30 - 0.5);
-
-            cScaleY.moveTo(scaleYW * 0.65, scaleYZ - i * scale - 40 - 0.5);
-            cScaleY.lineTo(scaleYW, scaleYZ - i * scale - 40 - 0.5);
-
-            cScaleX.moveTo(scaleXZ - i * scale - 0.5 - 10, scaleXH * 0.8);
-            cScaleX.lineTo(scaleXZ - i * scale - 0.5 - 10, scaleXH);
-
-            cScaleX.moveTo(scaleXZ - i * scale - 0.5 - 20, scaleXH * 0.65);
-            cScaleX.lineTo(scaleXZ - i * scale - 0.5 - 20, scaleXH);
-
-            cScaleX.moveTo(scaleXZ - i * scale - 0.5 - 30, scaleXH * 0.8);
-            cScaleX.lineTo(scaleXZ - i * scale - 0.5 - 30, scaleXH);
-
-            cScaleX.moveTo(scaleXZ - i * scale - 0.5 - 40, scaleXH * 0.65);
-            cScaleX.lineTo(scaleXZ - i * scale - 0.5 - 40, scaleXH);
-
-            cScaleX.fillText(-i * scale, scaleXZ - i * scale + 2, 9);
-
-            (String(-i * scale).split('') || []).forEach((item, index) => {
-                cScaleY.fillText(item, 3, scaleYZ - i * scale + 9 * (index + 1));
-            });
+            cScaleX.fillText(-i * gap, scaleXZ - i * gap + 2, 9);
+            cScaleX.fillText(i * gap, scaleXZ + i * gap + 2, 9);
             cScaleX.stroke();
+
+            // Y垂直大负刻度
+            cScaleY.moveTo(0, scaleYZ - i * gap - 0.5);
+            cScaleY.lineTo(scaleYW, scaleYZ - i * gap - 0.5);
+
+            // Y垂直50间的4个负刻度
+            cScaleY.moveTo(scaleYW * 0.8, scaleYZ - i * gap - 10 - 0.5);
+            cScaleY.lineTo(scaleYW, scaleYZ - i * gap - 10 - 0.5);
+
+            cScaleY.moveTo(scaleYW * 0.65, scaleYZ - i * gap - 20 - 0.5);
+            cScaleY.lineTo(scaleYW, scaleYZ - i * gap - 20 - 0.5);
+
+            cScaleY.moveTo(scaleYW * 0.8, scaleYZ - i * gap - 30) - 0.5;
+            cScaleY.lineTo(scaleYW, scaleYZ - i * gap - 30 - 0.5);
+
+            cScaleY.moveTo(scaleYW * 0.65, scaleYZ - i * gap - 40 - 0.5);
+            cScaleY.lineTo(scaleYW, scaleYZ - i * gap - 40 - 0.5);
+
+            // Y垂直大正刻度
+            cScaleY.moveTo(0, scaleYZ + i * gap - 0.5);
+            cScaleY.lineTo(scaleYW, scaleYZ + i * gap - 0.5);
+
+            // Y垂直50间的4个正刻度
+            cScaleY.moveTo(scaleYW * 0.8, scaleYZ + i * gap + 10 - 0, 5);
+            cScaleY.lineTo(scaleYW, scaleYZ + i * gap + 10 - 0.5);
+
+            cScaleY.moveTo(scaleYW * 0.65, scaleYZ + i * gap + 20 - 0, 5);
+            cScaleY.lineTo(scaleYW, scaleYZ + i * gap + 20 - 0.5);
+
+            cScaleY.moveTo(scaleYW * 0.8, scaleYZ + i * gap + 30) - 0, 5;
+            cScaleY.lineTo(scaleYW, scaleYZ + i * gap + 30 - 0.5);
+
+            cScaleY.moveTo(scaleYW * 0.65, scaleYZ + i * gap + 40 - 0, 5);
+            cScaleY.lineTo(scaleYW, scaleYZ + i * gap + 40 - 0.5);
+
+            (String(i * gap).split('') || []).forEach((item, index) => {
+                cScaleY.fillText(item, 3, scaleYZ + i * gap + 9 * (index + 1));
+            });
+            (String(-i * gap).split('') || []).forEach((item, index) => {
+                cScaleY.fillText(item, 3, scaleYZ - i * gap + 9 * (index + 1));
+            });
             cScaleY.stroke();
-        }
+            console.log(i)
+        };
     };
 
     public reset() {
@@ -165,7 +172,7 @@ export default class scale {
             this.oCanvas.style.left = `${this.scaleXZ}px`;
             this.oCanvas.style.transform = `translate(0)`;
         } else {
-            this.scaleXW = oDraw.offsetWidth;
+            this.scaleXW = width;
             this.scaleXZ = oCanvas.offsetLeft - Math.round(oCanvas.offsetWidth / 2);
             this.oCanvas.style.left = `50%`;
             this.oCanvas.style.transform = `translate(-50%, -50%)`;
@@ -176,7 +183,7 @@ export default class scale {
             this.oCanvas.style.top = `${this.scaleYZ}px`;
             this.oCanvas.style.transform = `translate(0)`;
         } else {
-            this.scaleYH = oDraw.offsetHeight;
+            this.scaleYH = heihgt;
             this.scaleYZ = oCanvas.offsetTop - Math.round(oCanvas.offsetHeight / 2);
             this.oCanvas.style.top = `50%`;
             this.oCanvas.style.transform = `translate(-50%, -50%)`;
@@ -187,9 +194,10 @@ export default class scale {
     public init() {
         const { oDraw, oScaleX, oScaleY } = this;
         this.scaleXW = oScaleX.width = oDraw.offsetWidth;
-        this.scaleXH = oScaleX.height = 19;
+        this.scaleXH = oScaleX.height = 18;
         this.scaleYH = oScaleY.height = oDraw.offsetHeight;
         this.scaleYW = oScaleY.width = 18;
+        
         window.onresize = () => {
             this.reset();
         };

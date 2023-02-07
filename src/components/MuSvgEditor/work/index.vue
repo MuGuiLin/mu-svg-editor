@@ -75,7 +75,7 @@ const setup = reactive({
 const rstate = ref();
 watch(() => [canvas.width, canvas.height], (n1, n2) => {
     setTimeout(() => {
-        rstate.value?.reset?.();
+        rstate.value?.reset?.(n1, n2);
     }, 100);
 }, { immediate: true });
 
@@ -540,6 +540,7 @@ onUnmounted(() => {
         <div :class="style.draw" ref="draw" @mousemove="onDrawMousemove">
 
             <div :class="style.scale" v-show="canvas.showScale">
+                <div :class="style.scale_z"></div>
                 <div :class="style.scale_x">
                     <canvas></canvas>
                 </div>
