@@ -190,23 +190,23 @@ export default defineComponent({
                             <a-switch v-model:checked={attr.show} checked-children="在画布中显示" un-checked-children="在画布中隐藏" />
                         </a-form-item>
                         <a-form-item label="X坐标" name="x">
-                            <a-input-number v-model:value={transform.x} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={transform.x} prefix={<arrow-left-outlined />} addon-after="px" />
                         </a-form-item>
                         <a-form-item label="Y坐标" name="y">
-                            <a-input-number v-model:value={transform.y} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={transform.y} prefix={<arrow-up-outlined />} addon-after="px" />
                         </a-form-item>
 
                         {Reflect.has(style, 'x2') && <>
                             <a-form-item label="X终点" name="x2">
-                                <a-input-number v-model:value={style.x2} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                                <a-input-number v-model:value={style.x2} prefix={<arrow-right-outlined />} addon-after="px" />
                             </a-form-item>
                             <a-form-item label="Y终点" name="y2">
-                                <a-input-number v-model:value={style.y2} prefix={<ColumnHeightOutlined />} addon-after="px" />
+                                <a-input-number v-model:value={style.y2} prefix={<arrow-down-outlined />} addon-after="px" />
                             </a-form-item>
                         </>}
 
                         {'rect' === type && <a-form-item label="圆角" name="rx">
-                            <a-input-number v-model:value={style.rx} prefix={<ColumnWidthOutlined />} addon-after="px" />
+                            <a-input-number v-model:value={style.rx} prefix={<radius-setting-outlined />} addon-after="px" />
                         </a-form-item>}
 
                         {'ellipse' === type ? <>

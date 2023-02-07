@@ -70,16 +70,6 @@ const setup = reactive({
 });
 
 /**
- * 重置画布标尺刻度
- */
-const rstate = ref();
-watch(() => [canvas.width, canvas.height], (n1, n2) => {
-    setTimeout(() => {
-        rstate.value?.reset?.(n1, n2);
-    }, 100);
-}, { immediate: true });
-
-/**
  * 显示基于世界坐标系中鼠标坐标的X和Y
  * @param{Object} e MouseEvent对象
  */
@@ -517,12 +507,20 @@ const onKeyup = (e: KeyboardEvent) => {
 };
 
 onMounted(() => {
-    rstate.value = new scale({
+    const oScale = new scale({
         draw: `.${style.draw} `,
         canvas: `.${style.canvas} `,
         scale_x: `.${style.scale_x} `,
         scale_y: `.${style.scale_y} `
     });
+
+    // 重置画布标尺刻度
+    watch(() => [canvas.width, canvas.height], (n1, n2) => {
+        setTimeout(() => {
+            oScale.reset();
+        }, 300);
+    }, { immediate: true });
+
     // document.addEventListener('keydown', onKeydown, false);
     useEventListener(document, 'keydown', onKeydown);
     useEventListener(document, 'keyup', onKeyup, false);

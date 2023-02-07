@@ -29,8 +29,8 @@ export default defineComponent({
                             <a-menu-item key="file:2" icon={<export-outlined />} onClick={() => addImage()}>添加图片 （Ctrl + I）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="存储">
-                            <a-menu-item key="file:3" icon={<folder-open-outlined />} onClick={() => hookSave(svgData,)}>保存 （Ctrl + S）</a-menu-item>
-                            <a-menu-item key="file:4" icon={<export-outlined />} onClick={() => hookSave(svgData, true)}>另存为 （Ctrl + Shift + S）</a-menu-item>
+                            <a-menu-item key="file:3" icon={<save-outlined />} onClick={() => hookSave(svgData,)}>保存 （Ctrl + S）</a-menu-item>
+                            <a-menu-item key="file:4" icon={<delivered-procedure-outlined />} onClick={() => hookSave(svgData, true)}>另存为 （Ctrl + Shift + S）</a-menu-item>
                         </a-menu-item-group>
                         <a-menu-item-group title="输出">
                             <a-menu-item key="file:5" icon={<save-outlined />} onClick={() => hookExportSvg()}>导出SVG （Ctrl + L）</a-menu-item>
