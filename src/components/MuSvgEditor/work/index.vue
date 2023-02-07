@@ -38,8 +38,13 @@ const state: any = {
         x: 0,
         y: 0,
         path: '',
-    }
+    },
 };
+
+const move = {
+    x: 0,
+    y: 0,
+}
 
 // 画布背景显示设置
 const setup = reactive({
@@ -517,9 +522,15 @@ onMounted(() => {
     // 重置画布标尺刻度
     watch(() => [canvas.width, canvas.height], (n1, n2) => {
         setTimeout(() => {
+            const { top, left } = drop.value.getBoundingClientRect();
+            [canvas.dropX, canvas.dropY] = [left, top];
             oScale.reset();
         }, 300);
     }, { immediate: true });
+
+    // 居中辅助线
+    canvas.lineX = draw.value.offsetWidth / 2;
+    canvas.lineY = draw.value.offsetHeight / 2;
 
     // document.addEventListener('keydown', onKeydown, false);
     useEventListener(document, 'keydown', onKeydown);

@@ -15,8 +15,10 @@ import { operate } from './hook';
 const state: IStateType = reactive({
     // 画布属性
     canvas: {
-        lineX: 730,
-        lineY: 420,
+        lineX: 0,
+        lineY: 0,
+        dropX: 0,
+        dropY: 0,
         width: 1008,
         height: 567,
         showLine: true,
