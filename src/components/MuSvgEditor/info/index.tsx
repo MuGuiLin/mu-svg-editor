@@ -35,7 +35,7 @@ export default defineComponent({
                 </div>
                 <div class={style.zoom}>
                     <expand-outlined onClick={() => toggle()} title={isFullscreen ? '全屏显示' : '正常显示'} />
-                    <minus-outlined title="减小缩放" onClick={() => change(0)} />
+                    <minus-outlined title="减少缩放" onClick={() => change(0)} />
                     <a-select title="选择缩放" v-model:value={canvas.zoom} prefix={<bg-colors-outlined />}>
                         {zoom.map((size) => <a-select-option value={size}>{size} %</a-select-option>)}
                     </a-select>
