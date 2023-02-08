@@ -166,7 +166,6 @@ export default class scale {
         this.scaleYZ = oScaleX.height;
 
         if (oCanvas.offsetWidth >= oDraw.offsetWidth && oCanvas.offsetHeight < oDraw.offsetHeight) {
-            console.log(oCanvas.offsetWidth, oDraw.offsetWidth)
             oScaleX.width = oCanvas.offsetWidth + 19;
             this.oCanvas.style.left = `19px`;
             this.oCanvas.style.top = `50%`;

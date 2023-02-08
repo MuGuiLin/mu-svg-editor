@@ -21,6 +21,7 @@ const state: IStateType = reactive({
         dropY: 0,
         width: 1008,
         height: 567,
+        zoom: 100,
         showLine: true,
         showDrag: false,
         showScale: true,

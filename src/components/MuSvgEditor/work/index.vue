@@ -561,8 +561,9 @@ onUnmounted(() => {
             <div ref="drop" :class="[style.canvas, canvas.showDrag && style.dragstart]" @dragenter="onDragenter"
                 @dragover="onDragover" @drop="onDrop" @mousedown="onCanvasMousedown" @mousemove="onCanvasMousemove"
                 @mouseup="onMouseup" @contextmenu.stop="onContextmenu">
-                <svg :class="style.svg" :style="{ background: canvas.background, ...setup.backsetup }" id="svg"
-                    :xmlns="NS.SVG" :width="canvas.width" :height="canvas.height"
+                <svg :class="style.svg"
+                    :style="{ background: canvas.background, transform: `scale(${canvas.zoom * 0.01})`, ...setup.backsetup }"
+                    id="svg" :xmlns="NS.SVG" :width="canvas.width" :height="canvas.height"
                     :viewBox="`0 0 ${canvas.width} ${canvas.height}`">
                     <defs>
                         <g class="style" v-html="strokeAnimations.style"></g>
