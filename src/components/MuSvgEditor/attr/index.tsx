@@ -186,8 +186,8 @@ export default defineComponent({
                         <a-form-item label="文本" name="text">
                             <a-input v-model:value={attr.text} prefix={<font-size-outlined />} placeholder="组件名称！" />
                         </a-form-item>
-                        <a-form-item label="可见性" name="show">
-                            <a-switch v-model:checked={attr.show} checked-children="在画布中显示" un-checked-children="在画布中隐藏" />
+                        <a-form-item label="显示" name="show">
+                            <a-switch style="margin-left: 5px" v-model:checked={attr.show} checked-children="在画布中显示" un-checked-children="在画布中隐藏" />
                         </a-form-item>
                         <a-form-item label="X坐标" name="x">
                             <a-input-number v-model:value={transform.x} prefix={<arrow-left-outlined />} addon-after="px" />
@@ -244,7 +244,7 @@ export default defineComponent({
                                 <a-input-number v-model:value={style.stroke_width} placeholder="图形边框(轮廓)粗细！" prefix={<border-outlined />} min={0} addon-after="px" />
                             </a-form-item>
                             {'text' === type ? <>
-                                <a-form-item label="字号" name="font_family">
+                                <a-form-item label="字体" name="font_family">
                                     <a-select v-model:value={style.font_family} prefix={<bg-colors-outlined />}>
                                         <a-select-option value="黑体">黑体</a-select-option>
                                         <a-select-option value="宋体">宋体</a-select-option>
@@ -253,10 +253,27 @@ export default defineComponent({
                                         <a-select-option value="Segoe UI">微软雅黑</a-select-option>
                                         <a-select-option value="News706 BT">News706 BT</a-select-option>
                                         <a-select-option value="Times New Roman">Times New Roman</a-select-option>
+                                        <a-select-option value="'Palatino Linotype', 'Book Antiqua', Palatino, serif">Palatino</a-select-option>
                                     </a-select>
                                 </a-form-item>
                                 <a-form-item label="字号" name="font_size">
                                     <a-input-number v-model:value={style.font_size} placeholder="文字字号大小！" prefix={<font-size-outlined />} min={8} addon-after="px" />
+                                </a-form-item>
+                                <a-form-item label="加粗" name="font_weight">
+                                    <a-select v-model:value={style.font_weight} prefix={<bg-colors-outlined />}>
+                                        <a-select-option value="normal">normal</a-select-option>
+                                        <a-select-option value="300">300</a-select-option>
+                                        <a-select-option value="400">400</a-select-option>
+                                        <a-select-option value="500">500</a-select-option>
+                                        <a-select-option value="bold">bold</a-select-option>
+                                        <a-select-option value="bolder">bolder</a-select-option>
+                                    </a-select>
+                                </a-form-item>
+                                <a-form-item label="倾斜" name="font_style">
+                                    <a-select v-model:value={style.font_style} prefix={<bg-colors-outlined />}>
+                                        <a-select-option value="normal">normal</a-select-option>
+                                        <a-select-option value="italic">italic</a-select-option>
+                                    </a-select>
                                 </a-form-item>
                                 <a-form-item label="对齐" name="text_anchor">
                                     <a-select v-model:value={style.text_anchor} prefix={<bg-colors-outlined />}>

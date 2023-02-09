@@ -165,6 +165,11 @@ const onDragend = (e: DragEvent, m: any) => {
                 background-size: contain;
             }
 
+            &.terminal {
+                background: url(@/assets/icon/tool/terminal.webp) no-repeat center center;
+                background-size: contain;
+            }
+
             &.visitor {
                 background: url(@/assets/icon/tool/visitor.webp) no-repeat center center;
                 background-size: contain;
@@ -258,6 +263,11 @@ const onDragend = (e: DragEvent, m: any) => {
             &.colony {
                 background: url(@/assets/icon/tool/colony.webp) no-repeat center center;
                 background-size: contain;
+            }  
+            
+            &.coordinate {
+                background: url(@/assets/icon/tool/coordinate.webp) no-repeat center center;
+                background-size: 80%;
             }
         }
 

@@ -45,9 +45,9 @@ const { info, info: { attr, attr: { style }, type } } = props;
         </polyline>
 
         <text v-else-if="'text' === type" :x="style.x" :class="[style.stroke_animation]"
-            :style="{ fontFamily: style.font_family }" :font-size="style.font_size" :y="style.y" :fill="style.fill"
-            :stroke="style.stroke" :stroke-width="style.stroke_width" :text-anchor="style.text_anchor"
-            :dominant-baseline="style.dominant_baseline">{{
+            :font-family="style.font_family" :font-size="style.font_size" :font-weight="style.font_weight" :font-style="style.font_style" :y="style.y"
+            :fill="style.fill" :stroke="style.stroke" :stroke-width="style.stroke_width"
+            :text-anchor="style.text_anchor" :dominant-baseline="style.dominant_baseline">{{
                 attr.text
             }}</text>
 
