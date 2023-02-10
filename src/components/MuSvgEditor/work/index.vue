@@ -4,7 +4,7 @@ import { useEventListener } from '@vueuse/core'
 import { NS, strokeAnimations } from "../config";
 
 import { uuid, isEmptyObj, getMousePos, getQuadrant, operate, scale } from "../hook";
-import Components from './components.vue';
+import Components from './components/index.vue';
 
 import style from './style.module.less';
 

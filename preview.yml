@@ -1,10 +1,12 @@
 # preview.yml
+
 autoOpen: true # 打开工作空间时是否自动开启所有应用的预览
+
 apps:
   - port: 666 # 应用的端口
     run: npm i --registry=https://registry.npm.taobao.org && npm run dev # 应用的启动命
-    command: # 使用此命令启动服务，且不执行run
-    root: / # 应用的启动目录
+    command:  # 使用此命令启动服务，且不执行run
+    root: /   # 应用的启动目录
     name: mu-svg-editor # 应用名称
     description: 'SVG编辑器, SVG在线编辑器, 网络拓扑图绘制, GitHub https://github.com/MuGuiLin/mu-svg-editor' # 应用描述
     autoOpen: true # 打开工作空间时是否自动开启预览（优先级高于根级 autoOpen)

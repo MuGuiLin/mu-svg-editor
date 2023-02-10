@@ -2,6 +2,7 @@
 import { markRaw } from 'vue';
 import { getLocalFile } from '@/utils';
 
+import Text from './text.vue';
 const props = defineProps({
     info: {
         type: Object as () => any,
@@ -44,12 +45,15 @@ const { info, info: { attr, attr: { style }, type } } = props;
             :stroke-dasharray="style.stroke_dasharray" :stroke-linecap="style.stroke_linecap">
         </polyline>
 
-        <text v-else-if="'text' === type" :x="style.x" :class="[style.stroke_animation]"
-            :font-family="style.font_family" :font-size="style.font_size" :font-weight="style.font_weight" :font-style="style.font_style" :y="style.y"
-            :fill="style.fill" :stroke="style.stroke" :stroke-width="style.stroke_width"
-            :text-anchor="style.text_anchor" :dominant-baseline="style.dominant_baseline">{{
+        <!-- <text v-else-if="'text' === type" :x="style.x" :class="[style.stroke_animation]"
+            :font-family="style.font_family" :font-size="style.font_size" :font-weight="style.font_weight"
+            :font-style="style.font_style" :y="style.y" :fill="style.fill" :stroke="style.stroke"
+            :stroke-width="style.stroke_width" :text-anchor="style.text_anchor"
+            :dominant-baseline="style.dominant_baseline">{{
                 attr.text
-            }}</text>
+            }}</text> -->
+
+        <Text v-else-if="'text' === type" v-bind:attr="attr" />
 
         <component v-else :is="type" :class="[style.stroke_animation]" :fill="style.fill" :d="attr.d" :x="style.x"
             :y="style.y" :width="style.width" :height="style.height" :stroke="style.stroke"
