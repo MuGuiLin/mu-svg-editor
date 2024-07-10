@@ -59,6 +59,7 @@ export default defineConfig((config: UserConfig) => {
             *
             */
           },
+          // additionalData: `@import "src/themes/main.less";`, // 注：后面一定要加;分号哦！
           javascriptEnabled: true
         }
       }
@@ -66,7 +67,7 @@ export default defineConfig((config: UserConfig) => {
 
     server: {
       host: true,
-      port: 666,
+      port: 888,
       strictPort: 888,
       open: true,
       https: false,
