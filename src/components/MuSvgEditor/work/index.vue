@@ -80,7 +80,9 @@ const setup = reactive({
  */
 const onDrawMousemove = (e: MouseEvent): void => {
     if (!canvas.showLine) return;
+    console.info(e);
     [canvas.lineX, canvas.lineY] = getMousePos(draw.value, e);
+    console.log(canvas.lineX, canvas.lineY);
 };
 
 const clearNowTool = () => {
@@ -525,6 +527,7 @@ onMounted(() => {
             const { top, left } = drop.value.getBoundingClientRect();
             [canvas.dropX, canvas.dropY] = [left, top];
             oScale.reset();
+            console.info(333333, top, left)
         }, 300);
     }, { immediate: true });
 
