@@ -9,10 +9,7 @@ const props = defineProps({
         default: {},
     }
 });
-
 const { info, info: { attr, attr: { style }, type } } = props;
-
-// console.info(props);
 
 </script>
 

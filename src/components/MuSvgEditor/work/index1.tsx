@@ -3,7 +3,7 @@ import propsType from '../types/propsType'
 import scale from "../hook/scale";
 
 import style from './style.module.less'
-import Components from './components.vue';
+import Components from './src/index.vue';
 
 export default defineComponent({
     props: {
