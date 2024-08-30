@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "builds": "vite build",
+    "build-only": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {

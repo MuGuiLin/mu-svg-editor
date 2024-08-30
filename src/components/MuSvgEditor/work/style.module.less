@@ -57,11 +57,16 @@
         }
 
         .canvas {
-            box-sizing   : border-box;
-            position     : absolute;
-            margin       : 0;
-            padding      : 0;
+            box-sizing: border-box;
+            position  : absolute;
+            margin    : 0;
+            padding   : 0;
+
             // border    : 5px dashed transparent;
+            &[data-start='true'] {
+                outline   : 5px dashed #166FFF;
+                box-shadow: 0 0 10px 2px #166FFF;
+            }
 
             .svg {
                 box-sizing            : border-box;
@@ -75,17 +80,13 @@
                     cursor: url(@/assets/img/editor/rotate.png) 12 12, auto;
                 }
 
-                g.selected {
+                g[data-selected='true'] {
                     outline: 2px double #F900FF;
                 }
             }
         }
 
-        .dragstart {
-            background-color: white;
-            border          : 5px dashed #166FFF;
-            box-shadow      : 0 0 10px 0 #166FFF;
-        }
+
 
         .subs {
             position      : sticky;
