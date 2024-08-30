@@ -26,7 +26,8 @@ const style: any = {
 
 watch(() => unref(svgCtrl.showCode),
     (v) => {
-        code.value = document.querySelector('#svg')?.outerHTML;
+
+        code.value = document.querySelector('#svg')?.outerHTML.replace(/<g/g, '\n\t<g').replace(/<\/svg>/g, '\n</svg>') || '';
         // `<svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
         //     <g>
         //         <title>background</title>
@@ -47,9 +48,8 @@ const ok = () => {
 </script>
 
 <template>
-    <a-modal v-model:visible="svgCtrl.showCode" title="SVG代码" width="100%" wrap-class-name="full-modal" cancelText="关闭"
+    <a-modal v-model:visible="svgCtrl.showCode" title="SVG代码" width="80%" wrap-class-name="full-modal" cancelText="关闭"
         okText="下载" @ok="ok">
-        <codemirror v-model="code" placeholder="暂无SVG代码！" :style="style" :disabled="true" :indent-with-tab="true"
-            :tab-size="4" :extensions="[html(), oneDark]" />
+        <codemirror v-model="code" placeholder="暂无SVG代码！" :style="style" :disabled="true" :indent-with-tab="true" :tab-size="4" :extensions="[html(), oneDark]" />
     </a-modal>
 </template>

@@ -44,7 +44,7 @@ const ok = () => {
 
 </script>
 <template>
-    <a-modal v-model:visible="svgCtrl.showJson" title="JSON数据" width="100%" wrap-class-name="full-modal" cancelText="关闭"
+    <a-modal v-model:visible="svgCtrl.showJson" title="JSON数据" width="80%" wrap-class-name="full-modal" cancelText="关闭"
         okText="下载" @ok="ok">
         <codemirror v-model="code" placeholder="暂无JSON数据！" :style="{ height: '560px' }" :autofocus="true"
             :indent-with-tab="true" :tab-size="4" :extensions="[json(), oneDark]" @ready="ready" @change="props.check.json"
