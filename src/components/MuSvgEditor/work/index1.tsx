@@ -12,8 +12,6 @@ export default defineComponent({
     },
 
     setup(props: any, ctx) {
-        console.log(props);
-
         const state: propsType = reactive({
             scale: null,
         });
@@ -28,7 +26,6 @@ export default defineComponent({
 
         // 控件拖动进入画布区域
         const ondragenter = (e: DragEvent) => {
-            console.log('进入放置区域');
             // rightnav_open.value = false;
             e.preventDefault();
         };
@@ -47,7 +44,6 @@ export default defineComponent({
                 return false;
             }
             const { type, name, attr } = props.attr.nowTool;
-            console.log(props.attr.nowTool)
             attr.x = e.offsetX;
             attr.y = e.offsetY;
 

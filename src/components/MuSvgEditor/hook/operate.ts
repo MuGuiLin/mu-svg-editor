@@ -16,7 +16,6 @@ export function hookDelete(arr: Array<any>, index: number) {
 export async function hookOpenSvg(callBack?: Function): Promise<any> {
     // const { files, open, reset } = useFileDialog();
     // await open({ accept: 'image/svg+xml' });
-    // console.info(files);
     // callBack?.(files);
 
     const { isSupported, data, file, fileName, fileMIME, fileSize, fileLastModified, open } = useFileSystemAccess({
@@ -93,8 +92,6 @@ export async function hookSave(data: any, as: boolean = false): Promise<any> {
         }],
         excludeAcceptAllOption: true,
     });
-    console.log(data)
-    console.dir(res);
     res.data = JSON.stringify(data);
     res.file = JSON.stringify(data);
     await res.updateData('JSON.stringify(data)');
@@ -141,7 +138,6 @@ export function hookExportImage(callBack?: Function): void {
     image.onload = (e: any) => {
         canvas.width = svg.clientWidth || 1008;
         canvas.height = svg.clientHeight || 567;
-        console.dir(svg);
         context.drawImage(image, 0, 0);
         a.href = canvas.toDataURL('image/png');
         a.setAttribute('download', `${new Date().getTime()}.png`);
