@@ -80,7 +80,6 @@ const menu = {
 
 const check = {
     json(code: Array<any>) {
-        console.log(code)
         state.svgData = code;
     }
 };

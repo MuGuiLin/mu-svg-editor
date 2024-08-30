@@ -53,7 +53,7 @@ export default class scale {
         cScaleX.clearRect(0, 0, oScaleX.width, oScaleX.height);
         cScaleY.clearRect(0, 0, oScaleY.width, oScaleY.height);
 
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 80; i++) {
             cScaleY.font = cScaleX.font = '9px Microsoft YaHei';
             cScaleY.lineWidth = cScaleX.lineWidth = 0.5;
             if (0 == i) {

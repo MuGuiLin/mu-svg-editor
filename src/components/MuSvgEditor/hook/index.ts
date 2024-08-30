@@ -1,5 +1,5 @@
 export { default as operate } from './operate';
-export { default as scale } from './scale';
+export { default as useScale } from './useScale';
 
 
 /**
@@ -45,15 +45,13 @@ export function isEmptyObj(obj: {}): boolean {
  * @returns 
  */
 export function getMousePos(target: Element, event: MouseEvent): Array<number> {
-    const { clientX, clientY } = event;
-
-    // 获取DOM元素的边界 // 核心方法：getBoundingClientRect()  https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect
+    const { clientX, clientY } = event, { scrollLeft, scrollTop } = target;
+    // 获取DOM元素的边界
     const { left, top } = target.getBoundingClientRect();
-
     //计算鼠标在DOM中的位置
     return [
-        clientX - left,
-        clientY - top
+        (clientX + scrollLeft) - left,
+        (clientY + scrollTop) - top
     ];
 };
 

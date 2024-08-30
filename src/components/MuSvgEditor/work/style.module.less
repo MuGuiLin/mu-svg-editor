@@ -87,14 +87,15 @@
             box-shadow      : 0 0 10px 0 #166FFF;
         }
 
-        .subline {
+        .subs {
             position      : sticky;
+            position      : absolute;
             top           : 0;
             right         : 0;
             bottom        : 0;
             left          : 0;
-            width         : 100%;
-            height        : 100%;
+            width         : calc(100vw);
+            height        : calc(100vh + 10px);
             user-select   : none;
             pointer-events: none;
 
@@ -107,13 +108,13 @@
                 background-color: blueviolet;
             }
 
-            .subline_x {
+            .sub_x {
                 top             : 0;
                 height          : 1px;
                 background-image: linear-gradient(to right, blueviolet, deepskyblue);
             }
 
-            .subline_y {
+            .sub_y {
                 left            : 0;
                 width           : 1px;
                 background-image: linear-gradient(deeppink, deepskyblue);

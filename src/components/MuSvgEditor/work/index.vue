@@ -1,13 +1,12 @@
 <script setup lang="ts" >
+import style from './style.module.less';
 import { ref, reactive, watch, computed, onMounted, onUnmounted } from 'vue';
 import { useEventListener } from '@vueuse/core'
 import { NS, strokeAnimations } from "../config";
-
-import { uuid, isEmptyObj, getMousePos, getQuadrant, operate, scale } from "../hook";
+import { uuid, isEmptyObj, getMousePos, getQuadrant, useScale, operate } from "../hook";
 import Components from './src/index.vue';
-
-import style from './style.module.less';
-
+import Scale from './src/Scale';
+import Lines from './src/Lines';
 const props: any = defineProps({
     prop: Object,
 });
@@ -514,7 +513,7 @@ const onKeyup = (e: KeyboardEvent) => {
 };
 
 onMounted(() => {
-    const oScale = new scale({
+    const oScale = new useScale({
         draw: `.${style.draw} `,
         canvas: `.${style.canvas} `,
         scale_x: `.${style.scale_x} `,
@@ -526,8 +525,9 @@ onMounted(() => {
         setTimeout(() => {
             const { top, left } = drop.value.getBoundingClientRect();
             [canvas.dropX, canvas.dropY] = [left, top];
+            // 居中辅助线
+            // [canvas.lineX, canvas.lineY] = [drop.value!.offsetWidth / 2, drop.value!.offsetHeight / 2];
             oScale.reset();
-            console.info(333333, top, left)
         }, 300);
     }, { immediate: true });
 
@@ -550,17 +550,7 @@ onUnmounted(() => {
 <template>
     <main :class="style.work">
         <div :class="style.draw" ref="draw" @mousemove="onDrawMousemove">
-
-            <div :class="style.scale" v-show="canvas.showScale">
-                <div :class="style.scale_z"></div>
-                <div :class="style.scale_x">
-                    <canvas></canvas>
-                </div>
-                <div :class="style.scale_y">
-                    <canvas></canvas>
-                </div>
-            </div>
-
+            <Scale v-show="canvas.showScale"/>
             <div ref="drop" :class="[style.canvas, canvas.showDrag && style.dragstart]" @dragenter="onDragenter"
                 @dragover="onDragover" @drop="onDrop" @mousedown="onCanvasMousedown" @mousemove="onCanvasMousemove"
                 @mouseup="onMouseup" @contextmenu.stop="onContextmenu">
@@ -579,12 +569,7 @@ onUnmounted(() => {
                     </g>
                 </svg>
             </div>
-
-            <div :class="style.subline" v-show="canvas.showLine">
-                <div :class="style.subline_x" :style="[{ top: canvas.lineY + 'px' }]"></div>
-                <div :class="style.subline_y" :style="[{ left: canvas.lineX + 'px' }]"></div>
-            </div>
-
+            <Lines v-show="canvas.showLine" :canvas="canvas" />
         </div>
     </main>
 </template>
